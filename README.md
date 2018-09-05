@@ -3,6 +3,9 @@ Summoning Tweaks for Divinity: Original Sin 2 - Definitive Edition
 
 Summoning Tweaks is a quality-of-life mod that makes player (non-enemy) summons permanent, allows the summon limit to be customized (defaults to 3), and provides a set of helper-skills to speed up summon preparation before battle. 
 
+# [Changelog](https://github.com/LaughingLeader-DOS2-Mods/SummoningTweaks/blob/master/CHANGELOG.md)
+Check the changelog [here](https://github.com/LaughingLeader-DOS2-Mods/SummoningTweaks/blob/master/CHANGELOG.md).
+
 # Releases
 * [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=1502424642)
 * [Steam Workshop - Permanent Summons](https://steamcommunity.com/sharedfiles/filedetails/?id=1503641584)
