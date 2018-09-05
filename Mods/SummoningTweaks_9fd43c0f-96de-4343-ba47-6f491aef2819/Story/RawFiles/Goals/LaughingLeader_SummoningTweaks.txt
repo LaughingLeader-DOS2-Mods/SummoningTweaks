@@ -13,6 +13,7 @@ StringContains(_Skill, "Summon_", 1)
 THEN
 SetVarString(_Player, "LLSUMMONINF_LastSummoningSkillUsed", _Skill);
 LLSUMMONINF_OnSummonSkillCast(_Player, _Skill);
+LLSUMMONINF_AddContract(_Player);
 
 PROC
 LLSUMMONINF_OnSummonSkillCast((CHARACTERGUID)_Player, (STRING)_Skill)
@@ -21,14 +22,35 @@ NOT HasActiveStatus(_Player, "LLSUMMONINF_MAX_SUMMONS_INC", 1)
 THEN
 SetStoryEvent(_Player, "LLSUMMONINF_IncreaseMaxSummons");
 
-PROC
-LLSUMMONINF_OnSummonSkillCast((CHARACTERGUID)_Player, (STRING)_Skill)
+IF
+CharacterJoinedParty(_Summon)
 AND
-HasActiveStatus(_Player, "LLSUMMONINF_MAX_SUMMONS_INC", 1)
+CharacterIsSummon(_Summon, 1)
+AND
+NOT GlobalGetFlag("LLSUMMONINF_DismissSkillAutoAddingDisabled", 1)
+AND
+CharacterGetOwner(_Summon, _Player)
+THEN
+LLSUMMONINF_AddDismissSkill(_Player);
+
+PROC
+LLSUMMONINF_AddDismissSkill((CHARACTERGUID)_Player)
 AND
 CharacterHasSkill(_Player, "Target_LLSUMMONINF_DismissSummon", 0)
+AND
+ObjectGetFlag(_Player, "LLSUMMONINF_AddedDismissSkillToSummoner", _Val)
+AND
+IntegerSubtract(1, _Val, _Notify)
 THEN
-CharacterAddSkill(_Player, "Target_LLSUMMONINF_DismissSummon", 0);
+ObjectSetFlag(_Player, "LLSUMMONINF_AddedDismissSkillToSummoner");
+CharacterAddSkill(_Player, "Target_LLSUMMONINF_DismissSummon", _Notify);
+
+PROC
+LLSUMMONINF_RemoveDismissSkill((CHARACTERGUID)_Player)
+AND
+CharacterHasSkill(_Player, "Target_LLSUMMONINF_DismissSummon", 1)
+THEN
+CharacterRemoveSkill(_Player, "Target_LLSUMMONINF_DismissSummon");
 
 IF
 GameStarted(_Level, _)
@@ -225,29 +247,40 @@ ObjectClearFlag(_Player, "LLSUMMONINF_IsHost");
 //END_REGION
 
 //REGION DIALOG_COMMANDS
+QRY
+LLSUMMONINF_QRY_ClearFlag((GUIDSTRING)_Object, (STRING)_Flag)
+THEN
+ObjectClearFlag(_Object, _Flag);
+
 IF
-ObjectFlagSet("LLSUMMONINF_LeaderLid_AddControlSkill", (CHARACTERGUID)_Player, _)
+ObjectFlagSet("LLSUMMONINF_LeaderLib_AddControlSkill", (CHARACTERGUID)_Player, _)
+AND
+LLSUMMONINF_QRY_ClearFlag(_Player, "LLSUMMONINF_LeaderLib_AddControlSkill")
 AND
 CharacterHasSkill(_Player, "Target_LeaderLib_ControlSummon", 0)
 THEN
 CharacterAddSkill(_Player, "Target_LeaderLib_ControlSummon", 1);
 
 IF
-ObjectFlagSet("LLSUMMONINF_LeaderLid_AddControlSkill", (CHARACTERGUID)_Player, _)
-THEN
-ObjectClearFlag(_Player, "LLSUMMONINF_LeaderLid_AddControlSkill");
-
-IF
-ObjectFlagSet("LLSUMMONINF_LeaderLid_RemoveControlSkill", (CHARACTERGUID)_Player, _)
+ObjectFlagSet("LLSUMMONINF_LeaderLib_RemoveControlSkill", (CHARACTERGUID)_Player, _)
+AND
+LLSUMMONINF_QRY_ClearFlag(_Player, "LLSUMMONINF_LeaderLib_RemoveControlSkill")
 AND
 CharacterHasSkill(_Player, "Target_LeaderLib_ControlSummon", 1)
 THEN
 CharacterRemoveSkill(_Player, "Target_LeaderLib_ControlSummon");
 
 IF
-ObjectFlagSet("LLSUMMONINF_LeaderLid_RemoveControlSkill", (CHARACTERGUID)_Player, _)
+ObjectFlagSet("LLSUMMONINF_Commands_AddDismissSkill", (CHARACTERGUID)_Player, _)
 THEN
-ObjectClearFlag(_Player, "LLSUMMONINF_LeaderLid_RemoveControlSkill");
+ObjectClearFlag(_Player, "LLSUMMONINF_Commands_AddDismissSkill");
+LLSUMMONINF_AddDismissSkill(_Player);
+
+IF
+ObjectFlagSet("LLSUMMONINF_Commands_RemoveDismissSkill", (CHARACTERGUID)_Player, _)
+THEN
+ObjectClearFlag(_Player, "LLSUMMONINF_Commands_RemoveDismissSkill");
+LLSUMMONINF_RemoveDismissSkill(_Player);
 //END_REGION
 
 //REGION COMBAT_ACTIVE_FIX
@@ -294,7 +327,7 @@ MakePlayerActive(_Summon);
 
 //REGION INVOKE_CONTRACT
 PROC
-LLSUMMONINF_OnSummonSkillCast((CHARACTERGUID)_Player, (STRING)_Skill)
+LLSUMMONINF_AddContract((CHARACTERGUID)_Player)
 AND
 NOT GlobalGetFlag("LLSUMMONINF_InvokeContractAutoAddDisabled", 1)
 AND
@@ -306,7 +339,7 @@ ObjectGetFlag(_Player, "LLSUMMONINF_AddedContractToSummoner", _Val)
 AND
 IntegerSubtract(1, _Val, _Notify) // x = 1 - x :)
 THEN
-ObjectSetFlag(_Player, "LLSUMMONINF_AddedContractToSummoner", _Val);
+ObjectSetFlag(_Player, "LLSUMMONINF_AddedContractToSummoner");
 ItemTemplateAddTo("Scroll_LLSUMMONINF_Skill_InvokeContract_9c6b4bf8-54df-434d-a4bf-ecad2ce4851c", _Player, 1, _Notify);
 
 PROC
@@ -400,10 +433,10 @@ LLSUMMONINF_Updater_SetVersion("1.0.0.0");
 IF
 GameStarted(_,_)
 AND
-LLSUMMONINF_Updater_QRY_UpdateNeeded("1.0.0.0")
+LLSUMMONINF_Updater_QRY_UpdateNeeded("1.0.1.0")
 THEN
-LLSUMMONINF_Updater_RemoveOldVersions("1.0.0.0");
-LLSUMMONINF_Updater_SetVersion("1.0.0.0");
+LLSUMMONINF_Updater_RemoveOldVersions("1.0.1.0");
+LLSUMMONINF_Updater_SetVersion("1.0.1.0");
 
 QRY
 LLSUMMONINF_Updater_QRY_UpdateNeeded((STRING)_Version)
@@ -424,8 +457,16 @@ LLSUMMONINF_Updater_VersionChanged(_Version, _NewVersion);
 
 PROC
 LLSUMMONINF_Updater_VersionChanged((STRING)_OldVersion, (STRING)_NewVersion)
+AND
+StringConcatenate("[SummoningTweaks:VersionChanged] Updating registered version [", _OldVersion, _Str)
+AND
+StringConcatenate(_Str, "] to [", _Str2)
+AND
+StringConcatenate(_Str2, _NewVersion, _Str3)
+AND
+StringConcatenate(_Str3, "]", _Str4)
 THEN
-DB_NOOP(1);
+DebugBreak(_Str4);
 
 PROC
 LLSUMMONINF_Updater_SetVersion((STRING)_Version)
