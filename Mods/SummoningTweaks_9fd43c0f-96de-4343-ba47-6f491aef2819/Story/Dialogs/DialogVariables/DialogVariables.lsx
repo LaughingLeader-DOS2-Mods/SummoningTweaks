@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<save>
+    <header version="2" time="1535975640" />
+    <version major="3" minor="6" revision="0" build="4" />
+    <region id="DialogVariables">
+        <node id="root">
+            <children>
+                <node id="DialogVariable">
+                    <attribute id="DefaultValue" value="1" type="23" />
+                    <attribute id="Description" value="" type="23" />
+                    <attribute id="UUID" value="89adccef-225e-47ab-8f10-5add6644ec3b" type="31" />
+                    <attribute id="name" value="LLSUMMONINF_MaxSummonLimit" type="22" />
+                    <attribute id="type" value="Int" type="23" />
+                </node>
+            </children>
+        </node>
+    </region>
+</save>

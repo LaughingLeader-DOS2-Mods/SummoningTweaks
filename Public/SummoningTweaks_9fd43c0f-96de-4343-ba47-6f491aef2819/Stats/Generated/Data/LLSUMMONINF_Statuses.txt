@@ -1,0 +1,13 @@
+new entry "LLSUMMONINF_MAX_SUMMONS_INC"
+type "StatusData"
+data "StatusType" "CONSUME"
+data "ForGameMaster" "No"
+data "InitiateCombat" "No"
+data "DisplayName" ""
+data "Description" ""
+data "Icon" ""
+data "StatsId" "Stats_LLSUMMONINF_MaxSummonIncrease"
+
+new entry "Stats_LLSUMMONINF_MaxSummonIncrease"
+type "Potion"
+data "MaxSummons" "1"

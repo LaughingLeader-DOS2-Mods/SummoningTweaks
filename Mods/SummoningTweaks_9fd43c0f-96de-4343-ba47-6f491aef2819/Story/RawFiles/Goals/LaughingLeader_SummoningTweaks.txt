@@ -1,0 +1,463 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+//REGION SET_MAX_EVENTS
+IF
+SkillCast(_Player, _Skill, _, _)
+AND
+CharacterIsPlayer(_Player, 1)
+AND
+StringContains(_Skill, "Summon_", 1)
+THEN
+SetVarString(_Player, "LLSUMMONINF_LastSummoningSkillUsed", _Skill);
+LLSUMMONINF_OnSummonSkillCast(_Player, _Skill);
+
+PROC
+LLSUMMONINF_OnSummonSkillCast((CHARACTERGUID)_Player, (STRING)_Skill)
+AND
+NOT HasActiveStatus(_Player, "LLSUMMONINF_MAX_SUMMONS_INC", 1)
+THEN
+SetStoryEvent(_Player, "LLSUMMONINF_IncreaseMaxSummons");
+
+PROC
+LLSUMMONINF_OnSummonSkillCast((CHARACTERGUID)_Player, (STRING)_Skill)
+AND
+HasActiveStatus(_Player, "LLSUMMONINF_MAX_SUMMONS_INC", 1)
+AND
+CharacterHasSkill(_Player, "Target_LLSUMMONINF_DismissSummon", 0)
+THEN
+CharacterAddSkill(_Player, "Target_LLSUMMONINF_DismissSummon", 0);
+
+IF
+GameStarted(_Level, _)
+AND
+NOT GlobalGetFlag("LLSUMMONINF_Initialized", 1)
+AND
+IsCharacterCreationLevel(_Level, 0)
+AND
+CharacterGetHostCharacter(_Host)
+THEN
+GlobalSetFlag("LLSUMMONINF_Initialized");
+SetStoryEvent(_Host, "LLSUMMONINF_MaxSummons_UpdatePlayers");
+
+IF
+GlobalFlagSet("LLSUMMONINF_Initialized")
+AND
+CharacterGetHostCharacter(_Host)
+AND
+ItemTemplateIsInUserInventory(_Host, "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 0, 0)
+THEN
+ItemTemplateAddTo("BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", _Host, 1, 0);
+
+IF
+CharacterJoinedParty(_Player)
+AND
+CharacterIsSummon(_Player, 0)
+AND
+NOT HasActiveStatus(_Player, "LLSUMMONINF_MAX_SUMMONS_INC", 1)
+AND
+CharacterGetHostCharacter(_Host)
+AND
+GetVarInteger(_Host, "LLSUMMONINF_MaxSummonsCap", _Max)
+AND
+_Max > 1
+THEN
+SetStoryEvent(_Player, "LLSUMMONINF_IncreaseMaxSummons");
+
+IF
+CharacterLeftParty(_Player)
+AND
+CharacterIsSummon(_Player, 0)
+AND
+CharacterIsControlled(_Player, 0)
+AND
+HasActiveStatus(_Player, "LLSUMMONINF_MAX_SUMMONS_INC", 1)
+THEN
+RemoveStatus(_Player, "LLSUMMONINF_MAX_SUMMONS_INC");
+//END_REGION
+
+//REGION DEBUG
+IF
+GameModeStarted(_, 1)
+AND
+NOT DB_Origins(_)
+THEN
+DB_Origins((CHARACTERGUID)S_GLO_CharacterCreationDummy_001_da072fe7-fdd5-42ae-9139-8bd4b9fca406);
+
+IF
+TextEventSet("llsummon_init")
+AND
+GetPosition(TRIGGERGUID_StartPoint_001_ab1e4726-a8e5-45a9-9dde-9816629646e3, _x, _y, _z)
+AND
+CharacterCreateAtPosition(_x, _y, _z, "Dwarves_Hero_Male_Beast_ca2b78c8-85f3-45f1-b8de-9e8363f1aa51", 0, _Host)
+THEN
+CharacterMakePlayer(_Host, NULL_00000000-0000-0000-0000-000000000000);
+DB_IsPlayer(_Host);
+//CharacterApplyPreset(_Host, "Conjurer_Act2");
+CharacterAddAbility(_Host, "Summoning", 5);
+CharacterAddAttribute(_Host, "Memory", 15);
+CharacterAddSkill(_Host, "Summon_Incarnate");
+CharacterAddSkill(_Host, "Summon_Cat");
+CharacterAddSkill(_Host, "Summon_Condor");
+CharacterAddSkill(_Host, "Summon_FireSlug");
+CharacterAddSkill(_Host, "Summon_SoulWolf");
+CharacterOverrideMaxSourcePoints(_Host, 10);
+CharacterAddSourcePoints(_Host, 10);
+ItemTemplateAddTo("BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", _Host, 1, 0);
+ItemTemplateAddTo("Scroll_LLSUMMONINF_Skill_InvokeContract_9c6b4bf8-54df-434d-a4bf-ecad2ce4851c", _Host, 1, 0);
+MakePlayerActive(_Host);
+
+IF
+TextEventSet("llsummon_setup")
+AND
+CharacterGetHostCharacter(_Host)
+THEN
+//CharacterApplyPreset(_Host, "Conjurer_Act2");
+CharacterMakePlayer(_Host, NULL_00000000-0000-0000-0000-000000000000);
+CharacterAddAbility(_Host, "Summoning", 5);
+CharacterAddAttribute(_Host, "Memory", 15);
+CharacterAddSkill(_Host, "Summon_Incarnate");
+CharacterAddSkill(_Host, "Summon_Cat");
+CharacterAddSkill(_Host, "Summon_Condor");
+CharacterAddSkill(_Host, "Summon_FireSlug");
+CharacterAddSkill(_Host, "Summon_SoulWolf");
+CharacterOverrideMaxSourcePoints(_Host, 10);
+CharacterAddSourcePoints(_Host, 10);
+ItemTemplateAddTo("BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", _Host, 1, 0);
+ItemTemplateAddTo("Scroll_LLSUMMONINF_Skill_InvokeContract_9c6b4bf8-54df-434d-a4bf-ecad2ce4851c", _Host, 1, 0);
+MakePlayerActive(_Host);
+//END_REGION
+
+//REGION SETTINGS_MENU
+PROC
+ProcBlockUseOfItem(_Player, _Book)
+AND
+GetTemplate(_Book, "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b")
+AND
+CharacterIsInCombat(_Player, 1)
+THEN
+CharacterStatusText(_Player, "<font color='#FF0000'>You can't open the settings menu in combat!");
+DB_CustomUseItemResponse(_Player, _Book, 0);
+
+IF
+CharacterUsedItemTemplate(_Player, "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", _Book)
+THEN
+DebugBreak("[SummoningTweaks] Opening settings menu.");
+SetStoryEvent(_Player, "LLSUMMONINF_MaxSummons_InitDialogVar");
+Proc_StartDialog(0, "LLSUMMONINF_SettingsMenu", _Player, _Player);
+
+//Set by LLSUMMONINF_Main.gameScript
+IF
+StoryEvent(_Player, "LLSUMMONINF_MaxSummons_UpdateDialogVar")
+AND
+GetVarInteger(_Player, "LLSUMMONINF_MaxSummonsCap", _Max)
+THEN
+DialogSetVariableInt("LLSUMMONINF_SettingsMenu", "LLSUMMONINF_MaxSummonLimit_89adccef-225e-47ab-8f10-5add6644ec3b", _Max);
+
+IF
+StoryEvent(_Player, "LLSUMMONINF_MaxSummons_InitDialogVar")
+AND
+LLSUMMONINF_QRY_IsHost(_Player)
+THEN
+ObjectSetFlag(_Player, "LLSUMMONINF_IsHost");
+
+QRY
+LLSUMMONINF_QRY_IsHost((CHARACTERGUID)_Player)
+AND
+CharacterGetHostCharacter(_Host)
+AND
+_Player == _Host
+THEN
+DB_NOOP(1);
+
+QRY
+LLSUMMONINF_QRY_IsHost((CHARACTERGUID)_Player)
+AND
+CharacterGetHostCharacter(_Host)
+AND
+_Player != _Host
+AND
+CharacterGetReservedUserID(_Host, _ID)
+AND
+CharacterGetReservedUserID(_Player, _ID)
+THEN
+DB_NOOP(1);
+
+IF
+DialogStarted("LLSUMMONINF_SettingsMenu", (INTEGER)_Instance)
+AND
+DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Player)
+AND
+ObjectGetFlag(_Player, "LLSUMMONINF_IsHost", 1)
+AND
+GetVarInteger(_Player, "LLSUMMONINF_MaxSummonsCap", _Max)
+THEN
+DB_LLSUMMONINF_Temp_StartingMaxSummons(_Player, _Max);
+
+IF
+DialogEnded("LLSUMMONINF_SettingsMenu", (INTEGER)_Instance)
+AND
+DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Player)
+AND
+ObjectGetFlag(_Player, "LLSUMMONINF_IsHost", 1)
+AND
+DB_LLSUMMONINF_Temp_StartingMaxSummons(_Player, _Max)
+AND
+GetVarInteger(_Player, "LLSUMMONINF_MaxSummonsCap", _NewMax)
+AND
+_Max != _NewMax
+AND
+_NewMax >= 0
+THEN
+SetStoryEvent(_Player, "LLSUMMONINF_MaxSummons_UpdatePlayers");
+
+IF
+DialogEnded("LLSUMMONINF_SettingsMenu", (INTEGER)_Instance)
+AND
+DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Player)
+AND
+DB_LLSUMMONINF_Temp_StartingMaxSummons(_Player, _Max)
+THEN
+NOT DB_LLSUMMONINF_Temp_StartingMaxSummons(_Player, _Max);
+ObjectClearFlag(_Player, "LLSUMMONINF_IsHost");
+//END_REGION
+
+//REGION DIALOG_COMMANDS
+IF
+ObjectFlagSet("LLSUMMONINF_LeaderLid_AddControlSkill", (CHARACTERGUID)_Player, _)
+AND
+CharacterHasSkill(_Player, "Target_LeaderLib_ControlSummon", 0)
+THEN
+CharacterAddSkill(_Player, "Target_LeaderLib_ControlSummon", 1);
+
+IF
+ObjectFlagSet("LLSUMMONINF_LeaderLid_AddControlSkill", (CHARACTERGUID)_Player, _)
+THEN
+ObjectClearFlag(_Player, "LLSUMMONINF_LeaderLid_AddControlSkill");
+
+IF
+ObjectFlagSet("LLSUMMONINF_LeaderLid_RemoveControlSkill", (CHARACTERGUID)_Player, _)
+AND
+CharacterHasSkill(_Player, "Target_LeaderLib_ControlSummon", 1)
+THEN
+CharacterRemoveSkill(_Player, "Target_LeaderLib_ControlSummon");
+
+IF
+ObjectFlagSet("LLSUMMONINF_LeaderLid_RemoveControlSkill", (CHARACTERGUID)_Player, _)
+THEN
+ObjectClearFlag(_Player, "LLSUMMONINF_LeaderLid_RemoveControlSkill");
+//END_REGION
+
+//REGION COMBAT_ACTIVE_FIX
+IF
+ObjectTurnStarted((CHARACTERGUID)_Summon)
+AND
+CharacterIsSummon(_Summon, 1)
+AND
+CharacterGetOwner(_Summon, _Owner)
+AND
+HasActiveStatus(_Owner, "LLSUMMONINF_MAX_SUMMONS_INC", 1)
+THEN
+DB_LLSUMMONINF_Temp_ActiveTurnSummon(_Summon, _Owner);
+ProcObjectTimer(_Summon, "LLSUMMONINF_Timers_MakeActiveFix", 500);
+
+IF
+CharacterDied(_Summon)
+AND
+DB_LLSUMMONINF_Temp_ActiveTurnSummon(_Summon, _Owner)
+THEN
+NOT DB_LLSUMMONINF_Temp_ActiveTurnSummon(_Summon, _Owner);
+
+IF
+ObjectTurnEnded((CHARACTERGUID)_Summon)
+AND
+DB_LLSUMMONINF_Temp_ActiveTurnSummon(_Summon, _Owner)
+THEN
+NOT DB_LLSUMMONINF_Temp_ActiveTurnSummon(_Summon, _Owner);
+
+IF
+ObjectLeftCombat((CHARACTERGUID)_Summon, _)
+AND
+DB_LLSUMMONINF_Temp_ActiveTurnSummon(_Summon, _Owner)
+THEN
+NOT DB_LLSUMMONINF_Temp_ActiveTurnSummon(_Summon, _Owner);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Summon, "LLSUMMONINF_Timers_MakeActiveFix")
+AND
+CharacterIsControlled(_Summon, 0)
+THEN
+MakePlayerActive(_Summon);
+//END_REGION
+
+//REGION INVOKE_CONTRACT
+PROC
+LLSUMMONINF_OnSummonSkillCast((CHARACTERGUID)_Player, (STRING)_Skill)
+AND
+NOT GlobalGetFlag("LLSUMMONINF_InvokeContractAutoAddDisabled", 1)
+AND
+HasActiveStatus(_Player, "LLSUMMONINF_MAX_SUMMONS_INC", 1)
+AND
+ItemTemplateIsInCharacterInventory(_Player, "Scroll_LLSUMMONINF_Skill_InvokeContract_9c6b4bf8-54df-434d-a4bf-ecad2ce4851c", 0)
+AND
+ObjectGetFlag(_Player, "LLSUMMONINF_AddedContractToSummoner", _Val)
+AND
+IntegerSubtract(1, _Val, _Notify) // x = 1 - x :)
+THEN
+ObjectSetFlag(_Player, "LLSUMMONINF_AddedContractToSummoner", _Val);
+ItemTemplateAddTo("Scroll_LLSUMMONINF_Skill_InvokeContract_9c6b4bf8-54df-434d-a4bf-ecad2ce4851c", _Player, 1, _Notify);
+
+PROC
+ProcBlockUseOfItem(_Player, _Item)
+AND
+CharacterIsInCombat(_Player, 1)
+AND
+GetTemplate(_Item, "Scroll_LLSUMMONINF_Skill_InvokeContract_9c6b4bf8-54df-434d-a4bf-ecad2ce4851c")
+THEN
+CharacterStatusText(_Player, "LLSUMMONINF_StatusText_InvokeContractBlocked");
+DB_CustomUseItemResponse(_Player, _Item, 0);
+
+PROC
+ProcBlockUseOfItem(_Player, _Item)
+AND
+NOT DB_CustomUseItemResponse(_Player, _Item, _)
+AND
+GetTemplate(_Item, "Scroll_LLSUMMONINF_Skill_InvokeContract_9c6b4bf8-54df-434d-a4bf-ecad2ce4851c")
+AND
+NOT LLSUMMONINF_QRY_LastSummonSkillSet(_Player)
+THEN
+CharacterStatusText(_Player, "LLSUMMONINF_StatusText_InvokeContractInvalid");
+DB_CustomUseItemResponse(_Player, _Item, 0);
+
+QRY
+LLSUMMONINF_QRY_LastSummonSkillSet((CHARACTERGUID)_Player)
+AND
+GetVarString(_Player, "LLSUMMONINF_LastSummoningSkillUsed", _Skill)
+AND
+StringContains(_Skill, "Summon_", 1)
+THEN
+DB_NOOP(1);
+
+IF
+CharacterUsedSkillAtPosition(_Player, _x, _y, _z, "Target_LLSUMMONINF_CastLastSummon", _, _)
+AND
+CharacterIsInCombat(_Player, 0)
+AND
+GetVarString(_Player, "LLSUMMONINF_LastSummoningSkillUsed", _Skill)
+AND
+StringContains(_Skill, "Summon_", 1)
+AND
+RealSum(_y, 2.0, _ty)
+THEN
+//CharacterSetAnimationOverride(_Player, "skill_cast_summon_totem_01_cast");
+DB_LLSUMMONINF_SummonEffectLocation(_Player, _x, _y, _z);
+CharacterUseSkillAtPosition(_Player, _Skill, _x, _y, _z, 1, 0);
+ProcObjectTimer(_Player, "LLSUMMONINF_Timers_PlaySummonEffect", 900);
+PlayEffectAtPosition("RS3_FX_UI_Icon_SkipTurn_UsedScroll_01", _x, _ty, _z);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Player, "LLSUMMONINF_Timers_PlaySummonEffect")
+AND
+DB_LLSUMMONINF_SummonEffectLocation(_Player, _x, _y, _z)
+THEN
+NOT DB_LLSUMMONINF_SummonEffectLocation(_Player, _x, _y, _z);
+PlayEffectAtPosition("LLSUMMONINF_Skills_InvokeContract_Cast_Summon_01", _x, _y, _z);
+PlayEffectAtPosition("RS3_FX_Skills_Totem_Target_Nebula_01", _x, _y, _z);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Player, "LLSUMMONINF_Timers_ResetAnimOverride")
+THEN
+CharacterSetAnimationOverride(_Player, "");
+//END_REGION
+
+//REGION START
+IF
+GameEventSet("GAMEEVENT_GameStarted")
+THEN
+DB_LLSUMMONINF_StoryStarted(1);
+
+IF
+SavegameLoaded(_,_,_,_)
+AND
+DB_StoryStarted(_)
+THEN
+DB_LLSUMMONINF_StoryStarted(1);
+
+IF
+DB_LLSUMMONINF_StoryStarted(1)
+THEN
+DebugBreak("[LaughingLeader_SummoningTweaks] Starting Summoning Tweaks.");
+//END_REGION
+
+//REGION VERSIONING
+IF
+DB_LLSUMMONINF_StoryStarted(1)
+THEN
+LLSUMMONINF_Updater_SetVersion("1.0.0.0");
+
+IF
+GameStarted(_,_)
+AND
+LLSUMMONINF_Updater_QRY_UpdateNeeded("1.0.0.0")
+THEN
+LLSUMMONINF_Updater_RemoveOldVersions("1.0.0.0");
+LLSUMMONINF_Updater_SetVersion("1.0.0.0");
+
+QRY
+LLSUMMONINF_Updater_QRY_UpdateNeeded((STRING)_Version)
+AND
+NOT DB_Mods_Registered("SummoningTweaks", "LaughingLeader", _Version)
+THEN
+DB_NOOP(1);
+
+PROC
+LLSUMMONINF_Updater_RemoveOldVersions((STRING)_NewVersion)
+AND
+DB_Mods_Registered("SummoningTweaks", "LaughingLeader", _Version)
+AND
+_Version != _NewVersion
+THEN
+NOT DB_Mods_Registered("SummoningTweaks", "LaughingLeader", _Version);
+LLSUMMONINF_Updater_VersionChanged(_Version, _NewVersion);
+
+PROC
+LLSUMMONINF_Updater_VersionChanged((STRING)_OldVersion, (STRING)_NewVersion)
+THEN
+DB_NOOP(1);
+
+PROC
+LLSUMMONINF_Updater_SetVersion((STRING)_Version)
+AND
+GlobalGetFlag("LeaderLib_Initialized", 1)
+THEN
+DB_LeaderLib_ModApi_RegisterMod("SummoningTweaks", "LaughingLeader", _Version);
+
+PROC
+LLSUMMONINF_Updater_SetVersion((STRING)_Version)
+AND
+NOT GlobalGetFlag("LeaderLib_Initialized", 1)
+THEN
+DB_Mods_Registered("SummoningTweaks", "LaughingLeader", _Version);
+//END_REGION
+
+//REGION LEADERLIB
+IF
+StoryEvent(_, "LeaderLib_Initialized")
+AND
+NOT DB_LLSUMMONINF_RegisteredLeaderLibSettings(_)
+THEN
+DB_LLSUMMONINF_RegisteredLeaderLibSettings(1);
+
+IF
+DB_LLSUMMONINF_RegisteredLeaderLibSettings(1)
+THEN
+DB_LeaderLib_ModApi_RegisterActiveGoal("SummoningTweaks", "LaughingLeader", "LaughingLeader_SummoningTweaks");
+DB_LeaderLib_ModApi_RegisterMenu("LaughingLeader.SummoningTweaks", "[Summoning Tweaks] Settings", "LLSUMMONINF_SettingsMenu", "SummoningTweaks", "LaughingLeader");
+DB_LeaderLib_Treasure_TreasureItemTemplates("LeaderLib.LeaderTrader.ModBooks", "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 4, "");
+DB_LeaderLib_Treasure_ItemMaxAmount("LeaderLib.LeaderTrader.ModBooks", "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 4);
+//END_REGION
+EXITSECTION
+
+ENDEXITSECTION

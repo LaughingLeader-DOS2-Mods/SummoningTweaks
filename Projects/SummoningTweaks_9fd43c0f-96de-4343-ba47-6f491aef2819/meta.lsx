@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<save>
+    <header version="2" time="1535980289" />
+    <version major="3" minor="6" revision="0" build="4" />
+    <region id="MetaData">
+        <node id="root">
+            <attribute id="Module" value="9fd43c0f-96de-4343-ba47-6f491aef2819" type="23" />
+            <attribute id="Name" value="SummoningTweaks" type="23" />
+            <attribute id="Type" value="Add-on" type="23" />
+            <attribute id="UUID" value="56655a01-3283-4348-a05a-64aa7aacd4bf" type="23" />
+        </node>
+    </region>
+</save>

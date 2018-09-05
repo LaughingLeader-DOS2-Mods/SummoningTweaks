@@ -1,0 +1,257 @@
+INIT
+	INT:%LLSUMMONINF_MaxSummonsCap = 3
+	INT:%LLSUMMONINF_MaxSummonsCap_Default = 3
+	INT:%LLSUMMONINF_MaxSummonsCap_Maximum = 20
+EVENTS
+
+EVENT LLSUMMONINF_IncreaseMaxSummons
+VARS
+	CHARACTER:_Character
+	INT:_Current
+	STRING:_Str
+	FIXEDSTRING:_StrF
+ON
+	OnCharacterEvent(_Character, "LLSUMMONINF_IncreaseMaxSummons")
+ACTIONS
+IF "c1"
+	IsGreaterThen(%LLSUMMONINF_MaxSummonsCap, 1)
+THEN
+	IF "c1"
+		CharacterHasStatus(_Character, LLSUMMONINF_MAX_SUMMONS_INC)
+	THEN
+		CharacterRemoveStatus(_Character, LLSUMMONINF_MAX_SUMMONS_INC, null, 0)
+	ENDIF
+	Set(_Current, 1)
+	WHILE "c1"
+		IsLessThen(_Current, %LLSUMMONINF_MaxSummonsCap)
+	DO
+		CharacterApplyStatus(_Character, LLSUMMONINF_MAX_SUMMONS_INC, -1, 1, _Character)
+		Add(_Current, 1)
+	ENDWHILE
+ELIF "c1"
+	CharacterHasStatus(_Character, LLSUMMONINF_MAX_SUMMONS_INC)
+THEN
+	CharacterRemoveStatus(_Character, LLSUMMONINF_MAX_SUMMONS_INC, null, 0)
+ELSE
+	//Print(_Str, "Max: [1]", _Max)
+	//Cast(_StrF, _Str)
+	//StatusText(_Character, _StrF)
+ENDIF
+
+//REGION START_EVENTS
+EVENT LLSUMMONINF_IncreaseMaxSummons_Start_Resurrected
+VARS
+	CHARACTER:_Character
+ON
+	OnCharacterStatusRemoved(_Character, RESURRECT)
+ACTIONS
+IF "c1&!c2"
+	CharacterIsPlayer(_Character)
+	CharacterIsSummon(_Character)
+THEN
+	CharacterEvent(_Character, "LLSUMMONINF_IncreaseMaxSummons")
+ENDIF
+
+EVENT LLSUMMONINF_IncreaseMaxSummons_Start_Flag
+VARS
+	CHARACTER:_Character
+ON
+	OnCharacterEvent(_Character, "LLSUMMONINF_MaxSummons_UpdatePlayers")
+ACTIONS
+	IterateParty("LLSUMMONINF_Iterate_SetMaxSummons")
+	
+EVENT LLSUMMONINF_IncreaseMaxSummons_Start_OnIterate
+VARS
+	CHARACTER:_Character
+ON
+	OnIterateCharacter(_Character, "LLSUMMONINF_Iterate_SetMaxSummons")
+ACTIONS
+IF "!c1"
+	CharacterIsSummon(_Character)
+THEN
+	IF "c1"
+		CharacterHasStatus(_Character, LLSUMMONINF_MAX_SUMMONS_INC)
+	THEN
+		SetFlag(_Character, "LLSUMMONINF_RefreshingMaxCapStatus")
+		CharacterRemoveStatus(_Character, LLSUMMONINF_MAX_SUMMONS_INC, null, 0)
+	ELSE
+		CharacterEvent(_Character, "LLSUMMONINF_IncreaseMaxSummons")
+	ENDIF
+ENDIF
+
+EVENT LLSUMMONINF_IncreaseMaxSummons_Start_RefreshActive
+VARS
+	CHARACTER:_Character
+ON
+	OnCharacterStatusRemoved(_Character, LLSUMMONINF_MAX_SUMMONS_INC)
+ACTIONS
+IF "c1"
+	HasFlag(_Character, "LLSUMMONINF_RefreshingMaxCapStatus")
+THEN
+	CharacterEvent(_Character, "LLSUMMONINF_IncreaseMaxSummons")
+	ClearFlag(_Character, "LLSUMMONINF_RefreshingMaxCapStatus")
+ENDIF
+	
+//END_REGION
+
+//REGION FLAG_COMMANDS
+EVENT LLSUMMONINF_DialogCommands_RemoveStatus
+ON
+	OnGlobalFlagSet("LLSUMMONINF_RemoveMaxHiddenStatus")
+ACTIONS
+	ClearGlobalFlag("LLSUMMONINF_RemoveMaxHiddenStatus")
+	IterateParty("LLSUMMONINF_Iterate_RemoveMaxCapStatus")
+	
+EVENT LLSUMMONINF_DialogCommands_RemoveStatus_OnIterate
+VARS
+	CHARACTER:_Character
+ON
+	OnIterateCharacter(_Character, "LLSUMMONINF_Iterate_RemoveMaxCapStatus")
+ACTIONS
+	CharacterRemoveStatus(_Character, LLSUMMONINF_MAX_SUMMONS_INC, null, 0)
+//END_REGION
+
+//REGION DIALOG_EVENTS
+EVENT LLSUMMONINF_DialogVar_Init
+VARS
+	CHARACTER:_Character
+ON
+	OnCharacterEvent(_Character, "LLSUMMONINF_MaxSummons_InitDialogVar")
+ACTIONS
+	SetVar(_Character, "LLSUMMONINF_MaxSummonsCap", %LLSUMMONINF_MaxSummonsCap)
+	CharacterEvent(_Character, "LLSUMMONINF_MaxSummons_UpdateDialogVar")
+	
+EVENT LLSUMMONINF_SettingsMenu_DisplayCurrentMax
+VARS
+	CHARACTER:_Character
+	STRING:_Str
+	FIXEDSTRING:_StatusStr
+ON
+	OnCharacterEvent(_Character, "LLSUMMONINF_MaxSummons_DisplayCurrentMax")
+ACTIONS
+	Print(_Str, "Max Summons Set to  <font color='#00FF00' size='26'>[1]</font>", %LLSUMMONINF_MaxSummonsCap)
+	Cast(_StatusStr, _Str)
+	StatusText(_Character, _StatusStr)
+	
+EVENT LLSUMMONINF_Cap_Increase
+VARS
+	CHARACTER:_Character
+ON
+	OnCharacterFlagSet("LLSUMMONINF_MaxSummons_Increase", _Character)
+ACTIONS
+IF "c1"
+	IsLessThen(%LLSUMMONINF_MaxSummonsCap, %LLSUMMONINF_MaxSummonsCap_Maximum)
+THEN
+	Add(%LLSUMMONINF_MaxSummonsCap, 1)
+ELSE
+	Set(%LLSUMMONINF_MaxSummonsCap, %LLSUMMONINF_MaxSummonsCap_Maximum)
+ENDIF
+	SetVar(_Character, "LLSUMMONINF_MaxSummonsCap", %LLSUMMONINF_MaxSummonsCap)
+	CharacterEvent(_Character, "LLSUMMONINF_MaxSummons_UpdateDialogVar")
+	CharacterEvent(_Character, "LLSUMMONINF_MaxSummons_DisplayCurrentMax")
+	
+EVENT LLSUMMONINF_Cap_Increase_5
+VARS
+	CHARACTER:_Character
+ON
+	OnCharacterFlagSet("LLSUMMONINF_MaxSummons_Increase_5", _Character)
+ACTIONS
+IF "c1"
+	IsLessThen(%LLSUMMONINF_MaxSummonsCap, %LLSUMMONINF_MaxSummonsCap_Maximum)
+THEN
+	Add(%LLSUMMONINF_MaxSummonsCap, 5)
+	IF "c1"
+		IsGreaterThen(%LLSUMMONINF_MaxSummonsCap, %LLSUMMONINF_MaxSummonsCap_Maximum)
+	THEN
+		Set(%LLSUMMONINF_MaxSummonsCap, %LLSUMMONINF_MaxSummonsCap_Maximum)
+	ENDIF
+ELSE
+	Set(%LLSUMMONINF_MaxSummonsCap, %LLSUMMONINF_MaxSummonsCap_Maximum)
+ENDIF
+	SetVar(_Character, "LLSUMMONINF_MaxSummonsCap", %LLSUMMONINF_MaxSummonsCap)
+	CharacterEvent(_Character, "LLSUMMONINF_MaxSummons_UpdateDialogVar")
+	CharacterEvent(_Character, "LLSUMMONINF_MaxSummons_DisplayCurrentMax")
+	
+EVENT LLSUMMONINF_Cap_Decrease
+VARS
+	CHARACTER:_Character
+ON
+	OnCharacterFlagSet("LLSUMMONINF_MaxSummons_Decrease", _Character)
+ACTIONS
+IF "c1"
+	IsGreaterThen(%LLSUMMONINF_MaxSummonsCap, 1)
+THEN
+	Subtract(%LLSUMMONINF_MaxSummonsCap, 1)
+ELIF "c1"
+	IsLessThen(%LLSUMMONINF_MaxSummonsCap, 1)
+THEN
+	Set(%LLSUMMONINF_MaxSummonsCap, 1)
+ENDIF
+	SetVar(_Character, "LLSUMMONINF_MaxSummonsCap", %LLSUMMONINF_MaxSummonsCap)
+	CharacterEvent(_Character, "LLSUMMONINF_MaxSummons_UpdateDialogVar")
+	CharacterEvent(_Character, "LLSUMMONINF_MaxSummons_DisplayCurrentMax")
+	
+EVENT LLSUMMONINF_Cap_Decrease_5
+VARS
+	CHARACTER:_Character
+ON
+	OnCharacterFlagSet("LLSUMMONINF_MaxSummons_Decrease_5", _Character)
+ACTIONS
+IF "c1"
+	IsGreaterThen(%LLSUMMONINF_MaxSummonsCap, 1)
+THEN
+	Subtract(%LLSUMMONINF_MaxSummonsCap, 5)
+	IF "c1"
+		IsLessThen(%LLSUMMONINF_MaxSummonsCap, 1)
+	THEN
+		Set(%LLSUMMONINF_MaxSummonsCap, 1)
+	ENDIF
+ELIF "c1"
+	IsLessThen(%LLSUMMONINF_MaxSummonsCap, 1)
+THEN
+	Set(%LLSUMMONINF_MaxSummonsCap, 1)
+ENDIF
+	SetVar(_Character, "LLSUMMONINF_MaxSummonsCap", %LLSUMMONINF_MaxSummonsCap)
+	CharacterEvent(_Character, "LLSUMMONINF_MaxSummons_UpdateDialogVar")
+	CharacterEvent(_Character, "LLSUMMONINF_MaxSummons_DisplayCurrentMax")
+	
+EVENT LLSUMMONINF_Cap_Reset
+VARS
+	CHARACTER:_Character
+ON
+	OnCharacterFlagSet("LLSUMMONINF_MaxSummons_Reset", _Character)
+ACTIONS
+	Set(%LLSUMMONINF_MaxSummonsCap, %LLSUMMONINF_MaxSummonsCap_Default)
+	SetVar(_Character, "LLSUMMONINF_MaxSummonsCap", %LLSUMMONINF_MaxSummonsCap)
+	CharacterEvent(_Character, "LLSUMMONINF_MaxSummons_UpdateDialogVar")
+	CharacterEvent(_Character, "LLSUMMONINF_MaxSummons_DisplayCurrentMax")
+	
+EVENT LLSUMMONINF_Cap_ResetToDOS2
+VARS
+	CHARACTER:_Character
+ON
+	OnCharacterFlagSet("LLSUMMONINF_MaxSummons_ResetToDOS2Default", _Character)
+ACTIONS
+	Set(%LLSUMMONINF_MaxSummonsCap, 1)
+	SetVar(_Character, "LLSUMMONINF_MaxSummonsCap", %LLSUMMONINF_MaxSummonsCap)
+	CharacterEvent(_Character, "LLSUMMONINF_MaxSummons_UpdateDialogVar")
+	CharacterEvent(_Character, "LLSUMMONINF_MaxSummons_DisplayCurrentMax")
+//END_REGION
+
+//REGION MISC
+
+EVENT LLSUMMONINF_DismissSummon_PlayAD
+VARS
+	CHARACTER:_Player
+	INT:_Ran
+ON
+	OnSkillCast(_Player, Target_LLSUMMONINF_DismissSummon)
+ACTIONS
+	GetRandomBetween(_Ran, 0, 100)
+IF "!c1&c2"
+	IsInAutomatedDialog(_Player)
+	IsGreaterThen(_Ran, 70)
+THEN
+	DialogStart(_, "LLSUMMONINF_AD_DismissSummon", _Player)
+ENDIF
+//END_REGION
