@@ -57,7 +57,7 @@ GameStarted(_Level, _)
 AND
 NOT GlobalGetFlag("LLSUMMONINF_Initialized", 1)
 AND
-IsCharacterCreationLevel(_Level, 0)
+IsGameLevel(_Level, 1)
 AND
 CharacterGetHostCharacter(_Host)
 THEN
@@ -496,7 +496,7 @@ DB_LLSUMMONINF_RegisteredLeaderLibSettings(1)
 THEN
 DB_LeaderLib_ModApi_RegisterActiveGoal("SummoningTweaks", "LaughingLeader", "LaughingLeader_SummoningTweaks");
 DB_LeaderLib_ModApi_RegisterMenu("LaughingLeader.SummoningTweaks", "[Summoning Tweaks] Settings", "LLSUMMONINF_SettingsMenu", "SummoningTweaks", "LaughingLeader");
-DB_LeaderLib_Treasure_TreasureItemTemplates("LeaderLib.LeaderTrader.ModBooks", "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 4, "");
+DB_LeaderLib_Treasure_TreasureItemTemplates("LeaderLib.LeaderTrader.ModBooks", "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 1, "");
 DB_LeaderLib_Treasure_ItemMaxAmount("LeaderLib.LeaderTrader.ModBooks", "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 4);
 //END_REGION
 EXITSECTION
