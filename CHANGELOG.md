@@ -1,6 +1,6 @@
 Summoning Tweaks Changelog
 =======
-# 1.0.1.1
+# 1.0.2.0
 * Minor quick fixes:
 	* Fix for the host flag not being set when opening the ST menu via the mod menu.
 	* Fix for the summon cap not being raised when summoning a Bloated Corpse (normally when you cast a summon spell, an invisible status is applied (+ stacked) that raises your max summoning limit. Bloated Corpse is a target spell, so it was ignored by the check).
