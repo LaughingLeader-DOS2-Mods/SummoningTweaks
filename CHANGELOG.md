@@ -1,5 +1,8 @@
 Summoning Tweaks Changelog
 =======
+# Permanent Summons 1.0.1.0
+* Made the "Summon Newt" summon permanent.
+
 # 1.0.2.0
 * Minor quick fixes:
 	* Fix for the host flag not being set when opening the ST menu via the mod menu.
