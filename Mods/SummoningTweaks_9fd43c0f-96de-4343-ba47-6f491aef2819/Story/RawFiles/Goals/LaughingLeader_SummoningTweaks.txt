@@ -4,15 +4,34 @@ INITSECTION
 
 KBSECTION
 //REGION SET_MAX_EVENTS
+QRY
+LLSUMMONINF_QRY_IsSummonSkill((STRING)_Skill)
+AND
+StringContains(_Skill, "Summon_", 1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLSUMMONINF_QRY_IsSummonSkill("Target_BloatedCorpse")
+THEN
+DB_NOOP(1);
+
 IF
 SkillCast(_Player, _Skill, _, _)
 AND
 CharacterIsPlayer(_Player, 1)
 AND
+LLSUMMONINF_QRY_IsSummonSkill(_Skill)
+THEN
+LLSUMMONINF_OnSummonSkillCast(_Player, _Skill);
+LLSUMMONINF_ContractCheck(_Player, _Skill);
+
+PROC
+LLSUMMONINF_ContractCheck((CHARACTERGUID)_Player, (STRING)_Skill)
+AND
 StringContains(_Skill, "Summon_", 1)
 THEN
 SetVarString(_Player, "LLSUMMONINF_LastSummoningSkillUsed", _Skill);
-LLSUMMONINF_OnSummonSkillCast(_Player, _Skill);
 LLSUMMONINF_AddContract(_Player);
 
 PROC
@@ -167,6 +186,12 @@ IF
 CharacterUsedItemTemplate(_Player, "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", _Book)
 THEN
 DebugBreak("[SummoningTweaks] Opening settings menu.");
+SetStoryEvent(_Player, "LLSUMMONINF_MaxSummons_InitDialogVar");
+Proc_StartDialog(0, "LLSUMMONINF_SettingsMenu", _Player, _Player);
+
+IF
+StoryEvent(_Player, "SummoningTweaks_SettingsMenu_OpenRequest")
+THEN
 SetStoryEvent(_Player, "LLSUMMONINF_MaxSummons_InitDialogVar");
 Proc_StartDialog(0, "LLSUMMONINF_SettingsMenu", _Player, _Player);
 
@@ -428,15 +453,15 @@ DebugBreak("[LaughingLeader_SummoningTweaks] Starting Summoning Tweaks.");
 IF
 DB_LLSUMMONINF_StoryStarted(1)
 THEN
-LLSUMMONINF_Updater_SetVersion("1.0.0.0");
+LLSUMMONINF_Updater_SetVersion("1.0.2.0");
 
 IF
 GameStarted(_,_)
 AND
-LLSUMMONINF_Updater_QRY_UpdateNeeded("1.0.1.0")
+LLSUMMONINF_Updater_QRY_UpdateNeeded("1.0.2.0")
 THEN
-LLSUMMONINF_Updater_RemoveOldVersions("1.0.1.0");
-LLSUMMONINF_Updater_SetVersion("1.0.1.0");
+LLSUMMONINF_Updater_RemoveOldVersions("1.0.2.0");
+LLSUMMONINF_Updater_SetVersion("1.0.2.0");
 
 QRY
 LLSUMMONINF_Updater_QRY_UpdateNeeded((STRING)_Version)
@@ -496,8 +521,16 @@ DB_LLSUMMONINF_RegisteredLeaderLibSettings(1)
 THEN
 DB_LeaderLib_ModApi_RegisterActiveGoal("SummoningTweaks", "LaughingLeader", "LaughingLeader_SummoningTweaks");
 DB_LeaderLib_ModApi_RegisterMenu("LaughingLeader.SummoningTweaks", "[Summoning Tweaks] Settings", "LLSUMMONINF_SettingsMenu", "SummoningTweaks", "LaughingLeader");
+DB_LeaderLib_ModMenu_RegisteredMenu_OpenEvent("LaughingLeader.SummoningTweaks", "SummoningTweaks_SettingsMenu_OpenRequest");
 DB_LeaderLib_Treasure_TreasureItemTemplates("LeaderLib.LeaderTrader.ModBooks", "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 1, "");
 DB_LeaderLib_Treasure_ItemMaxAmount("LeaderLib.LeaderTrader.ModBooks", "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 4);
+
+PROC
+LLSUMMONINF_Updater_VersionChanged((STRING)_OldVersion, "1.0.2.0")
+AND
+NOT DB_LeaderLib_ModMenu_RegisteredMenu_OpenEvent("LaughingLeader.SummoningTweaks", _)
+THEN
+DB_LeaderLib_ModMenu_RegisteredMenu_OpenEvent("LaughingLeader.SummoningTweaks", "SummoningTweaks_SettingsMenu_OpenRequest");
 //END_REGION
 EXITSECTION
 
