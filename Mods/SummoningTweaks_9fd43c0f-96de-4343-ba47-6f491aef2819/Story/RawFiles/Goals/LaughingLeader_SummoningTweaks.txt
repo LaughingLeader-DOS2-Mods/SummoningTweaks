@@ -177,6 +177,8 @@ ProcBlockUseOfItem(_Player, _Book)
 AND
 GetTemplate(_Book, "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b")
 AND
+NOT QRY_SpeakerIsAvailable(_Player)
+AND
 CharacterIsInCombat(_Player, 1)
 THEN
 CharacterStatusText(_Player, "<font color='#FF0000'>You can't open the settings menu in combat!");
@@ -184,6 +186,8 @@ DB_CustomUseItemResponse(_Player, _Book, 0);
 
 IF
 CharacterUsedItemTemplate(_Player, "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", _Book)
+AND
+QRY_SpeakerIsAvailable(_Player)
 THEN
 DebugBreak("[SummoningTweaks] Opening settings menu.");
 SetStoryEvent(_Player, "LLSUMMONINF_MaxSummons_InitDialogVar");
@@ -191,6 +195,8 @@ Proc_StartDialog(0, "LLSUMMONINF_SettingsMenu", _Player, _Player);
 
 IF
 StoryEvent(_Player, "SummoningTweaks_SettingsMenu_OpenRequest")
+AND
+QRY_SpeakerIsAvailable(_Player)
 THEN
 SetStoryEvent(_Player, "LLSUMMONINF_MaxSummons_InitDialogVar");
 Proc_StartDialog(0, "LLSUMMONINF_SettingsMenu", _Player, _Player);
@@ -204,7 +210,7 @@ THEN
 DialogSetVariableInt("LLSUMMONINF_SettingsMenu", "LLSUMMONINF_MaxSummonLimit_89adccef-225e-47ab-8f10-5add6644ec3b", _Max);
 
 IF
-StoryEvent(_Player, "LLSUMMONINF_MaxSummons_InitDialogVar")
+StoryEvent((CHARACTERGUID)_Player, "LLSUMMONINF_MaxSummons_InitDialogVar")
 AND
 LLSUMMONINF_QRY_IsHost(_Player)
 THEN
@@ -276,6 +282,26 @@ QRY
 LLSUMMONINF_QRY_ClearFlag((GUIDSTRING)_Object, (STRING)_Flag)
 THEN
 ObjectClearFlag(_Object, _Flag);
+
+IF
+ObjectFlagSet("LLSUMMONINF_Commands_AddDemonCodex", (CHARACTERGUID)_Player, _)
+AND
+LLSUMMONINF_QRY_ClearFlag(_Player, "LLSUMMONINF_Commands_AddDemonCodex")
+AND
+NOT CharacterGetItemTemplateCount(_Player, "BOOK_LLSUMMONINF_DemonCodex_48957893-b552-4642-b864-98f114a6d7fb", 0)
+THEN
+ShowNotification(_Player, "LLSUMMONINF_Notification_AlreadyHaveDemonCodex");
+
+IF
+ObjectFlagSet("LLSUMMONINF_Commands_AddDemonCodex", (CHARACTERGUID)_Player, _)
+AND
+LLSUMMONINF_QRY_ClearFlag(_Player, "LLSUMMONINF_Commands_AddDemonCodex")
+AND
+CharacterGetItemTemplateCount(_Player, "BOOK_LLSUMMONINF_DemonCodex_48957893-b552-4642-b864-98f114a6d7fb", 0)
+THEN
+ItemTemplateAddTo("BOOK_LLSUMMONINF_DemonCodex_48957893-b552-4642-b864-98f114a6d7fb", _Player, 1);
+PlayEffect(_Player, "RS3_FX_Skills_Totem_Cast_Target_Totem_Void_Root_02");
+PlayEffect(_Player, "RS3_FX_Skills_Totem_Impact_Summon_Void_01");
 
 IF
 ObjectFlagSet("LLSUMMONINF_LeaderLib_AddControlSkill", (CHARACTERGUID)_Player, _)
@@ -403,6 +429,16 @@ CharacterUsedSkillAtPosition(_Player, _x, _y, _z, "Target_LLSUMMONINF_CastLastSu
 AND
 CharacterIsInCombat(_Player, 0)
 AND
+LLSUMMONINF_QRY_LastSummonSkillSet(_Player)
+THEN
+DB_LLSUMMONINF_SummonEffectLocation(_Player, _x, _y, _z);
+ProcObjectTimer(_Player, "LLSUMMONINF_Timers_InvokeContract_Start", 100);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Player, "LLSUMMONINF_Timers_InvokeContract_Start")
+AND
+DB_LLSUMMONINF_SummonEffectLocation(_Player, _x, _y, _z)
+AND
 GetVarString(_Player, "LLSUMMONINF_LastSummoningSkillUsed", _Skill)
 AND
 StringContains(_Skill, "Summon_", 1)
@@ -410,10 +446,19 @@ AND
 RealSum(_y, 2.0, _ty)
 THEN
 //CharacterSetAnimationOverride(_Player, "skill_cast_summon_totem_01_cast");
-DB_LLSUMMONINF_SummonEffectLocation(_Player, _x, _y, _z);
 CharacterUseSkillAtPosition(_Player, _Skill, _x, _y, _z, 1, 0);
 ProcObjectTimer(_Player, "LLSUMMONINF_Timers_PlaySummonEffect", 900);
 PlayEffectAtPosition("RS3_FX_UI_Icon_SkipTurn_UsedScroll_01", _x, _ty, _z);
+
+//Failsafe
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Player, "LLSUMMONINF_Timers_InvokeContract_Start")
+AND
+NOT DB_ObjectTimer(_Player, _, "LLSUMMONINF_Timers_PlaySummonEffect")
+AND
+DB_LLSUMMONINF_SummonEffectLocation(_Player, _x, _y, _z)
+THEN
+NOT DB_LLSUMMONINF_SummonEffectLocation(_Player, _x, _y, _z);
 
 PROC
 ProcObjectTimerFinished((CHARACTERGUID)_Player, "LLSUMMONINF_Timers_PlaySummonEffect")
@@ -428,6 +473,127 @@ PROC
 ProcObjectTimerFinished((CHARACTERGUID)_Player, "LLSUMMONINF_Timers_ResetAnimOverride")
 THEN
 CharacterSetAnimationOverride(_Player, "");
+//END_REGION
+
+//REGION DEMON_CODEX
+IF
+RegionStarted(_)
+AND
+NOT DB_LLSUMMONINF_SettingsInitialized(1)
+THEN
+LLSUMMONINF_InitDemonCodexSettings();
+DB_LLSUMMONINF_SettingsInitialized(1);
+
+PROC
+LLSUMMONINF_InitDemonCodexSettings()
+THEN
+DB_LLSUMMONINF_IncarnateInfusion("Target_RangedInfusion", "INF_RANGED", "INF_RANGED");
+DB_LLSUMMONINF_IncarnateInfusion("Target_PowerInfusion", "INF_POWER", "INF_POWER");
+DB_LLSUMMONINF_IncarnateInfusion("Target_ShadowInfusion", "INF_SHADOW", "INF_SHADOW");
+DB_LLSUMMONINF_IncarnateInfusion("Target_WarpInfusion", "INF_WARP", "INF_WARP");
+DB_LLSUMMONINF_IncarnateInfusion("Target_FireInfusion", "INF_FIRE", "INF_FIRE_G");
+DB_LLSUMMONINF_IncarnateInfusion("Target_IceInfusion", "INF_BLESSED_ICE", "INF_BLESSED_ICE_G");
+DB_LLSUMMONINF_IncarnateInfusion("Target_ElectricInfusion", "INF_ELECTRIC", "INF_ELECTRIC_G");
+DB_LLSUMMONINF_IncarnateInfusion("Target_PoisonInfusion", "INF_POISON", "INF_POISON_G");
+DB_LLSUMMONINF_IncarnateInfusion("Target_NecrofireInfusion", "INF_NECROFIRE", "INF_NECROFIRE_G");
+DB_LLSUMMONINF_IncarnateInfusion("Target_WaterInfusion", "INF_NECROFIRE", "INF_WATER_G");
+DB_LLSUMMONINF_IncarnateInfusion("Target_AcidInfusion", "INF_ACID", "INF_ACID_G");
+DB_LLSUMMONINF_IncarnateInfusion("Target_CursedElectricInfusion", "INF_CURSED_ELECTRIC", "INF_CURSED_ELECTRIC_G");
+
+IF
+CharacterStatusApplied(_Incarnate, "LLSUMMONINF_COPY_INFUSIONS", (CHARACTERGUID)_Summoner)
+AND
+DB_LLSUMMONINF_DemonCodexInfusions(_Summoner, _Skill)
+THEN
+NOT DB_LLSUMMONINF_DemonCodexInfusions(_Summoner, _Skill);
+ObjectSetFlag(_Summoner, "LLSUMMONINF_HadCopiedInfusions");
+
+IF
+CharacterStatusApplied(_Incarnate, "LLSUMMONINF_COPY_INFUSIONS", (CHARACTERGUID)_Summoner)
+AND
+ObjectGetFlag(_Summoner, "LLSUMMONINF_HadCopiedInfusions", 1)
+THEN
+ShowNotification(_Summoner, "LLSUMMONINF_Notification_InfusionsCleared");
+ObjectClearFlag(_Summoner, "LLSUMMONINF_HadCopiedInfusions", 1);
+
+IF
+CharacterStatusApplied(_Incarnate, "LLSUMMONINF_COPY_INFUSIONS", (CHARACTERGUID)_Summoner)
+AND
+IsTagged(_Incarnate, "INCARNATE_S", 1)
+AND
+DB_LLSUMMONINF_IncarnateInfusion(_Skill, _SmallStatus, _LargeStatus)
+AND
+HasActiveStatus(_Incarnate, _SmallStatus, 1)
+AND
+IsSkillActive(_Summoner, _Skill, 1)
+THEN
+DB_LLSUMMONINF_DemonCodexInfusions(_Summoner, _Skill);
+
+QRY
+LLSUMMONINF_QRY_HasStoredInfusions((CHARACTERGUID)_Summoner)
+AND
+DB_LLSUMMONINF_DemonCodexInfusions(_Summoner, _Skill)
+THEN
+DB_NOOP(1);
+
+IF
+CharacterStatusApplied(_Incarnate, "LLSUMMONINF_COPY_INFUSIONS", (CHARACTERGUID)_Summoner)
+AND
+LLSUMMONINF_QRY_HasStoredInfusions(_Summoner)
+THEN
+ShowNotification(_Summoner, "LLSUMMONINF_Notification_InfusionsStored");
+
+IF
+CharacterStatusApplied(_Incarnate, "LLSUMMONINF_COPY_INFUSIONS", (CHARACTERGUID)_Summoner)
+AND
+NOT LLSUMMONINF_QRY_HasStoredInfusions(_Summoner)
+AND
+ObjectGetFlag(_Summoner, "LLSUMMONINF_HadCopiedInfusions", 0)
+THEN
+ShowNotification(_Summoner, "LLSUMMONINF_Notification_NoInfusionsStored");
+
+IF
+CharacterStatusApplied(_Incarnate, "LLSUMMONINF_COPY_INFUSIONS", (CHARACTERGUID)_Summoner)
+AND
+IsTagged(_Incarnate, "INCARNATE_G", 1)
+AND
+DB_LLSUMMONINF_IncarnateInfusion(_Skill, _SmallStatus, _LargeStatus)
+AND
+HasActiveStatus(_Incarnate, _LargeStatus, 1)
+AND
+IsSkillActive(_Summoner, _Skill, 1)
+THEN
+DB_LLSUMMONINF_DemonCodexInfusions(_Summoner, _Skill);
+
+IF
+CharacterStatusApplied(_Incarnate, "LLSUMMONINF_APPLY_INFUSIONS", (CHARACTERGUID)_Summoner)
+AND
+IsTagged(_Incarnate, "INCARNATE_S", 1)
+AND
+DB_LLSUMMONINF_DemonCodexInfusions(_Summoner, _Skill)
+AND
+IsSkillActive(_Summoner, _Skill, 1)
+AND
+DB_LLSUMMONINF_IncarnateInfusion(_Skill, _SmallStatus, _LargeStatus)
+AND
+HasActiveStatus(_Incarnate, _SmallStatus, 0)
+THEN
+ApplyStatus(_Incarnate, _SmallStatus, -1.0, 0, _Summoner);
+
+IF
+CharacterStatusApplied(_Incarnate, "LLSUMMONINF_APPLY_INFUSIONS", (CHARACTERGUID)_Summoner)
+AND
+IsTagged(_Incarnate, "INCARNATE_G", 1)
+AND
+DB_LLSUMMONINF_DemonCodexInfusions(_Summoner, _Skill)
+AND
+IsSkillActive(_Summoner, _Skill, 1)
+AND
+DB_LLSUMMONINF_IncarnateInfusion(_Skill, _SmallStatus, _LargeStatus)
+AND
+HasActiveStatus(_Incarnate, _LargeStatus, 0)
+THEN
+ApplyStatus(_Incarnate, _LargeStatus, -1.0, 0, _Summoner);
 //END_REGION
 
 //REGION START
@@ -453,15 +619,15 @@ DebugBreak("[LaughingLeader_SummoningTweaks] Starting Summoning Tweaks.");
 IF
 DB_LLSUMMONINF_StoryStarted(1)
 THEN
-LLSUMMONINF_Updater_SetVersion("1.0.2.0");
+LLSUMMONINF_Updater_SetVersion("1.1.0.0");
 
 IF
 GameStarted(_,_)
 AND
-LLSUMMONINF_Updater_QRY_UpdateNeeded("1.0.2.0")
+LLSUMMONINF_Updater_QRY_UpdateNeeded("1.1.0.0")
 THEN
-LLSUMMONINF_Updater_RemoveOldVersions("1.0.2.0");
-LLSUMMONINF_Updater_SetVersion("1.0.2.0");
+LLSUMMONINF_Updater_RemoveOldVersions("1.1.0.0");
+LLSUMMONINF_Updater_SetVersion("1.1.0.0");
 
 QRY
 LLSUMMONINF_Updater_QRY_UpdateNeeded((STRING)_Version)
