@@ -138,4 +138,5 @@ data "PrepareAnimationInit" "skill_prepare_totem_01_start"
 data "PrepareAnimationLoop" "skill_prepare_totem_01_loop"
 data "PrepareEffect" "RS3_FX_Skills_Voodoo_Prepare_Voodoo_Blood_Root_01,KeepRot;RS3_FX_Skills_Voodoo_Prepare_Voodoo_Blood_Hand_01:Dummy_CastFX"
 data "CastAnimation" "skill_cast_summon_totem_01_cast"
-d
+data "CastEffect" "RS3_FX_Skills_Voodoo_Cast_Target_Voodoo_Blood_Root_01;RS3_FX_Skills_Voodoo_Cast_Aoe_Voodoo_Blood_Hand_01:Dummy_CastFX"
+

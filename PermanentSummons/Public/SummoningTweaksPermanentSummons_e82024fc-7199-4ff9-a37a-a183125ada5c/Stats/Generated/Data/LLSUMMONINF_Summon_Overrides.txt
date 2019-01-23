@@ -256,3 +256,4 @@ data "CastSelfAnimation" "skill_cast_target_voodoo_01_cast"
 data "CastTextEvent" "cast"
 data "CastEffect" "RS3_FX_Skills_Voodoo_Cast_Target_Voodoo_Blood_Root_01;RS3_FX_Skills_Voodoo_Cast_Aoe_Voodoo_Blood_Hand_01:Dummy_R_HandFX,Dummy_L_HandFX"
 data "TargetEffect" "RS3_FX_Skills_Voodoo_Impact_Voodo_BloatedCorpse_01:root:cast"
+
