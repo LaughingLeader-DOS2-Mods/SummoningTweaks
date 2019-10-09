@@ -3,6 +3,27 @@ SubGoalCombiner SGC_AND
 INITSECTION
 
 KBSECTION
+//REGION ADD_REMOVE_SKILL
+PROC
+LLSUMMONINF_AddSkill((CHARACTERGUID)_Player, (STRING)_Skill, (STRING)_AddedSkillFlag)
+AND
+CharacterHasSkill(_Player, _Skill, 0)
+AND
+ObjectGetFlag(_Player, _AddedSkillFlag, _Val)
+AND
+IntegerSubtract(1, _Val, _Notify)
+THEN
+ObjectSetFlag(_Player, _AddedSkillFlag, 0);
+CharacterAddSkill(_Player, _Skill, _Notify);
+
+PROC
+LLSUMMONINF_RemoveSkill((CHARACTERGUID)_Player, (STRING)_Skill)
+AND
+CharacterHasSkill(_Player, _Skill, 1)
+THEN
+CharacterRemoveSkill(_Player, _Skill);
+//END_REGION
+
 //REGION SET_MAX_EVENTS
 QRY
 LLSUMMONINF_QRY_IsSummonSkill((STRING)_Skill)
@@ -50,26 +71,7 @@ NOT GlobalGetFlag("LLSUMMONINF_DismissSkillAutoAddingDisabled", 1)
 AND
 CharacterGetOwner(_Summon, _Player)
 THEN
-LLSUMMONINF_AddDismissSkill(_Player);
-
-PROC
-LLSUMMONINF_AddDismissSkill((CHARACTERGUID)_Player)
-AND
-CharacterHasSkill(_Player, "Target_LLSUMMONINF_DismissSummon", 0)
-AND
-ObjectGetFlag(_Player, "LLSUMMONINF_AddedDismissSkillToSummoner", _Val)
-AND
-IntegerSubtract(1, _Val, _Notify)
-THEN
-ObjectSetFlag(_Player, "LLSUMMONINF_AddedDismissSkillToSummoner");
-CharacterAddSkill(_Player, "Target_LLSUMMONINF_DismissSummon", _Notify);
-
-PROC
-LLSUMMONINF_RemoveDismissSkill((CHARACTERGUID)_Player)
-AND
-CharacterHasSkill(_Player, "Target_LLSUMMONINF_DismissSummon", 1)
-THEN
-CharacterRemoveSkill(_Player, "Target_LLSUMMONINF_DismissSummon");
+LLSUMMONINF_AddSkill(_Player, "Target_LLSUMMONINF_DismissSummon", "LLSUMMONINF_AddedDismissSkillToSummoner");
 
 IF
 GameStarted(_Level, _)
@@ -77,20 +79,56 @@ AND
 NOT GlobalGetFlag("LLSUMMONINF_Initialized", 1)
 AND
 IsGameLevel(_Level, 1)
+THEN
+TimerCancel("LLSUMMONINF_Timers_InitPartyLeader");
+TimerLaunch("LLSUMMONINF_Timers_InitPartyLeader", 250);
+
+IF
+TimerFinished("LLSUMMONINF_Timers_InitPartyLeader")
 AND
 CharacterGetHostCharacter(_Host)
+AND
+CharacterGameMaster(_Host, _IsGM)
+THEN
+LLSUMMONINF_InitializePartyLeader(_Host, _IsGM);
+
+PROC
+LLSUMMONINF_InitializePartyLeader((CHARACTERGUID)_Host, 0)
 THEN
 GlobalSetFlag("LLSUMMONINF_Initialized");
 SetStoryEvent(_Host, "LLSUMMONINF_MaxSummons_UpdatePlayers");
 
-IF
-GlobalFlagSet("LLSUMMONINF_Initialized")
-AND
-CharacterGetHostCharacter(_Host)
+PROC
+LLSUMMONINF_InitializePartyLeader((CHARACTERGUID)_Host, 0)
 AND
 ItemTemplateIsInUserInventory(_Host, "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 0, 0)
 THEN
 ItemTemplateAddTo("BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", _Host, 1, 0);
+
+//GM Mode
+PROC
+LLSUMMONINF_InitializePartyLeader((CHARACTERGUID)_Host, 1)
+AND
+DB_IsPlayer(_Player)
+AND
+_Player != _Host
+AND
+NOT GlobalGetFlag("LLSUMMONINF_Initialized", 1)
+THEN
+GlobalSetFlag("LLSUMMONINF_Initialized");
+SetStoryEvent(_Player, "LLSUMMONINF_MaxSummons_UpdatePlayers");
+
+//GM Mode
+PROC
+LLSUMMONINF_InitializePartyLeader((CHARACTERGUID)_Host, 1)
+AND
+DB_IsPlayer(_Player)
+AND
+_Player != _Host
+AND
+ItemTemplateIsInUserInventory(_Player, "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 0, 0)
+THEN
+ItemTemplateAddTo("BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", _Player, 1, 0);
 
 IF
 CharacterJoinedParty(_Player)
@@ -169,6 +207,14 @@ CharacterAddSourcePoints(_Host, 10);
 ItemTemplateAddTo("BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", _Host, 1, 0);
 ItemTemplateAddTo("Scroll_LLSUMMONINF_Skill_InvokeContract_9c6b4bf8-54df-434d-a4bf-ecad2ce4851c", _Host, 1, 0);
 MakePlayerActive(_Host);
+
+IF
+GameStarted("_TMPL_Sandbox", 1)
+AND
+NOT GlobalGetFlag("LLSUMMONINF_Initialized", 1)
+THEN
+TimerCancel("LLSUMMONINF_Timers_InitPartyLeader");
+TimerLaunch("LLSUMMONINF_Timers_InitPartyLeader", 500);
 //END_REGION
 
 //REGION SETTINGS_MENU
@@ -191,7 +237,7 @@ QRY_SpeakerIsAvailable(_Player)
 THEN
 DebugBreak("[SummoningTweaks] Opening settings menu.");
 SetStoryEvent(_Player, "LLSUMMONINF_MaxSummons_InitDialogVar");
-Proc_StartDialog(0, "LLSUMMONINF_SettingsMenu", _Player, _Player);
+Proc_StartDialog(0, "LLSUMMONINF_SettingsMenu", _Player);
 
 IF
 StoryEvent(_Player, "SummoningTweaks_SettingsMenu_OpenRequest")
@@ -199,7 +245,7 @@ AND
 QRY_SpeakerIsAvailable(_Player)
 THEN
 SetStoryEvent(_Player, "LLSUMMONINF_MaxSummons_InitDialogVar");
-Proc_StartDialog(0, "LLSUMMONINF_SettingsMenu", _Player, _Player);
+Proc_StartDialog(0, "LLSUMMONINF_SettingsMenu", _Player);
 
 //Set by LLSUMMONINF_Main.gameScript
 IF
@@ -214,7 +260,7 @@ StoryEvent((CHARACTERGUID)_Player, "LLSUMMONINF_MaxSummons_InitDialogVar")
 AND
 LLSUMMONINF_QRY_IsHost(_Player)
 THEN
-ObjectSetFlag(_Player, "LLSUMMONINF_IsHost");
+UserSetFlag(_Player, "LLSUMMONINF_IsHost");
 
 QRY
 LLSUMMONINF_QRY_IsHost((CHARACTERGUID)_Player)
@@ -243,7 +289,7 @@ DialogStarted("LLSUMMONINF_SettingsMenu", (INTEGER)_Instance)
 AND
 DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Player)
 AND
-ObjectGetFlag(_Player, "LLSUMMONINF_IsHost", 1)
+UserGetFlag(_Player, "LLSUMMONINF_IsHost", 1)
 AND
 GetVarInteger(_Player, "LLSUMMONINF_MaxSummonsCap", _Max)
 THEN
@@ -254,7 +300,7 @@ DialogEnded("LLSUMMONINF_SettingsMenu", (INTEGER)_Instance)
 AND
 DialogGetInvolvedPlayer(_Instance, 1, (CHARACTERGUID)_Player)
 AND
-ObjectGetFlag(_Player, "LLSUMMONINF_IsHost", 1)
+UserGetFlag(_Player, "LLSUMMONINF_IsHost", 1)
 AND
 DB_LLSUMMONINF_Temp_StartingMaxSummons(_Player, _Max)
 AND
@@ -274,7 +320,7 @@ AND
 DB_LLSUMMONINF_Temp_StartingMaxSummons(_Player, _Max)
 THEN
 NOT DB_LLSUMMONINF_Temp_StartingMaxSummons(_Player, _Max);
-ObjectClearFlag(_Player, "LLSUMMONINF_IsHost");
+UserClearFlag(_Player, "LLSUMMONINF_IsHost", 0);
 //END_REGION
 
 //REGION DIALOG_COMMANDS
@@ -325,13 +371,60 @@ IF
 ObjectFlagSet("LLSUMMONINF_Commands_AddDismissSkill", (CHARACTERGUID)_Player, _)
 THEN
 ObjectClearFlag(_Player, "LLSUMMONINF_Commands_AddDismissSkill");
-LLSUMMONINF_AddDismissSkill(_Player);
+LLSUMMONINF_AddSkill(_Player, "Target_LLSUMMONINF_DismissSummon", "LLSUMMONINF_AddedDismissSkillToSummoner");
 
 IF
 ObjectFlagSet("LLSUMMONINF_Commands_RemoveDismissSkill", (CHARACTERGUID)_Player, _)
 THEN
 ObjectClearFlag(_Player, "LLSUMMONINF_Commands_RemoveDismissSkill");
-LLSUMMONINF_RemoveDismissSkill(_Player);
+LLSUMMONINF_RemoveSkill(_Player, "Target_LLSUMMONINF_DismissSummon");
+
+IF
+ObjectFlagSet("LLSUMMONINF_Commands_AddAiToggleSkill", (CHARACTERGUID)_Player, _)
+THEN
+ObjectClearFlag(_Player, "LLSUMMONINF_Commands_AddAiToggleSkill");
+LLSUMMONINF_AddSkill(_Player, "Target_LLSUMMONINF_ToggleAiControl", "LLSUMMONINF_AddedAiControlSkill");
+
+IF
+ObjectFlagSet("LLSUMMONINF_Commands_RemoveAiToggleSkill", (CHARACTERGUID)_Player, _)
+THEN
+ObjectClearFlag(_Player, "LLSUMMONINF_Commands_RemoveAiToggleSkill");
+LLSUMMONINF_RemoveSkill(_Player, "Target_LLSUMMONINF_ToggleAiControl");
+
+IF
+ObjectFlagSet("LLSUMMONINF_Commands_HostRemoveAllAutonomous", (CHARACTERGUID)_Player, _)
+THEN
+ObjectClearFlag(_Player, "LLSUMMONINF_Commands_HostRemoveAllAutonomous");
+IterateParties("LLSUMMONINF_RemoveAutomonousTag");
+
+IF
+StoryEvent(_Char, "LLSUMMONINF_RemoveAutomonousTag")
+THEN
+ClearTag(_Char, "LLSUMMONINF_Autonomous");
+
+IF
+ObjectFlagSet("LLSUMMONINF_Commands_OwnerRemoveAllAutonomous", (CHARACTERGUID)_Player, _)
+THEN
+ObjectClearFlag(_Player, "LLSUMMONINF_Commands_OwnerRemoveAllAutonomous");
+DB_LLSUMMONINF_Temp_RemovingAutonomousTag(_Player);
+IterateParty(_Player, "LLSUMMONINF_RemoveAutomonousTag_ByOwner");
+ProcObjectTimer(_Player, "LLSUMMONINF_Timers_ClearAutonomousDBIterator", 250);
+
+IF
+StoryEvent((CHARACTERGUID)_Char, "LLSUMMONINF_Timers_ClearAutonomousDBIterator")
+AND
+DB_LLSUMMONINF_Temp_RemovingAutonomousTag(_Player)
+AND
+LLSUMMONINF_QRY_CanMakeAutonomous(_Player, _Char)
+THEN
+ClearTag(_Char, "LLSUMMONINF_Autonomous");
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Player, "LLSUMMONINF_Timers_ClearAutonomousDBIterator")
+AND
+DB_LLSUMMONINF_Temp_RemovingAutonomousTag(_Player)
+THEN
+NOT DB_LLSUMMONINF_Temp_RemovingAutonomousTag(_Player);
 //END_REGION
 
 //REGION COMBAT_ACTIVE_FIX
@@ -697,6 +790,105 @@ AND
 NOT DB_LeaderLib_ModMenu_RegisteredMenu_OpenEvent("LaughingLeader.SummoningTweaks", _)
 THEN
 DB_LeaderLib_ModMenu_RegisteredMenu_OpenEvent("LaughingLeader.SummoningTweaks", "SummoningTweaks_SettingsMenu_OpenRequest");
+//END_REGION
+
+//REGION MIMICRY
+IF
+StoryEvent(_, "LeaderLib_Initialized")
+AND
+NOT DB_LLSUMMONINF_RegisteredMimicrySettings(_)
+AND
+SysIsActive("LLMIME_ZZZ_Updater")
+THEN
+DB_LLSUMMONINF_RegisteredMimicrySettings(1);
+DB_LLMIME_Mimicking_Blacklist_Skills("SummoningTweaks", "Target_LLSUMMONINF_CastLastSummon");
+DB_LLMIME_Mimicking_Blacklist_Skills("SummoningTweaks", "Target_LLSUMMONINF_DismissSummon");
+DB_LLMIME_Mimicking_Blacklist_Skills("SummoningTweaks", "Target_LLSUMMONINF_CopyInfusions");
+DB_LLMIME_Mimicking_Blacklist_Skills("SummoningTweaks", "Target_LLSUMMONINF_ApplyInfusions");
+DB_LLMIME_Mimicking_Blacklist_Skills("SummoningTweaks", "Target_LLSUMMONINF_ToggleAiControl");
+//END_REGION
+
+//REGION AI_CONTROL
+QRY
+LLSUMMONINF_QRY_CanMakeAutonomous((CHARACTERGUID)_Source, (CHARACTERGUID)_Target)
+AND
+CharacterGetOwner(_Target, _Source)
+THEN
+DB_NOOP(1);
+
+QRY
+LLSUMMONINF_QRY_CanMakeAutonomous((CHARACTERGUID)_Source, (CHARACTERGUID)_Target)
+AND
+CharacterGetReservedUserID(_Source, _ID)
+AND
+CharacterGetReservedUserID(_Target, _ID)
+THEN
+DB_NOOP(1);
+
+QRY
+LLSUMMONINF_QRY_StillHasControllingCharacter((CHARACTERGUID)_Source, (CHARACTERGUID)_Target)
+AND
+IsTagged(_Source, "LLSUMMONINF_Autonomous", 0)
+AND
+_Target != _Source
+THEN
+DB_NOOP(1);
+
+QRY
+LLSUMMONINF_QRY_StillHasControllingCharacter((CHARACTERGUID)_Source, (CHARACTERGUID)_Target)
+AND
+DB_IsPlayer(_Player)
+AND
+IsTagged(_Player, "LLSUMMONINF_Autonomous", 0)
+THEN
+DB_NOOP(1);
+
+/*
+IF
+CharacterStatusApplied(_Char, "LLSUMMONINF_AUTONOMOUS_TOGGLE", (CHARACTERGUID)_Source)
+AND
+NOT LLSUMMONINF_QRY_StillHasControllingCharacter(_Source, _Char)
+THEN
+ShowNotification(_Source, "LLSUMMONINF_Notification_LastControllableCharacter");
+*/
+
+IF
+CharacterStatusApplied(_Char, "LLSUMMONINF_AUTONOMOUS_TOGGLE", (CHARACTERGUID)_Source)
+AND
+LLSUMMONINF_QRY_CanMakeAutonomous(_Source, _Char)
+//AND
+//LLSUMMONINF_QRY_StillHasControllingCharacter(_Source, _Char)
+AND
+IsTagged(_Char, "LLSUMMONINF_Autonomous", _HasTag)
+THEN
+LLSUMMONINF_ToggleTag(_Char, "LLSUMMONINF_Autonomous", _HasTag);
+
+PROC
+LLSUMMONINF_ToggleTag((CHARACTERGUID)_Char, (STRING)_Tag, 0)
+THEN
+SetTag(_Char, "LLSUMMONINF_Autonomous");
+
+PROC
+LLSUMMONINF_ToggleTag((CHARACTERGUID)_Char, (STRING)_Tag, 1)
+THEN
+ClearTag(_Char, "LLSUMMONINF_Autonomous");
+
+IF
+ObjectEnteredCombat((CHARACTERGUID)_Char, _)
+AND
+HasActiveStatus(_Char, "LLSUMMONINF_AUTONOMOUS", 1)
+THEN
+SetStoryEvent(_Char, "LLSUMMONINF_Autonomous_CombatStarted");
+
+IF
+ObjectWasTagged((CHARACTERGUID)_Char, "LLSUMMONINF_Autonomous")
+THEN
+SetStoryEvent(_Char, "LLSUMMONINF_AutonomousSet");
+
+IF
+ObjectLostTag((CHARACTERGUID)_Char, "LLSUMMONINF_Autonomous")
+THEN
+SetStoryEvent(_Char, "LLSUMMONINF_AutonomousRemoved");
 //END_REGION
 EXITSECTION
 

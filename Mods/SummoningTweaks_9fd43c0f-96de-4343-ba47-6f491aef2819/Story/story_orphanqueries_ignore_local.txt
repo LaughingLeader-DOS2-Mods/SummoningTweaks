@@ -158,3 +158,4 @@ DB_TUT_PlayOnEasy 1
 DB_LeaderLib_Treasure_ItemMaxAmount 3
 DB_LeaderLib_ModApi_RegisterActiveGoal 3
 DB_LeaderLib_ModMenu_RegisteredMenu_OpenEvent 2
+DB_LLMIME_Mimicking_Blacklist_Skills 2

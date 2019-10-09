@@ -255,3 +255,53 @@ THEN
 	DialogStart(_, "LLSUMMONINF_AD_DismissSummon", _Player)
 ENDIF
 //END_REGION
+
+EVENT LLSUMMONINF_AiControl_TagApplied
+VARS
+	CHARACTER:_Char
+ON
+	OnCharacterEvent(_Char, "LLSUMMONINF_AutonomousSet")
+ACTIONS
+	AddStatusInfluence(_Char, LLSUMMONINF_AUTONOMOUS, 999.0, "", 0, 1)
+IF "c1"
+	IsInCombat(_Char)
+THEN
+	AddStatusInfluence(_Char, LLSUMMONINF_AI_CONTROL, 999.0, "", 0, 1)
+ENDIF
+
+EVENT LLSUMMONINF_AiControl_TagRemoved
+VARS
+	CHARACTER:_Char
+ON
+	OnCharacterEvent(_Char, "LLSUMMONINF_AutonomousRemoved")
+ACTIONS
+	RemoveStatusInfluence(_Char, LLSUMMONINF_AUTONOMOUS, 999.0, "", 0)
+IF "c1"
+	HasStatusInfluence(_Char, LLSUMMONINF_AI_CONTROL)
+THEN
+	RemoveStatusInfluence(_Char, LLSUMMONINF_AI_CONTROL, 999.0, "", 0)
+ENDIF
+
+EVENT LLSUMMONINF_AiControl_CombatStarted
+VARS
+	CHARACTER:_Char
+ON
+	OnCharacterEvent(_Char, "LLSUMMONINF_Autonomous_CombatStarted")
+ACTIONS
+IF "!c1"
+	HasStatusInfluence(_Char, LLSUMMONINF_AI_CONTROL)
+THEN
+	AddStatusInfluence(_Char, LLSUMMONINF_AI_CONTROL, 999.0, "", 0, 1)
+ENDIF
+
+EVENT LLSUMMONINF_AiControl_CombatEnded
+VARS
+	CHARACTER:_Char
+ON
+	OnCharacterEvent(_Char, "LLSUMMONINF_Autonomous_CombatEnded")
+ACTIONS
+IF "c1"
+	HasStatusInfluence(_Char, LLSUMMONINF_AI_CONTROL)
+THEN
+	RemoveStatusInfluence(_Char, LLSUMMONINF_AI_CONTROL, 999.0, "", 0)
+ENDIF
