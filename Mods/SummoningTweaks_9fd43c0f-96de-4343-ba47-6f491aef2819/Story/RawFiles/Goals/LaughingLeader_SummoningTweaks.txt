@@ -215,6 +215,8 @@ NOT GlobalGetFlag("LLSUMMONINF_Initialized", 1)
 THEN
 TimerCancel("LLSUMMONINF_Timers_InitPartyLeader");
 TimerLaunch("LLSUMMONINF_Timers_InitPartyLeader", 500);
+TimerCancel("LLSUMMONINF_Timers_FixAiControl");
+TimerLaunch("LLSUMMONINF_Timers_FixAiControl", 250);
 //END_REGION
 
 //REGION SETTINGS_MENU
@@ -712,15 +714,15 @@ DebugBreak("[LaughingLeader_SummoningTweaks] Starting Summoning Tweaks.");
 IF
 DB_LLSUMMONINF_StoryStarted(1)
 THEN
-LLSUMMONINF_Updater_SetVersion("1.1.0.0");
+LLSUMMONINF_Updater_SetVersion("1.1.1.0");
 
 IF
 GameStarted(_,_)
 AND
-LLSUMMONINF_Updater_QRY_UpdateNeeded("1.1.0.0")
+LLSUMMONINF_Updater_QRY_UpdateNeeded("1.1.1.0")
 THEN
-LLSUMMONINF_Updater_RemoveOldVersions("1.1.0.0");
-LLSUMMONINF_Updater_SetVersion("1.1.0.0");
+LLSUMMONINF_Updater_RemoveOldVersions("1.1.1.0");
+LLSUMMONINF_Updater_SetVersion("1.1.1.0");
 
 QRY
 LLSUMMONINF_Updater_QRY_UpdateNeeded((STRING)_Version)
@@ -874,11 +876,56 @@ THEN
 ClearTag(_Char, "LLSUMMONINF_Autonomous");
 
 IF
-ObjectEnteredCombat((CHARACTERGUID)_Char, _)
+CharacterStatusRemoved(_Char, "LLSUMMONINF_AUTONOMOUS", _)
 AND
-HasActiveStatus(_Char, "LLSUMMONINF_AUTONOMOUS", 1)
+IsTagged(_Char, "LLSUMMONINF_Autonomous", 1)
+AND
+CharacterIsDead(_Char, 0)
+THEN
+ProcObjectTimer(_Char, "LLSUMMONINF_Timers_ReapplyAutonomous", 250);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Char, "LLSUMMONINF_Timers_ReapplyAutonomous")
+AND
+IsTagged(_Char, "LLSUMMONINF_Autonomous", 1)
+AND
+NOT GetStatusTurns(_Char, "LLSUMMONINF_AUTONOMOUS", -1)
+THEN
+ApplyStatus(_Char, "LLSUMMONINF_AUTONOMOUS", -1.0, 1, _Char);
+
+IF
+CharacterStatusRemoved(_Char, "LLSUMMONINF_AI_CONTROL", _)
+AND
+IsTagged(_Char, "LLSUMMONINF_Autonomous", 1)
+AND
+CharacterIsDead(_Char, 0)
+AND
+CharacterIsInCombat(_Char, 1)
+THEN
+ProcObjectTimer(_Char, "LLSUMMONINF_Timers_ReapplyAiControl", 250);
+
+PROC
+ProcObjectTimerFinished((CHARACTERGUID)_Char, "LLSUMMONINF_Timers_ReapplyAiControl")
+AND
+IsTagged(_Char, "LLSUMMONINF_Autonomous", 1)
+AND
+NOT GetStatusTurns(_Char, "LLSUMMONINF_AI_CONTROL", -1)
+THEN
+ApplyStatus(_Char, "LLSUMMONINF_AI_CONTROL", -1.0, 1, _Char);
+
+IF
+ObjectEnteredCombat(_Char, _)
+AND
+IsTagged(_Char, "LLSUMMONINF_Autonomous", 1)
 THEN
 SetStoryEvent(_Char, "LLSUMMONINF_Autonomous_CombatStarted");
+
+IF
+ObjectLeftCombat(_Char, _)
+AND
+IsTagged(_Char, "LLSUMMONINF_Autonomous", 1)
+THEN
+SetStoryEvent(_Char, "LLSUMMONINF_Autonomous_CombatEnded");
 
 IF
 ObjectWasTagged((CHARACTERGUID)_Char, "LLSUMMONINF_Autonomous")
@@ -889,6 +936,38 @@ IF
 ObjectLostTag((CHARACTERGUID)_Char, "LLSUMMONINF_Autonomous")
 THEN
 SetStoryEvent(_Char, "LLSUMMONINF_AutonomousRemoved");
+
+//Failsafe
+IF
+GameStarted(_Region, _)
+AND
+IsGameLevel(_Region, 1)
+AND
+DB_IsPlayer(_Char)
+AND
+HasActiveStatus(_Char, "LLSUMMONINF_AI_CONTROL", 1)
+AND
+NOT DB_CombatCharacters(_Char, _)
+THEN
+TimerCancel("LLSUMMONINF_Timers_FixAiControl");
+TimerLaunch("LLSUMMONINF_Timers_FixAiControl", 250);
+
+IF
+TimerFinished("LLSUMMONINF_Timers_FixAiControl")
+THEN
+IterateParties("LLSUMMONINF_AutomonousAiControlCheck");
+
+IF
+StoryEvent((CHARACTERGUID)_Char, "LLSUMMONINF_AutomonousAiControlCheck")
+AND
+HasActiveStatus(_Char, "LLSUMMONINF_AI_CONTROL", 1)
+AND
+//CharacterIsInCombat(_Char, 0)
+NOT DB_CombatCharacters(_Char, _)
+THEN
+DebugBreak("[SummoningTweaks] Removing (LLSUMMONINF_AI_CONTROL) status influence from a character not in combat.");
+SetStoryEvent(_Char, "LLSUMMONINF_Autonomous_CombatEnded");
+
 //END_REGION
 EXITSECTION
 

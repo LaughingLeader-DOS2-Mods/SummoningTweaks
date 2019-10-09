@@ -261,12 +261,17 @@ VARS
 	CHARACTER:_Char
 ON
 	OnCharacterEvent(_Char, "LLSUMMONINF_AutonomousSet")
+	OnCharacterStatusRemoved(_Char, RESURRECT)
 ACTIONS
-	AddStatusInfluence(_Char, LLSUMMONINF_AUTONOMOUS, 999.0, "", 0, 1)
 IF "c1"
-	IsInCombat(_Char)
+	IsTagged(_Char, "LLSUMMONINF_Autonomous")
 THEN
-	AddStatusInfluence(_Char, LLSUMMONINF_AI_CONTROL, 999.0, "", 0, 1)
+	CharacterApplyStatus(_Char, LLSUMMONINF_AUTONOMOUS, -1, 0, _Char)
+	IF "c1"
+		IsInCombat(_Char)
+	THEN
+		CharacterApplyStatus(_Char, LLSUMMONINF_AI_CONTROL, -1, 0, _Char)
+	ENDIF
 ENDIF
 
 EVENT LLSUMMONINF_AiControl_TagRemoved
@@ -275,12 +280,8 @@ VARS
 ON
 	OnCharacterEvent(_Char, "LLSUMMONINF_AutonomousRemoved")
 ACTIONS
-	RemoveStatusInfluence(_Char, LLSUMMONINF_AUTONOMOUS, 999.0, "", 0)
-IF "c1"
-	HasStatusInfluence(_Char, LLSUMMONINF_AI_CONTROL)
-THEN
-	RemoveStatusInfluence(_Char, LLSUMMONINF_AI_CONTROL, 999.0, "", 0)
-ENDIF
+	CharacterRemoveStatus(_Char, LLSUMMONINF_AUTONOMOUS)
+	CharacterRemoveStatus(_Char, LLSUMMONINF_AI_CONTROL)
 
 EVENT LLSUMMONINF_AiControl_CombatStarted
 VARS
@@ -288,11 +289,7 @@ VARS
 ON
 	OnCharacterEvent(_Char, "LLSUMMONINF_Autonomous_CombatStarted")
 ACTIONS
-IF "!c1"
-	HasStatusInfluence(_Char, LLSUMMONINF_AI_CONTROL)
-THEN
-	AddStatusInfluence(_Char, LLSUMMONINF_AI_CONTROL, 999.0, "", 0, 1)
-ENDIF
+	CharacterApplyStatus(_Char, LLSUMMONINF_AI_CONTROL, -1, 0, _Char)
 
 EVENT LLSUMMONINF_AiControl_CombatEnded
 VARS
@@ -300,8 +297,4 @@ VARS
 ON
 	OnCharacterEvent(_Char, "LLSUMMONINF_Autonomous_CombatEnded")
 ACTIONS
-IF "c1"
-	HasStatusInfluence(_Char, LLSUMMONINF_AI_CONTROL)
-THEN
-	RemoveStatusInfluence(_Char, LLSUMMONINF_AI_CONTROL, 999.0, "", 0)
-ENDIF
+	CharacterRemoveStatus(_Char, LLSUMMONINF_AI_CONTROL)
