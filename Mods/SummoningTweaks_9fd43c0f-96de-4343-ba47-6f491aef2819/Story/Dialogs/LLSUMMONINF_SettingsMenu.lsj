@@ -1383,7 +1383,7 @@
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
-                        "ShowOnce" : {"type" : 19, "value" : 1},
+                        "ShowOnce" : {"type" : 19, "value" : 0},
                         "TaggedTexts" : [
                            {
                               "TaggedText" : [
@@ -1488,7 +1488,7 @@
                            }
                         ],
                         "speaker" : {"type" : 4, "value" : 0},
-                        "stub" : {"type" : 19, "value" : 1},
+                        "stub" : {"type" : 19, "value" : 0},
                         "transitionmode" : {"type" : 1, "value" : 0},
                         "waittime" : {"type" : 6, "value" : -1.0}
                      },
@@ -4132,7 +4132,7 @@
                               "SoundEvent" : {"type" : 23, "value" : ""}
                            }
                         ],
-                        "ShowOnce" : {"type" : 19, "value" : 1},
+                        "ShowOnce" : {"type" : 19, "value" : 0},
                         "TaggedTexts" : [
                            {
                               "TaggedText" : [
@@ -4224,7 +4224,7 @@
                            }
                         ],
                         "speaker" : {"type" : 4, "value" : 0},
-                        "stub" : {"type" : 19, "value" : 1},
+                        "stub" : {"type" : 19, "value" : 0},
                         "transitionmode" : {"type" : 1, "value" : 0},
                         "waittime" : {"type" : 6, "value" : -1.0}
                      },
