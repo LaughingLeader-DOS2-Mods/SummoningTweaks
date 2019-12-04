@@ -1,0 +1,37 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+QRY
+LLSUMMONINF_CharacterIsPlayer((CHARACTERGUID)_Char)
+AND
+CharacterIsPlayer(_Char, _a)
+AND
+CharacterIsPartyMember(_Char, _b)
+AND
+IntegerMax(_a,_b,1)
+THEN
+DB_NOOP(1);
+
+QRY
+LLSUMMONINF_CharacterIsPlayer((CHARACTERGUID)_Char)
+AND
+DB_IsPlayer(_Char)
+THEN
+DB_NOOP(1);
+
+IF
+CharacterStatusAttempt(_Summon, "SUMMONING", _)
+AND
+IsTagged(_Summon, "TOTEM", 0)
+AND
+CharacterGetOwner(_Summon, _Player)
+AND
+LLSUMMONINF_CharacterIsPlayer(_Player)
+THEN
+CharacterSetSummonLifetime(_Summon, -1);
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "__Start"
