@@ -3,6 +3,36 @@ SubGoalCombiner SGC_AND
 INITSECTION
 
 KBSECTION
+//REGION SETTINGS
+IF
+RegionStarted(_)
+AND
+NOT DB_LLSUMMONINF_SettingsInitialized(1)
+THEN
+LLSUMMONINF_InitSettings();
+DB_LLSUMMONINF_SettingsInitialized(1);
+
+PROC
+LLSUMMONINF_InitSettings()
+THEN
+LLSUMMONINF_InitDemonCodexSettings();
+LLSUMMONINF_InitLarianModSettings();
+
+PROC
+LLSUMMONINF_Updater_VersionChanged((STRING)_OldVersion, "1.2.0.0")
+THEN
+LLSUMMONINF_InitSettings();
+//END_REGION
+
+//REGION LARIAN_MOD_ENABLED
+QRY
+LLSUMMONINF_QRY_LarianSummoningModIsEnabled()
+AND
+SysIsActive("CMP_SummoningImproved_Statuses")
+THEN
+DB_NOOP(1);
+//END_REGION
+
 //REGION ADD_REMOVE_SKILL
 PROC
 LLSUMMONINF_AddSkill((CHARACTERGUID)_Player, (STRING)_Skill, (STRING)_AddedSkillFlag)
@@ -571,17 +601,10 @@ CharacterSetAnimationOverride(_Player, "");
 //END_REGION
 
 //REGION DEMON_CODEX
-IF
-RegionStarted(_)
-AND
-NOT DB_LLSUMMONINF_SettingsInitialized(1)
-THEN
-LLSUMMONINF_InitDemonCodexSettings();
-DB_LLSUMMONINF_SettingsInitialized(1);
-
 PROC
 LLSUMMONINF_InitDemonCodexSettings()
 THEN
+SysClear("DB_LLSUMMONINF_IncarnateInfusion", 3);
 DB_LLSUMMONINF_IncarnateInfusion("Target_RangedInfusion", "INF_RANGED", "INF_RANGED");
 DB_LLSUMMONINF_IncarnateInfusion("Target_PowerInfusion", "INF_POWER", "INF_POWER");
 DB_LLSUMMONINF_IncarnateInfusion("Target_ShadowInfusion", "INF_SHADOW", "INF_SHADOW");
@@ -594,6 +617,32 @@ DB_LLSUMMONINF_IncarnateInfusion("Target_NecrofireInfusion", "INF_NECROFIRE", "I
 DB_LLSUMMONINF_IncarnateInfusion("Target_WaterInfusion", "INF_NECROFIRE", "INF_WATER_G");
 DB_LLSUMMONINF_IncarnateInfusion("Target_AcidInfusion", "INF_ACID", "INF_ACID_G");
 DB_LLSUMMONINF_IncarnateInfusion("Target_CursedElectricInfusion", "INF_CURSED_ELECTRIC", "INF_CURSED_ELECTRIC_G");
+
+SysClear("DB_LLSUMMONINF_LarianInfusion", 2);
+//For cross-referencing with Larian's DB_CMP_SummoningImproved_Statuses database
+DB_LLSUMMONINF_LarianInfusion("Target_RangedInfusion", "RangedInfusion");
+DB_LLSUMMONINF_LarianInfusion("Target_PowerInfusion", "PowerInfusion");
+DB_LLSUMMONINF_LarianInfusion("Target_ShadowInfusion", "ShadowInfusion");
+DB_LLSUMMONINF_LarianInfusion("Target_WarpInfusion", "WarpInfusion");
+DB_LLSUMMONINF_LarianInfusion("Target_FireInfusion", "FireInfusion");
+DB_LLSUMMONINF_LarianInfusion("Target_IceInfusion", "IceInfusion");
+DB_LLSUMMONINF_LarianInfusion("Target_ElectricInfusion", "ElectricInfusion");
+DB_LLSUMMONINF_LarianInfusion("Target_PoisonInfusion", "PoisonInfusion");
+DB_LLSUMMONINF_LarianInfusion("Target_NecrofireInfusion", "NecrofireInfusion");
+DB_LLSUMMONINF_LarianInfusion("Target_WaterInfusion", "WaterInfusion");
+DB_LLSUMMONINF_LarianInfusion("Target_AcidInfusion", "AcidInfusion");
+DB_LLSUMMONINF_LarianInfusion("Target_CursedElectricInfusion", "CursedElectricInfusion");
+DB_LLSUMMONINF_LarianInfusion("Target_OilInfusion", "OilInfusion");
+DB_LLSUMMONINF_LarianInfusion("Target_CursedOilInfusion", "CursedOilInfusion");
+DB_LLSUMMONINF_LarianInfusion("Target_BloodInfusion", "BloodInfusion");
+DB_LLSUMMONINF_LarianInfusion("Target_CursedBloodInfusion", "CursedBloodInfusion");
+
+QRY
+LLSUMMONINF_QRY_HasStoredInfusions((CHARACTERGUID)_Summoner)
+AND
+DB_LLSUMMONINF_DemonCodexInfusions(_Summoner, _Skill)
+THEN
+DB_NOOP(1);
 
 IF
 CharacterStatusApplied(_Incarnate, "LLSUMMONINF_COPY_INFUSIONS", (CHARACTERGUID)_Summoner)
@@ -614,6 +663,8 @@ ObjectClearFlag(_Summoner, "LLSUMMONINF_HadCopiedInfusions", 1);
 IF
 CharacterStatusApplied(_Incarnate, "LLSUMMONINF_COPY_INFUSIONS", (CHARACTERGUID)_Summoner)
 AND
+NOT LLSUMMONINF_QRY_LarianSummoningModIsEnabled()
+AND
 IsTagged(_Incarnate, "INCARNATE_S", 1)
 AND
 DB_LLSUMMONINF_IncarnateInfusion(_Skill, _SmallStatus, _LargeStatus)
@@ -624,12 +675,38 @@ IsSkillActive(_Summoner, _Skill, 1)
 THEN
 DB_LLSUMMONINF_DemonCodexInfusions(_Summoner, _Skill);
 
-QRY
-LLSUMMONINF_QRY_HasStoredInfusions((CHARACTERGUID)_Summoner)
+IF
+CharacterStatusApplied(_Incarnate, "LLSUMMONINF_COPY_INFUSIONS", (CHARACTERGUID)_Summoner)
 AND
-DB_LLSUMMONINF_DemonCodexInfusions(_Summoner, _Skill)
+NOT LLSUMMONINF_QRY_LarianSummoningModIsEnabled()
+AND
+IsTagged(_Incarnate, "INCARNATE_G", 1)
+AND
+DB_LLSUMMONINF_IncarnateInfusion(_Skill, _SmallStatus, _LargeStatus)
+AND
+HasActiveStatus(_Incarnate, _LargeStatus, 1)
+AND
+IsSkillActive(_Summoner, _Skill, 1)
 THEN
-DB_NOOP(1);
+DB_LLSUMMONINF_DemonCodexInfusions(_Summoner, _Skill);
+
+//Larian Mod Version - They changed all the infusion statuses since they can be applied to any Shared summon
+IF
+CharacterStatusApplied(_Summon, "LLSUMMONINF_COPY_INFUSIONS", (CHARACTERGUID)_Summoner)
+AND
+LLSUMMONINF_QRY_LarianSummoningModIsEnabled()
+AND
+GetTemplate(_Summon, _Template)
+AND
+DB_LLSUMMONINF_LarianInfusion(_Skill, _Infusion)
+AND
+IsSkillActive(_Summoner, _Skill, 1)
+AND
+DB_CMP_SummoningImproved_Statuses(_Template, _Infusion, (STRING)_Status)
+AND
+HasActiveStatus(_Summon, _Status, 1)
+THEN
+DB_LLSUMMONINF_DemonCodexInfusions(_Summoner, _Skill);
 
 IF
 CharacterStatusApplied(_Incarnate, "LLSUMMONINF_COPY_INFUSIONS", (CHARACTERGUID)_Summoner)
@@ -648,20 +725,9 @@ THEN
 ShowNotification(_Summoner, "LLSUMMONINF_Notification_NoInfusionsStored");
 
 IF
-CharacterStatusApplied(_Incarnate, "LLSUMMONINF_COPY_INFUSIONS", (CHARACTERGUID)_Summoner)
-AND
-IsTagged(_Incarnate, "INCARNATE_G", 1)
-AND
-DB_LLSUMMONINF_IncarnateInfusion(_Skill, _SmallStatus, _LargeStatus)
-AND
-HasActiveStatus(_Incarnate, _LargeStatus, 1)
-AND
-IsSkillActive(_Summoner, _Skill, 1)
-THEN
-DB_LLSUMMONINF_DemonCodexInfusions(_Summoner, _Skill);
-
-IF
 CharacterStatusApplied(_Incarnate, "LLSUMMONINF_APPLY_INFUSIONS", (CHARACTERGUID)_Summoner)
+AND
+NOT LLSUMMONINF_QRY_LarianSummoningModIsEnabled()
 AND
 IsTagged(_Incarnate, "INCARNATE_S", 1)
 AND
@@ -678,6 +744,8 @@ ApplyStatus(_Incarnate, _SmallStatus, -1.0, 0, _Summoner);
 IF
 CharacterStatusApplied(_Incarnate, "LLSUMMONINF_APPLY_INFUSIONS", (CHARACTERGUID)_Summoner)
 AND
+NOT LLSUMMONINF_QRY_LarianSummoningModIsEnabled()
+AND
 IsTagged(_Incarnate, "INCARNATE_G", 1)
 AND
 DB_LLSUMMONINF_DemonCodexInfusions(_Summoner, _Skill)
@@ -689,6 +757,96 @@ AND
 HasActiveStatus(_Incarnate, _LargeStatus, 0)
 THEN
 ApplyStatus(_Incarnate, _LargeStatus, -1.0, 0, _Summoner);
+
+IF
+CharacterStatusApplied(_Summon, "LLSUMMONINF_APPLY_INFUSIONS", (CHARACTERGUID)_Summoner)
+AND
+LLSUMMONINF_QRY_LarianSummoningModIsEnabled()
+AND
+GetTemplate(_Summon, _Template)
+AND
+DB_LLSUMMONINF_DemonCodexInfusions(_Summoner, _Skill)
+AND
+IsSkillActive(_Summoner, _Skill, 1)
+AND
+DB_CMP_SummoningImproved_Statuses(_Template, _Infusion, (STRING)_Status)
+AND
+HasActiveStatus(_Summon, _Status, 0)
+THEN
+ApplyStatus(_Summon, _Status, -1.0, 0, _Summoner);
+//END_REGION
+
+//REGION LARIAN_MOD_APPLY_COPY_INFUSIONS_SKILLS
+PROC
+LLSUMMONINF_InitLarianModSettings()
+THEN
+//The Larian versions use more generic targeting conditions since any Larian summon can be infused
+DB_LLSUMMONINF_LarianSummonModSkillVersions("Target_LLSUMMONINF_CopyInfusions", "Target_LLSUMMONINF_CopyInfusions_LarianModVersion");
+DB_LLSUMMONINF_LarianSummonModSkillVersions("Target_LLSUMMONINF_ApplyInfusions", "Target_LLSUMMONINF_ApplyInfusions_LarianModVersion");
+
+IF
+SkillAdded(_Char, "Target_LLSUMMONINF_CopyInfusions", _)
+AND
+LLSUMMONINF_QRY_LarianSummoningModIsEnabled()
+THEN
+CharacterRemoveSkill(_Char, "Target_LLSUMMONINF_CopyInfusions");
+CharacterAddSkill(_Char, "Target_LLSUMMONINF_CopyInfusions_LarianModVersion", 0);
+
+IF
+SkillAdded(_Char, "Target_LLSUMMONINF_ApplyInfusions", _)
+AND
+LLSUMMONINF_QRY_LarianSummoningModIsEnabled()
+THEN
+CharacterRemoveSkill(_Char, "Target_LLSUMMONINF_ApplyInfusions");
+CharacterAddSkill(_Char, "Target_LLSUMMONINF_ApplyInfusions_LarianModVersion", 0);
+
+IF
+GameStarted(_Region,_)
+AND
+IsGameLevel(_Region, 1)
+AND
+LLSUMMONINF_QRY_LarianSummoningModIsEnabled()
+AND
+NOT DB_LLSUMMONINF_LarianSummonModActived(_)
+THEN
+DB_LLSUMMONINF_LarianSummonModActived(1);
+LLSUMMONINF_OnLarianSummonModActivated();
+
+PROC
+LLSUMMONINF_OnLarianSummonModActivated()
+AND
+DB_IsPlayer(_Char)
+AND
+DB_LLSUMMONINF_LarianSummonModSkillVersions(_BaseSkill, _LarianVersionSkill)
+AND
+CharacterHasSkill(_Char, _BaseSkill, 1)
+THEN
+CharacterRemoveSkill(_Char, _BaseSkill);
+CharacterAddSkill(_Char, _LarianVersionSkill, 0);
+
+IF
+GameStarted(_Region,_)
+AND
+IsGameLevel(_Region, 1)
+AND
+NOT LLSUMMONINF_QRY_LarianSummoningModIsEnabled()
+AND
+DB_LLSUMMONINF_LarianSummonModActived(1)
+THEN
+NOT DB_LLSUMMONINF_LarianSummonModActived(1);
+LLSUMMONINF_OnLarianSummonModDeactivated();
+
+PROC
+LLSUMMONINF_OnLarianSummonModDeactivated()
+AND
+DB_IsPlayer(_Char)
+AND
+DB_LLSUMMONINF_LarianSummonModSkillVersions(_BaseSkill, _LarianVersionSkill)
+AND
+CharacterHasSkill(_Char, _LarianVersionSkill, 1)
+THEN
+CharacterRemoveSkill(_Char, _LarianVersionSkill);
+CharacterAddSkill(_Char, _BaseSkill, 0);
 //END_REGION
 
 //REGION START
@@ -714,15 +872,15 @@ DebugBreak("[LaughingLeader_SummoningTweaks] Starting Summoning Tweaks.");
 IF
 DB_LLSUMMONINF_StoryStarted(1)
 THEN
-LLSUMMONINF_Updater_SetVersion("1.1.1.0");
+LLSUMMONINF_Updater_SetVersion("1.2.0.0");
 
 IF
 GameStarted(_,_)
 AND
-LLSUMMONINF_Updater_QRY_UpdateNeeded("1.1.1.0")
+LLSUMMONINF_Updater_QRY_UpdateNeeded("1.2.0.0")
 THEN
-LLSUMMONINF_Updater_RemoveOldVersions("1.1.1.0");
-LLSUMMONINF_Updater_SetVersion("1.1.1.0");
+LLSUMMONINF_Updater_RemoveOldVersions("1.2.0.0");
+LLSUMMONINF_Updater_SetVersion("1.2.0.0");
 
 QRY
 LLSUMMONINF_Updater_QRY_UpdateNeeded((STRING)_Version)
@@ -808,6 +966,8 @@ DB_LLMIME_Mimicking_Blacklist_Skills("SummoningTweaks", "Target_LLSUMMONINF_Dism
 DB_LLMIME_Mimicking_Blacklist_Skills("SummoningTweaks", "Target_LLSUMMONINF_CopyInfusions");
 DB_LLMIME_Mimicking_Blacklist_Skills("SummoningTweaks", "Target_LLSUMMONINF_ApplyInfusions");
 DB_LLMIME_Mimicking_Blacklist_Skills("SummoningTweaks", "Target_LLSUMMONINF_ToggleAiControl");
+DB_LLMIME_Mimicking_Blacklist_Skills("SummoningTweaks", "Target_LLSUMMONINF_CopyInfusions_LarianModVersion");
+DB_LLMIME_Mimicking_Blacklist_Skills("SummoningTweaks", "Target_LLSUMMONINF_ApplyInfusions_LarianModVersion");
 //END_REGION
 
 //REGION AI_CONTROL
