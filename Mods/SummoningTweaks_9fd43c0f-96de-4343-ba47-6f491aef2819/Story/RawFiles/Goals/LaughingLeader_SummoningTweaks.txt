@@ -769,6 +769,8 @@ DB_LLSUMMONINF_DemonCodexInfusions(_Summoner, _Skill)
 AND
 IsSkillActive(_Summoner, _Skill, 1)
 AND
+DB_LLSUMMONINF_LarianInfusion(_Skill, _Infusion)
+AND
 DB_CMP_SummoningImproved_Statuses(_Template, _Infusion, (STRING)_Status)
 AND
 HasActiveStatus(_Summon, _Status, 0)
