@@ -19,7 +19,7 @@ LLSUMMONINF_InitDemonCodexSettings();
 LLSUMMONINF_InitLarianModSettings();
 
 PROC
-LLSUMMONINF_Updater_VersionChanged((STRING)_OldVersion, "1.2.0.0")
+LLSUMMONINF_Updater_VersionChanged((STRING)_OldVersion, "1.2.0.1")
 THEN
 LLSUMMONINF_InitSettings();
 //END_REGION
@@ -874,15 +874,15 @@ DebugBreak("[LaughingLeader_SummoningTweaks] Starting Summoning Tweaks.");
 IF
 DB_LLSUMMONINF_StoryStarted(1)
 THEN
-LLSUMMONINF_Updater_SetVersion("1.2.0.0");
+LLSUMMONINF_Updater_SetVersion("1.2.0.1");
 
 IF
 GameStarted(_,_)
 AND
-LLSUMMONINF_Updater_QRY_UpdateNeeded("1.2.0.0")
+LLSUMMONINF_Updater_QRY_UpdateNeeded("1.2.0.1")
 THEN
-LLSUMMONINF_Updater_RemoveOldVersions("1.2.0.0");
-LLSUMMONINF_Updater_SetVersion("1.2.0.0");
+LLSUMMONINF_Updater_RemoveOldVersions("1.2.0.1");
+LLSUMMONINF_Updater_SetVersion("1.2.0.1");
 
 QRY
 LLSUMMONINF_Updater_QRY_UpdateNeeded((STRING)_Version)
