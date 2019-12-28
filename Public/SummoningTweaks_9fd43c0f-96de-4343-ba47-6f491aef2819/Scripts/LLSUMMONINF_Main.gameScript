@@ -214,7 +214,24 @@ ENDIF
 	SetVar(_Character, "LLSUMMONINF_MaxSummonsCap", %LLSUMMONINF_MaxSummonsCap)
 	CharacterEvent(_Character, "LLSUMMONINF_MaxSummons_UpdateDialogVar")
 	CharacterEvent(_Character, "LLSUMMONINF_MaxSummons_DisplayCurrentMax")
-	
+
+EVENT LLSUMMONINF_Cap_SetFromCharacter
+VARS
+	CHARACTER:_Character
+	INT:_Max
+ON
+	OnCharacterEvent(_Character, "LLSUMMONINF_SetMaxSummonsCapFromCharacter")
+ACTIONS
+IF "c1|c2"
+	GetVar(_Max, _Character, "LLSUMMONINF_MaxSummonsCap")
+	IsGreaterThen(_Max, 0)
+THEN
+	Set(%LLSUMMONINF_MaxSummonsCap,_Max)
+ENDIF
+	CharacterEvent(_Character, "LLSUMMONINF_MaxSummons_UpdateDialogVar")
+	CharacterEvent(_Character, "LLSUMMONINF_MaxSummons_DisplayCurrentMax")
+	IterateParty("LLSUMMONINF_Iterate_SetMaxSummons")
+
 EVENT LLSUMMONINF_Cap_Reset
 VARS
 	CHARACTER:_Character

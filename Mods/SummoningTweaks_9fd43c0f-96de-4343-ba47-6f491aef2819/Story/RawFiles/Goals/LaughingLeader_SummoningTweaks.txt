@@ -131,6 +131,8 @@ SetStoryEvent(_Host, "LLSUMMONINF_MaxSummons_UpdatePlayers");
 PROC
 LLSUMMONINF_InitializePartyLeader((CHARACTERGUID)_Host, 0)
 AND
+GlobalGetFlag("LeaderLib_AutoAddModMenuBooksDisabled", 0)
+AND
 ItemTemplateIsInUserInventory(_Host, "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 0, 0)
 THEN
 ItemTemplateAddTo("BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", _Host, 1, 0);
@@ -151,6 +153,8 @@ SetStoryEvent(_Player, "LLSUMMONINF_MaxSummons_UpdatePlayers");
 //GM Mode
 PROC
 LLSUMMONINF_InitializePartyLeader((CHARACTERGUID)_Host, 1)
+AND
+GlobalGetFlag("LeaderLib_AutoAddModMenuBooksDisabled", 0)
 AND
 DB_IsPlayer(_Player)
 AND
@@ -874,15 +878,15 @@ DebugBreak("[LaughingLeader_SummoningTweaks] Starting Summoning Tweaks.");
 IF
 DB_LLSUMMONINF_StoryStarted(1)
 THEN
-LLSUMMONINF_Updater_SetVersion("1.2.0.1");
+LLSUMMONINF_Updater_SetVersion("1.3.0.0");
 
 IF
 GameStarted(_,_)
 AND
-LLSUMMONINF_Updater_QRY_UpdateNeeded("1.2.0.1")
+LLSUMMONINF_Updater_QRY_UpdateNeeded("1.3.0.0")
 THEN
-LLSUMMONINF_Updater_RemoveOldVersions("1.2.0.1");
-LLSUMMONINF_Updater_SetVersion("1.2.0.1");
+LLSUMMONINF_Updater_RemoveOldVersions("1.3.0.0");
+LLSUMMONINF_Updater_SetVersion("1.3.0.0");
 
 QRY
 LLSUMMONINF_Updater_QRY_UpdateNeeded((STRING)_Version)
@@ -952,6 +956,62 @@ AND
 NOT DB_LeaderLib_ModMenu_RegisteredMenu_OpenEvent("LaughingLeader.SummoningTweaks", _)
 THEN
 DB_LeaderLib_ModMenu_RegisteredMenu_OpenEvent("LaughingLeader.SummoningTweaks", "SummoningTweaks_SettingsMenu_OpenRequest");
+//END_REGION
+
+//REGION LEADERLIB_GLOBAL_SETTINGS
+IF
+GlobalFlagSet("LLSUMMONINF_SaveGlobalSettings")
+THEN
+LLSUMMONINF_SaveGlobalSettings();
+GlobalClearFlag("LLSUMMONINF_SaveGlobalSettings");
+
+PROC
+LLSUMMONINF_SaveGlobalSettings()
+AND
+GlobalGetFlag("LeaderLib_Initialized", 1)
+AND
+GlobalGetFlag("LeaderLib_ExtenderIsActive", 1)
+AND
+CharacterGetHostCharacter(_Host)
+THEN
+/* Signals LeaderLib to write the global settings file. */
+SetStoryEvent(_Host, "LeaderLib_Commands_SaveGlobalSettings");
+
+/* Automatically called by LeaderLib for mod variable registration */
+PROC
+LeaderLib_GlobalSettings_InitModRegistration()
+THEN
+DB_LeaderLib_ModApi_GlobalSettings_Register_Flag("SummoningTweaks", "LaughingLeader", "LLSUMMONINF_DismissSkillAutoAddingDisabled");
+DB_LeaderLib_ModApi_GlobalSettings_Register_Flag("SummoningTweaks", "LaughingLeader", "LLSUMMONINF_InvokeContractAutoAddDisabled");
+DB_LeaderLib_ModApi_GlobalSettings_Register_Integer("SummoningTweaks", "LaughingLeader", "LLSUMMONINF_MaxSummonsCap", 3);
+
+/* Automatically called by LeaderLib when global settings attempts to get an integer variable. 
+LeaderLib will save the variable value when DB_LeaderLib_ModApi_GlobalSettings_SaveIntegerVariable is added to.*/
+PROC
+LeaderLib_GlobalSettings_GetIntegerVariable("SummoningTweaks", "LaughingLeader", "LLSUMMONINF_MaxSummonsCap")
+AND
+CharacterGetHostCharacter(_Host)
+AND
+GetVarInteger(_Host, "LLSUMMONINF_MaxSummonsCap", _Max)
+THEN
+DB_LeaderLib_ModApi_GlobalSettings_SaveIntegerVariable("SummoningTweaks", "LaughingLeader", "LLSUMMONINF_MaxSummonsCap", _Max);
+
+/* Automatically called by LeaderLib when the variable is loaded from global settings*/
+PROC
+LeaderLib_GlobalSettings_SetIntegerVariable("SummoningTweaks", "LaughingLeader", "LLSUMMONINF_MaxSummonsCap", (INTEGER)_Cap)
+AND
+IntegerMax(_Cap, 1, _ClampedA)
+AND
+IntegerMin(_Cap, 999, _ClampedB)
+AND
+CharacterGetHostCharacter(_Host)
+AND
+GetVarInteger(_Host, "LLSUMMONINF_MaxSummonsCap", _Current)
+AND
+_Current != _ClampedB
+THEN
+SetVarInteger(_Host, "LLSUMMONINF_MaxSummonsCap", _ClampedB);
+SetStoryEvent(_Host, "LLSUMMONINF_SetMaxSummonsCapFromCharacter");
 //END_REGION
 
 //REGION MIMICRY
