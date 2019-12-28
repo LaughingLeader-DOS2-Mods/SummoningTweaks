@@ -263,7 +263,7 @@ NOT QRY_SpeakerIsAvailable(_Player)
 AND
 CharacterIsInCombat(_Player, 1)
 THEN
-CharacterStatusText(_Player, "<font color='#FF0000'>You can't open the settings menu in combat!");
+CharacterStatusText(_Player, "LLSUMMONINF_StatusText_SettingsBookBlocked");
 DB_CustomUseItemResponse(_Player, _Book, 0);
 
 IF
