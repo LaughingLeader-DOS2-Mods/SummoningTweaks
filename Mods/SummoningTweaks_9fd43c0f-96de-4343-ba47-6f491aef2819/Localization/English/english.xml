@@ -1,62 +1,71 @@
 <contentList>
-	<content contentuid="he5ac054bga24fg4cd7gae8dga1f5b1352da9" Source ="LLSUMMONINF_AD_DismissSummon.lsj"> Begone!</content>
-	<content contentuid="h2037fda8gfa0bg40d7gb437g22b12895c70c" Source ="LLSUMMONINF_SettingsMenu.lsj">[Exit]</content>
-	<content contentuid="h08b62c06g5016g40b4gb64ag1f166be83367" Source ="LLSUMMONINF_SettingsMenu.lsj">Add &quot;Toggle Autonomous Behavior&quot; skill, allowing you to toggle ai control for characters in combat.</content>
-	<content contentuid="hcd12d23eg3e55g4299g8f40gd7f52a21e036" Source ="LLSUMMONINF_SettingsMenu.lsj">&lt;b&gt;(Disabled - LeaderLib Required) &lt;/b&gt;Add &quot;Control Summon&quot; Skill.</content>
-	<content contentuid="h4504eca3g3804g4abfg8a50gb30e779ae2cc" Source ="LLSUMMONINF_SettingsMenu.lsj">Updating limit...</content>
-	<content contentuid="he1fbe0c4gefedg483fg87b8ga37b88c81bb8" Source ="LLSUMMONINF_SettingsMenu.lsj">Reset Limit to Summoning Tweaks Default (3)</content>
-	<content contentuid="h39767f05g0428g42a8gbcd8gc890e943d968" Source ="LLSUMMONINF_SettingsMenu.lsj">Enable auto-adding the Summoner&apos;s Contract when a summon skill is used.</content>
-	<content contentuid="h59ec3612g935dg49b4gbe0fg467efc9814b5" Source ="LLSUMMONINF_SettingsMenu.lsj">Add &quot;Control Summon&quot; Skill. This lets you directly control summons you own, whose portraits are invisible.</content>
-	<content contentuid="hf5bdd15ag5069g4705gbeebg1bb5cedda2ab" Source ="LLSUMMONINF_SettingsMenu.lsj">Max Summons: [LLSUMMONINF_MaxSummonLimit_89adccef-225e-47ab-8f10-5add6644ec3b]&lt;br&gt;&lt;i&gt;Note: Changing the limit will destroy most of your current summons.&lt;/i&gt;</content>
-	<content contentuid="h881c96ebg1d92g4036ga21fg99d517342ebc" Source ="LLSUMMONINF_SettingsMenu.lsj">Remove &quot;Control Summon&quot; Skill.</content>
-	<content contentuid="hf89c1133g4364g4d58gb451gfdc64370119c" Source ="LLSUMMONINF_SettingsMenu.lsj">Disable auto-adding the Dismiss Summon skill when summoning a creature.</content>
-	<content contentuid="h2331d655gbd5fg4922g982egf84176cd13f6" Source ="LLSUMMONINF_SettingsMenu.lsj">Remove hidden &quot;Max Summon Increase&quot; status from all characters.</content>
-	<content contentuid="h572b78aeg1d9ag4857gb18eg4c78a750c49e" Source ="LLSUMMONINF_SettingsMenu.lsj">Increase Limit by +5</content>
-	<content contentuid="h8ccdb4f8g8c7dg4ef6g8766g236912169c8f" Source ="LLSUMMONINF_SettingsMenu.lsj">[Host] Remove all Autonomous tags from all characters.</content>
-	<content contentuid="hd47791fcg5411g44cegaee7geafe78573ad3" Source ="LLSUMMONINF_SettingsMenu.lsj">Add Dismiss Summon Skill</content>
-	<content contentuid="hdae1c708g70e4g48adgbcd0g03f90e21cd8e" Source ="LLSUMMONINF_SettingsMenu.lsj">*Summon a Tiny Demon&apos;s Codex.* (Used to learn the Copy Infusions and Apply Infusions skills.)</content>
-	<content contentuid="heaf1bc0ag4bfag4532g9b94g20b5d0b522b6" Source ="LLSUMMONINF_SettingsMenu.lsj">Increase Limit by +1</content>
-	<content contentuid="h31d827c4g39d2g4059ga84ag63a6030a77a3" Source ="LLSUMMONINF_SettingsMenu.lsj">Running command...</content>
-	<content contentuid="h737913b0g8cb4g4b12gbb99g212ca05fd3ec" Source ="LLSUMMONINF_SettingsMenu.lsj">[Back]</content>
-	<content contentuid="h1a30ab80g2517g43bdg92dbg9b542934d11a" Source ="LLSUMMONINF_SettingsMenu.lsj">Set Max Summon Limit</content>
-	<content contentuid="h4394079dg8ce1g4f77gbe26g71c4a1d17a7e" Source ="LLSUMMONINF_SettingsMenu.lsj"> (&lt;b&gt;Disabled&lt;/b&gt; - Host Only Menu) Set Max Summon Limit</content>
-	<content contentuid="hb1b7046ag4f6fg40a9gac83gf6f9260368a1" Source ="LLSUMMONINF_SettingsMenu.lsj">Only the host can change the summon limit cap. Get them to change it for you!</content>
-	<content contentuid="h7e9017a9g4c12g4155ga7f4ga8b592aabbf3" Source ="LLSUMMONINF_SettingsMenu.lsj">Decrease Limit by -5</content>
-	<content contentuid="h57a8c871g6f74g4e9cgbce2gf17c8e0453b0" Source ="LLSUMMONINF_SettingsMenu.lsj">Remove Dismiss Summon Skill</content>
-	<content contentuid="ha8bfec7ag2b71g4787ga972g9d8188885053" Source ="LLSUMMONINF_SettingsMenu.lsj">Enable auto-adding the Dismiss Summon skill when summoning a creature.</content>
-	<content contentuid="h02b25705gdc04g4e73g870dg256073976ad9" Source ="LLSUMMONINF_SettingsMenu.lsj">Settings updated.</content>
-	<content contentuid="h735eff53g0852g4e01gae56g8872762b7e36" Source ="LLSUMMONINF_SettingsMenu.lsj">Summoning Tweaks Settings Menu</content>
-	<content contentuid="hb282ee97gd3b7g4b78gb1fegc53fc5df318e" Source ="LLSUMMONINF_SettingsMenu.lsj">Reset Limit to DOS2DE Default (1)</content>
-	<content contentuid="h7e5e193dgec46g491cgbbabgb764977480af" Source ="LLSUMMONINF_SettingsMenu.lsj">Disable auto-adding the Summoner&apos;s Contract when a summon skill is used.</content>
-	<content contentuid="hf7887dedgf86eg45d1g8024g4d9c57665643" Source ="LLSUMMONINF_SettingsMenu.lsj">Commands Menu</content>
-	<content contentuid="h2826f28agdcecg4957g8a5egb71bf5465f37" Source ="LLSUMMONINF_SettingsMenu.lsj">LeaderLib is required for the &quot;Control Summon&quot; skill, which lets you control summons whose portraits are invisible (a current bug with multiple summons).</content>
-	<content contentuid="hbbcc5824g3e4dg491bg931dgad9a1f9ae901" Source ="LLSUMMONINF_SettingsMenu.lsj">Decrease Limit by -1</content>
-	<content contentuid="hd568b72fgf3eeg466agb4c6g549a89459c55" Source ="LLSUMMONINF_SettingsMenu.lsj">[Self] Remove all Autonomous tags from all owned characters.</content>
-	<content contentuid="he3000620g3eeeg4972g83d6g02d97a88d198" Source ="LLSUMMONINF_SettingsMenu.lsj">Remove &quot;Toggle Autonomous Behavior&quot; skill.</content>
-	<content contentuid="he4ef996bg1a26g4da2g87b3g297f298b1c27" Source ="LLSUMMONINF_SettingsMenu.lsj">Commands</content>
-	<content contentuid="heeb4229bg5807g4071ga91cg43b590bdba11" Source ="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_ApplyInfusions_Description">Applies copied infusions to targeted &lt;font color=&apos;#c7a758&apos;&gt;Incarnates&lt;/font&gt; within a [1]m radius within [2]m.&lt;br&gt;&lt;font color=&apos;#FF6347&apos;&gt;Only infusions with matching, memorized skills are applied.&lt;/font&gt;</content>
-	<content contentuid="h0d0018a8gdc26g4056g90d4g05cf52782376" Source ="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_ApplyInfusions_DisplayName">Apply Infusions</content>
-	<content contentuid="hd239fbc6gc473g4ac0ga32fgdee44b1fb438" Source ="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_ApplyInfusions_LarianModVersion_Description">Applies copied infusions to targeted summons within a [1]m radius within [2]m.&lt;br&gt;&lt;font color=&apos;#FF6347&apos;&gt;Only infusions with matching, memorized skills are applied.&lt;/font&gt;</content>
-	<content contentuid="h550403f2g8fd1g4dbagaeaeg833e29971c90" Source ="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_CastLastSummon_Description">Re-cast the last Summoning spell you used at the target location.</content>
-	<content contentuid="ha59f04c9geeaeg4c42ga58fg71c1b43ae099" Source ="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_CastLastSummon_DisplayName">Invoke Contract</content>
-	<content contentuid="h9424aa76g9f77g4c3cgac96g6c8167daad7e" Source ="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_CopyInfusions_Description">Copies and stores the current infusions on an &lt;font color=&apos;#c7a758&apos;&gt;Incarnate&lt;/font&gt;.&lt;br&gt;&lt;font color=&apos;#FF6347&apos;&gt;Only infusions with matching, memorized skills are stored.&lt;/font&gt;&lt;br&gt;Cast again on another Incarnate to override the previously copied infusions.</content>
-	<content contentuid="h05c89a8dg5b2cg4552g93d3g7b698ba024f4" Source ="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_CopyInfusions_DisplayName">Copy Infusions</content>
-	<content contentuid="hea75d5b5g9a75g470dga772g56f2af803ae0" Source ="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_CopyInfusions_LarianModVersion_Description">Copies and stores the current infusions on a summon.&lt;br&gt;&lt;font color=&apos;#FF6347&apos;&gt;Only infusions with matching, memorized skills are stored.&lt;/font&gt;&lt;br&gt;Cast again on another summon to override the previously copied infusions.</content>
-	<content contentuid="h22e2a9e7g46bbg4b36ga88bg498bfe02588f" Source ="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_DismissSummon_Description">Dismiss targeted summons you own within a [1] area of effect.</content>
-	<content contentuid="h4f0102b1g9f5ag41f5g8d86ga05591ac9921" Source ="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_DismissSummon_DisplayName">Dismiss Summon</content>
-	<content contentuid="h37b0c9cdg59b9g4faega680gb968651d8c2a" Source ="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_ToggleAiControl_Description">Commands the targeted (owned) character to control their own actions in combat.&lt;br&gt;&lt;font color=&apos;#FFDD00&apos;&gt;Toggles this behavior on or off, depending on the target&apos;s current behavior.&lt;/font&gt;&lt;br&gt;&lt;font color=&apos;#33FF33&apos;&gt;This behavior can be toggled for summons, party members you control, and even yourself.&lt;/font&gt;</content>
-	<content contentuid="hc51f00dfg2fe8g4c4agb3e4gcf71149b1c5c" Source ="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_ToggleAiControl_DisplayName">&lt;font color=&apos;#FF33FF&apos;&gt;Toggle Autonomous Behavior&lt;/font&gt;</content>
-	<content contentuid="h32e9d487g932eg4c69g8b7fg6430aa05a5a4" Source ="LLSUMMONINF_Statuses.lsb" Key="LLSUMMONINF_APPLY_INFUSIONS_DisplayName">Apply Infusions</content>
-	<content contentuid="h57d2385dgc271g4290g9d3ag31621d05a0c0" Source ="LLSUMMONINF_Statuses.lsb" Key="LLSUMMONINF_AUTONOMOUS_Description">Character will dictate their own actions in combat.</content>
-	<content contentuid="hd242f631gaaa6g4b48g998fg034b24ddc6eb" Source ="LLSUMMONINF_Statuses.lsb" Key="LLSUMMONINF_AUTONOMOUS_DisplayName">Autonomous</content>
-	<content contentuid="hb80fe619g7effg437eg8de6ga2bf15ab154f" Source ="LLSUMMONINF_Statuses.lsb" Key="LLSUMMONINF_AUTONOMOUS_TOGGLE_DisplayName">Toggle Autonomous Behavior</content>
-	<content contentuid="h614a9dbcg9b81g4df4gae85g65d6f6d94fde" Source ="LLSUMMONINF_Statuses.lsb" Key="LLSUMMONINF_COPY_INFUSIONS_DisplayName">Copy Infusions</content>
-	<content contentuid="h9c848462g2092g4898g9ed9g43b0a5841769" Source ="LLSUMMONINF_StatusText.lsb" Key="LLSUMMONINF_Notification_AlreadyHaveDemonCodex">&lt;font color=&apos;#FF0000&apos;&gt;You already have a Tiny Demon&apos;s Codex!&lt;/font&gt;</content>
-	<content contentuid="h01b4e350gb6a6g48cagb1ecg41cdf173a688" Source ="LLSUMMONINF_StatusText.lsb" Key="LLSUMMONINF_Notification_InfusionsCleared">&lt;font color=&apos;#FF4500&apos;&gt;Stored Infusions Cleared&lt;/font&gt;</content>
-	<content contentuid="hf0dc5a29g9074g44c2g8730g710c1fbe3870" Source ="LLSUMMONINF_StatusText.lsb" Key="LLSUMMONINF_Notification_InfusionsStored">&lt;font color=&apos;#00FF00&apos;&gt;Infusions Copied&lt;/font&gt;</content>
-	<content contentuid="h0ec18240gd0fcg4bf6gb376g73bbd43ef3de" Source ="LLSUMMONINF_StatusText.lsb" Key="LLSUMMONINF_Notification_LastControllableCharacter">&lt;font color=&apos;#FF0000&apos;&gt;Autonomous behavior skipped for safety reasons.&lt;/font&gt;</content>
-	<content contentuid="h15478bfdgc814g4f0agb8bdg5aa8daa180f0" Source ="LLSUMMONINF_StatusText.lsb" Key="LLSUMMONINF_Notification_NoInfusionsStored">&lt;font color=&apos;#FF0000&apos;&gt;No Infusions Stored&lt;/font&gt;</content>
-	<content contentuid="h1d949fb3g4123g4d6egae56g6f0c8dc67147" Source ="LLSUMMONINF_StatusText.lsb" Key="LLSUMMONINF_StatusText_InvokeContractBlocked">&lt;font color=&apos;#FF0000&apos;&gt;*You can&apos;t use the contract in combat!*&lt;/font&gt;</content>
-	<content contentuid="hcde1ede8g60e1g4a6cg8d00g9ad0468a863b" Source ="LLSUMMONINF_StatusText.lsb" Key="LLSUMMONINF_StatusText_InvokeContractInvalid">&lt;font color=&apos;#FF0000&apos;&gt;*Summon a creature before invoking the contract!*&lt;/font&gt;</content>
-	<content contentuid="h130f3b27g8e7ag4a82g9ea5g4c94a45c8124" Source ="LLSUMMONINF_StatusText.lsb" Key="LLSUMMONINF_StatusText_SettingsBookBlocked">&lt;font color=&apos;#FF0000&apos;&gt;You can&apos;t open the settings menu in combat!</content>
+	<content contentuid="hd6e19e0bgd9cfg45f0g9363g4a332ff803fb" Source="BOOK_LLSUMMONINF_DemonCodex">Teaches &lt;font color=&apos;#00FFFF&apos;&gt;Copy Infusions&lt;/font&gt; and &lt;font color=&apos;#00FA9A&apos;&gt;Apply Infusions&lt;/font&gt;, two value spells to speed up Incarnate preparation outside of battle.</content>
+	<content contentuid="he9bcccc6g24e2g4f73g87cfg6a922115b907" Source="BOOK_LLSUMMONINF_DemonCodex">Tiny Devil&apos;s Codex</content>
+	<content contentuid="h9da360efga333g4b98g9c43g202f2019172f" Source="BOOK_LLSUMMONINF_DemonCodex">Read Codex</content>
+	<content contentuid="h4525f4e7ga59bg4109g922cg62ee5c4f120e" Source="BOOK_LLSUMMONINF_SettingsMenu">Use to configure Summoning Tweaks.</content>
+	<content contentuid="ha4943c9ege663g44f5g85e4g91512611e6c1" Source="BOOK_LLSUMMONINF_SettingsMenu">Summoning Tweaks Settings Menu</content>
+	<content contentuid="he82d5b8bg5ea3g4068g8f77gd2ea31e73f2d" Source="BOOK_LLSUMMONINF_SettingsMenu">Open Settings Menu</content>
+	<content contentuid="he5ac054bga24fg4cd7gae8dga1f5b1352da9" Source="LLSUMMONINF_AD_DismissSummon.lsj"> Begone!</content>
+	<content contentuid="h2037fda8gfa0bg40d7gb437g22b12895c70c" Source="LLSUMMONINF_SettingsMenu.lsj">[Exit]</content>
+	<content contentuid="h08b62c06g5016g40b4gb64ag1f166be83367" Source="LLSUMMONINF_SettingsMenu.lsj">Add &quot;Toggle Autonomous Behavior&quot; skill, allowing you to toggle ai control for characters in combat.</content>
+	<content contentuid="hcd12d23eg3e55g4299g8f40gd7f52a21e036" Source="LLSUMMONINF_SettingsMenu.lsj">&lt;b&gt;(Disabled - LeaderLib Required) &lt;/b&gt;Add &quot;Control Summon&quot; Skill.</content>
+	<content contentuid="h4504eca3g3804g4abfg8a50gb30e779ae2cc" Source="LLSUMMONINF_SettingsMenu.lsj">Updating limit...</content>
+	<content contentuid="he1fbe0c4gefedg483fg87b8ga37b88c81bb8" Source="LLSUMMONINF_SettingsMenu.lsj">Reset Limit to Summoning Tweaks Default (3)</content>
+	<content contentuid="h39767f05g0428g42a8gbcd8gc890e943d968" Source="LLSUMMONINF_SettingsMenu.lsj">Enable auto-adding the Summoner&apos;s Contract when a summon skill is used.</content>
+	<content contentuid="h59ec3612g935dg49b4gbe0fg467efc9814b5" Source="LLSUMMONINF_SettingsMenu.lsj">Add &quot;Control Summon&quot; Skill. This lets you directly control summons you own, whose portraits are invisible.</content>
+	<content contentuid="hf5bdd15ag5069g4705gbeebg1bb5cedda2ab" Source="LLSUMMONINF_SettingsMenu.lsj">Max Summons: [LLSUMMONINF_MaxSummonLimit_89adccef-225e-47ab-8f10-5add6644ec3b]&lt;br&gt;&lt;i&gt;Note: Changing the limit will destroy most of your current summons.&lt;/i&gt;</content>
+	<content contentuid="h881c96ebg1d92g4036ga21fg99d517342ebc" Source="LLSUMMONINF_SettingsMenu.lsj">Remove &quot;Control Summon&quot; Skill.</content>
+	<content contentuid="hf89c1133g4364g4d58gb451gfdc64370119c" Source="LLSUMMONINF_SettingsMenu.lsj">Disable auto-adding the Dismiss Summon skill when summoning a creature.</content>
+	<content contentuid="h2331d655gbd5fg4922g982egf84176cd13f6" Source="LLSUMMONINF_SettingsMenu.lsj">Remove hidden &quot;Max Summon Increase&quot; status from all characters.</content>
+	<content contentuid="h572b78aeg1d9ag4857gb18eg4c78a750c49e" Source="LLSUMMONINF_SettingsMenu.lsj">Increase Limit by +5</content>
+	<content contentuid="h8ccdb4f8g8c7dg4ef6g8766g236912169c8f" Source="LLSUMMONINF_SettingsMenu.lsj">[Host] Remove all Autonomous tags from all characters.</content>
+	<content contentuid="hd47791fcg5411g44cegaee7geafe78573ad3" Source="LLSUMMONINF_SettingsMenu.lsj">Add Dismiss Summon Skill</content>
+	<content contentuid="hdae1c708g70e4g48adgbcd0g03f90e21cd8e" Source="LLSUMMONINF_SettingsMenu.lsj">*Summon a Tiny Demon&apos;s Codex.* (Used to learn the Copy Infusions and Apply Infusions skills.)</content>
+	<content contentuid="heaf1bc0ag4bfag4532g9b94g20b5d0b522b6" Source="LLSUMMONINF_SettingsMenu.lsj">Increase Limit by +1</content>
+	<content contentuid="h31d827c4g39d2g4059ga84ag63a6030a77a3" Source="LLSUMMONINF_SettingsMenu.lsj">Running command...</content>
+	<content contentuid="h737913b0g8cb4g4b12gbb99g212ca05fd3ec" Source="LLSUMMONINF_SettingsMenu.lsj">[Back]</content>
+	<content contentuid="h1a30ab80g2517g43bdg92dbg9b542934d11a" Source="LLSUMMONINF_SettingsMenu.lsj">Set Max Summon Limit</content>
+	<content contentuid="h4394079dg8ce1g4f77gbe26g71c4a1d17a7e" Source="LLSUMMONINF_SettingsMenu.lsj"> (&lt;b&gt;Disabled&lt;/b&gt; - Host Only Menu) Set Max Summon Limit</content>
+	<content contentuid="hb1b7046ag4f6fg40a9gac83gf6f9260368a1" Source="LLSUMMONINF_SettingsMenu.lsj">Only the host can change the summon limit cap. Get them to change it for you!</content>
+	<content contentuid="h7e9017a9g4c12g4155ga7f4ga8b592aabbf3" Source="LLSUMMONINF_SettingsMenu.lsj">Decrease Limit by -5</content>
+	<content contentuid="h57a8c871g6f74g4e9cgbce2gf17c8e0453b0" Source="LLSUMMONINF_SettingsMenu.lsj">Remove Dismiss Summon Skill</content>
+	<content contentuid="ha8bfec7ag2b71g4787ga972g9d8188885053" Source="LLSUMMONINF_SettingsMenu.lsj">Enable auto-adding the Dismiss Summon skill when summoning a creature.</content>
+	<content contentuid="h02b25705gdc04g4e73g870dg256073976ad9" Source="LLSUMMONINF_SettingsMenu.lsj">Settings updated.</content>
+	<content contentuid="h735eff53g0852g4e01gae56g8872762b7e36" Source="LLSUMMONINF_SettingsMenu.lsj">Summoning Tweaks Settings Menu</content>
+	<content contentuid="hb282ee97gd3b7g4b78gb1fegc53fc5df318e" Source="LLSUMMONINF_SettingsMenu.lsj">Reset Limit to DOS2DE Default (1)</content>
+	<content contentuid="h7e5e193dgec46g491cgbbabgb764977480af" Source="LLSUMMONINF_SettingsMenu.lsj">Disable auto-adding the Summoner&apos;s Contract when a summon skill is used.</content>
+	<content contentuid="hf7887dedgf86eg45d1g8024g4d9c57665643" Source="LLSUMMONINF_SettingsMenu.lsj">Commands Menu</content>
+	<content contentuid="h2826f28agdcecg4957g8a5egb71bf5465f37" Source="LLSUMMONINF_SettingsMenu.lsj">LeaderLib is required for the &quot;Control Summon&quot; skill, which lets you control summons whose portraits are invisible (a current bug with multiple summons).</content>
+	<content contentuid="hbbcc5824g3e4dg491bg931dgad9a1f9ae901" Source="LLSUMMONINF_SettingsMenu.lsj">Decrease Limit by -1</content>
+	<content contentuid="hd568b72fgf3eeg466agb4c6g549a89459c55" Source="LLSUMMONINF_SettingsMenu.lsj">[Self] Remove all Autonomous tags from all owned characters.</content>
+	<content contentuid="he3000620g3eeeg4972g83d6g02d97a88d198" Source="LLSUMMONINF_SettingsMenu.lsj">Remove &quot;Toggle Autonomous Behavior&quot; skill.</content>
+	<content contentuid="he4ef996bg1a26g4da2g87b3g297f298b1c27" Source="LLSUMMONINF_SettingsMenu.lsj">Commands</content>
+	<content contentuid="heeb4229bg5807g4071ga91cg43b590bdba11" Source="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_ApplyInfusions_Description">Applies copied infusions to targeted &lt;font color=&apos;#c7a758&apos;&gt;Incarnates&lt;/font&gt; within a [1]m radius within [2]m.&lt;br&gt;&lt;font color=&apos;#FF6347&apos;&gt;Only infusions with matching, memorized skills are applied.&lt;/font&gt;</content>
+	<content contentuid="h0d0018a8gdc26g4056g90d4g05cf52782376" Source="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_ApplyInfusions_DisplayName">Apply Infusions</content>
+	<content contentuid="hd239fbc6gc473g4ac0ga32fgdee44b1fb438" Source="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_ApplyInfusions_LarianModVersion_Description">Applies copied infusions to targeted summons within a [1]m radius within [2]m.&lt;br&gt;&lt;font color=&apos;#FF6347&apos;&gt;Only infusions with matching, memorized skills are applied.&lt;/font&gt;</content>
+	<content contentuid="h550403f2g8fd1g4dbagaeaeg833e29971c90" Source="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_CastLastSummon_Description">Summon another creature you last conjured at the target location.</content>
+	<content contentuid="ha59f04c9geeaeg4c42ga58fg71c1b43ae099" Source="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_CastLastSummon_DisplayName">Invoke Contract</content>
+	<content contentuid="h9424aa76g9f77g4c3cgac96g6c8167daad7e" Source="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_CopyInfusions_Description">Copies and stores the current infusions on an &lt;font color=&apos;#c7a758&apos;&gt;Incarnate&lt;/font&gt;.&lt;br&gt;&lt;font color=&apos;#FF6347&apos;&gt;Only infusions with matching, memorized skills are stored.&lt;/font&gt;&lt;br&gt;Cast again on another Incarnate to override the previously copied infusions.</content>
+	<content contentuid="h05c89a8dg5b2cg4552g93d3g7b698ba024f4" Source="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_CopyInfusions_DisplayName">Copy Infusions</content>
+	<content contentuid="hea75d5b5g9a75g470dga772g56f2af803ae0" Source="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_CopyInfusions_LarianModVersion_Description">Copies and stores the current infusions on a summon.&lt;br&gt;&lt;font color=&apos;#FF6347&apos;&gt;Only infusions with matching, memorized skills are stored.&lt;/font&gt;&lt;br&gt;Cast again on another summon to override the previously copied infusions.</content>
+	<content contentuid="h22e2a9e7g46bbg4b36ga88bg498bfe02588f" Source="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_DismissSummon_Description">Dismiss targeted summons you own within a [1] area of effect.</content>
+	<content contentuid="h4f0102b1g9f5ag41f5g8d86ga05591ac9921" Source="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_DismissSummon_DisplayName">Dismiss Summon</content>
+	<content contentuid="h37b0c9cdg59b9g4faega680gb968651d8c2a" Source="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_ToggleAiControl_Description">Commands the targeted (owned) character to control their own actions in combat.&lt;br&gt;&lt;font color=&apos;#FFDD00&apos;&gt;Toggles this behavior on or off, depending on the target&apos;s current behavior.&lt;/font&gt;&lt;br&gt;&lt;font color=&apos;#33FF33&apos;&gt;This behavior can be toggled for summons, party members you control, and even yourself.&lt;/font&gt;</content>
+	<content contentuid="hc51f00dfg2fe8g4c4agb3e4gcf71149b1c5c" Source="LLSUMMONINF_Skills.lsb" Key="Target_LLSUMMONINF_ToggleAiControl_DisplayName">&lt;font color=&apos;#FF33FF&apos;&gt;Toggle Autonomous Behavior&lt;/font&gt;</content>
+	<content contentuid="h32e9d487g932eg4c69g8b7fg6430aa05a5a4" Source="LLSUMMONINF_Statuses.lsb" Key="LLSUMMONINF_APPLY_INFUSIONS_DisplayName">Apply Infusions</content>
+	<content contentuid="h57d2385dgc271g4290g9d3ag31621d05a0c0" Source="LLSUMMONINF_Statuses.lsb" Key="LLSUMMONINF_AUTONOMOUS_Description">Character will dictate their own actions in combat.</content>
+	<content contentuid="hd242f631gaaa6g4b48g998fg034b24ddc6eb" Source="LLSUMMONINF_Statuses.lsb" Key="LLSUMMONINF_AUTONOMOUS_DisplayName">Autonomous</content>
+	<content contentuid="hb80fe619g7effg437eg8de6ga2bf15ab154f" Source="LLSUMMONINF_Statuses.lsb" Key="LLSUMMONINF_AUTONOMOUS_TOGGLE_DisplayName">Toggle Autonomous Behavior</content>
+	<content contentuid="h614a9dbcg9b81g4df4gae85g65d6f6d94fde" Source="LLSUMMONINF_Statuses.lsb" Key="LLSUMMONINF_COPY_INFUSIONS_DisplayName">Copy Infusions</content>
+	<content contentuid="h9c848462g2092g4898g9ed9g43b0a5841769" Source="LLSUMMONINF_StatusText.lsb" Key="LLSUMMONINF_Notification_AlreadyHaveDemonCodex">&lt;font color=&apos;#FF0000&apos;&gt;You already have a Tiny Demon&apos;s Codex!&lt;/font&gt;</content>
+	<content contentuid="h01b4e350gb6a6g48cagb1ecg41cdf173a688" Source="LLSUMMONINF_StatusText.lsb" Key="LLSUMMONINF_Notification_InfusionsCleared">&lt;font color=&apos;#FF4500&apos;&gt;Stored Infusions Cleared&lt;/font&gt;</content>
+	<content contentuid="hf0dc5a29g9074g44c2g8730g710c1fbe3870" Source="LLSUMMONINF_StatusText.lsb" Key="LLSUMMONINF_Notification_InfusionsStored">&lt;font color=&apos;#00FF00&apos;&gt;Infusions Copied&lt;/font&gt;</content>
+	<content contentuid="h0ec18240gd0fcg4bf6gb376g73bbd43ef3de" Source="LLSUMMONINF_StatusText.lsb" Key="LLSUMMONINF_Notification_LastControllableCharacter">&lt;font color=&apos;#FF0000&apos;&gt;Autonomous behavior skipped for safety reasons.&lt;/font&gt;</content>
+	<content contentuid="h15478bfdgc814g4f0agb8bdg5aa8daa180f0" Source="LLSUMMONINF_StatusText.lsb" Key="LLSUMMONINF_Notification_NoInfusionsStored">&lt;font color=&apos;#FF0000&apos;&gt;No Infusions Stored&lt;/font&gt;</content>
+	<content contentuid="h1d949fb3g4123g4d6egae56g6f0c8dc67147" Source="LLSUMMONINF_StatusText.lsb" Key="LLSUMMONINF_StatusText_InvokeContractBlocked">&lt;font color=&apos;#FF0000&apos;&gt;*You can&apos;t use the contract in combat!*&lt;/font&gt;</content>
+	<content contentuid="hcde1ede8g60e1g4a6cg8d00g9ad0468a863b" Source="LLSUMMONINF_StatusText.lsb" Key="LLSUMMONINF_StatusText_InvokeContractInvalid">&lt;font color=&apos;#FF0000&apos;&gt;*Summon a creature before invoking the contract!*&lt;/font&gt;</content>
+	<content contentuid="h130f3b27g8e7ag4a82g9ea5g4c94a45c8124" Source="LLSUMMONINF_StatusText.lsb" Key="LLSUMMONINF_StatusText_SettingsBookBlocked">&lt;font color=&apos;#FF0000&apos;&gt;You can&apos;t open the settings menu in combat!</content>
+	<content contentuid="h211716ecg126cg4973g8af4g31caed415883" Source="Scroll_LLSUMMONINF_Skill_InvokeContract">Conjures the last creature you&apos;ve summoned at no cost.&lt;br&gt;&lt;font color=&apos;#FF0000&apos;&gt;Does not work in combat.&lt;/font&gt;</content>
+	<content contentuid="ha3db9492g994eg4761g8929ge5e39c9a2774" Source="Scroll_LLSUMMONINF_Skill_InvokeContract">Summoner&apos;s Contract</content>
+	<content contentuid="hd0065be4g937bg46f8gb4d7g724a27f72a18" Source="Scroll_LLSUMMONINF_Skill_InvokeContract">Invoke Contract</content>
 </contentList>
