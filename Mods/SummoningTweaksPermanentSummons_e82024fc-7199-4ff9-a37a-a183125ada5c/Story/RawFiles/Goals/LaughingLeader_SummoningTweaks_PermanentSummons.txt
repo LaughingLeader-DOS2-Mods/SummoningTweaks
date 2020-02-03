@@ -1,23 +1,120 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-
+DB_Mods_Registered("SummoningTweaksPermanentSummons", "LaughingLeader", "1.2.1.0");
 KBSECTION
+//REGION VERSIONING
+IF
+GameStarted(_,_)
+AND
+LLSUMMONINF_PS_Updater_QRY_UpdateNeeded("1.2.1.0")
+THEN
+LLSUMMONINF_PS_Updater_RemoveOldVersions("1.2.1.0");
+LLSUMMONINF_PS_Updater_SetVersion("1.2.1.0");
+
 QRY
-LLSUMMONINF_CharacterIsPlayer((CHARACTERGUID)_Char)
+LLSUMMONINF_PS_Updater_QRY_UpdateNeeded((STRING)_Version)
 AND
-CharacterIsPlayer(_Char, _a)
+NOT DB_Mods_Registered("SummoningTweaksPermanentSummons", "LaughingLeader", _Version)
+THEN
+DB_NOOP(1);
+
+PROC
+LLSUMMONINF_PS_Updater_RemoveOldVersions((STRING)_NewVersion)
 AND
-CharacterIsPartyMember(_Char, _b)
+DB_Mods_Registered("SummoningTweaksPermanentSummons", "LaughingLeader", _Version)
 AND
-IntegerMax(_a,_b,1)
+_Version != _NewVersion
+THEN
+NOT DB_Mods_Registered("SummoningTweaksPermanentSummons", "LaughingLeader", _Version);
+LLSUMMONINF_PS_Updater_VersionChanged(_Version, _NewVersion);
+
+PROC
+LLSUMMONINF_PS_Updater_VersionChanged((STRING)_OldVersion, (STRING)_NewVersion)
+AND
+StringConcatenate("[SummoningTweaksPermanentSummons:VersionChanged] Updating registered version [", _OldVersion, _Str)
+AND
+StringConcatenate(_Str, "] to [", _Str2)
+AND
+StringConcatenate(_Str2, _NewVersion, _Str3)
+AND
+StringConcatenate(_Str3, "]", _Str4)
+THEN
+DebugBreak(_Str4);
+
+PROC
+LLSUMMONINF_PS_Updater_SetVersion((STRING)_Version)
+AND
+GlobalGetFlag("LeaderLib_Initialized", 1)
+THEN
+DB_LeaderLib_ModApi_RegisterMod("SummoningTweaksPermanentSummons", "LaughingLeader", _Version);
+
+PROC
+LLSUMMONINF_PS_Updater_SetVersion((STRING)_Version)
+AND
+NOT GlobalGetFlag("LeaderLib_Initialized", 1)
+THEN
+DB_Mods_Registered("SummoningTweaksPermanentSummons", "LaughingLeader", _Version);
+//END_REGION
+
+//REGION LEADERLIB_REGISTER
+IF
+StoryEvent(_, "LeaderLib_Initialized")
+AND
+NOT DB_LLSUMMONINF_PS_RegisteredLeaderLibSettings(_)
+THEN
+DB_LLSUMMONINF_PS_RegisteredLeaderLibSettings(1);
+
+IF
+DB_LLSUMMONINF_PS_RegisteredLeaderLibSettings(1)
+THEN
+DB_LeaderLib_ModApi_RegisterActiveGoal("SummoningTweaksPermanentSummons", "LaughingLeader", "LaughingLeader_SummoningTweaks_PermanentSummons");
+DB_LeaderLib_ModApi_RegisterMenu("LaughingLeader.SummoningTweaks", "[Summoning Tweaks] Settings", "LLSUMMONINF_PermanentSummons_Menu", "SummoningTweaksPermanentSummons", "LaughingLeader");
+DB_LeaderUpdater_RegisteredUUID("SummoningTweaksPermanentSummons", "LaughingLeader", e82024fc-7199-4ff9-a37a-a183125ada5c);
+//END_REGION
+
+//REGION ADD_SKILLS
+IF
+TextEventSet("llsummon_opensettings")
+AND
+CharacterGetHostCharacter(_Host)
+THEN
+Proc_StartDialog(0, "LLSUMMONINF_PermanentSummons_Menu", _Host);
+
+IF
+ObjectFlagSet("LLSUMMONINF_Commands_AddBlacklistSkills", (CHARACTERGUID)_Player, _)
+THEN
+ObjectClearFlag(_Player, "LLSUMMONINF_Commands_AddBlacklistSkills", 0);
+CharacterAddSkill(_Player, "Target_LLSUMMONINF_AddSummonToBlackList", 1);
+CharacterAddSkill(_Player, "Target_LLSUMMONINF_RemoveSummonFromBlackList", 1);
+
+IF
+ObjectFlagSet("LLSUMMONINF_Commands_RemoveBlacklistSkills", (CHARACTERGUID)_Player, _)
+THEN
+CharacterRemoveSkill(_Player, "Target_LLSUMMONINF_AddSummonToBlackList");
+CharacterRemoveSkill(_Player, "Target_LLSUMMONINF_RemoveSummonFromBlackList");
+ObjectClearFlag(_Player, "LLSUMMONINF_Commands_RemoveBlacklistSkills", 0);
+//END_REGION
+
+QRY
+LLSUMMONINF_PlayeracterIsPlayer((CHARACTERGUID)_Player)
+AND
+DB_IsPlayer(_Player)
 THEN
 DB_NOOP(1);
 
 QRY
-LLSUMMONINF_CharacterIsPlayer((CHARACTERGUID)_Char)
+LLSUMMONINF_PlayeracterIsPlayer((CHARACTERGUID)_Player)
 AND
-DB_IsPlayer(_Char)
+CharacterIsSummon(_Player, 0)
+AND
+CharacterIsPartyFollower(_Player, 0)
+AND
+CharacterIsPlayer(_Player, _a)
+AND
+CharacterIsPartyMember(_Player, _b)
+AND
+IntegerMax(_a,_b,1)
 THEN
 DB_NOOP(1);
 
@@ -28,9 +125,99 @@ IsTagged(_Summon, "TOTEM", 0)
 AND
 CharacterGetOwner(_Summon, _Player)
 AND
-LLSUMMONINF_CharacterIsPlayer(_Player)
+LLSUMMONINF_PlayeracterIsPlayer(_Player)
+AND
+GetTemplate(_Summon, _Template)
+AND
+NOT DB_LLSUMMONINF_IgnoredTemplates(_Player, _Template)
 THEN
 CharacterSetSummonLifetime(_Summon, -1);
+
+//REGION SUMMON_IGNORING
+PROC
+LLSUMMONINF_IgnoreSummon((CHARACTERGUID)_Player, (CHARACTERGUID)_Summon, (STRING)_Template)
+AND
+DB_LLSUMMONINF_IgnoredTemplates(_Player, _Template)
+THEN
+ShowNotification(_Player, "LLSUMMONINF_Notification_SummonTemplateAlreadyBlacklisted");
+
+PROC
+LLSUMMONINF_IgnoreSummon((CHARACTERGUID)_Player, (CHARACTERGUID)_Summon, (STRING)_Template)
+AND
+NOT DB_LLSUMMONINF_IgnoredTemplates(_Player, _Template)
+THEN
+DB_LLSUMMONINF_IgnoredTemplates(_Player, _Template);
+ShowNotification(_Player, "LLSUMMONINF_Notification_SummonTemplateBlacklisted");
+
+IF
+CharacterUsedSkillOnTarget(_Player, _Summon, "Target_LLSUMMONINF_AddSummonToBlackList", _, _)
+AND
+IsTagged(_Summon, "TOTEM", 0)
+AND
+CharacterIsSummon((CHARACTERGUID)_Summon, 1)
+AND
+GetTemplate(_Summon, _Template)
+THEN
+LLSUMMONINF_IgnoreSummon(_Player, _Summon, _Template);
+
+PROC
+LLSUMMONINF_IgnoreSummon((CHARACTERGUID)_Player, (CHARACTERGUID)_Summon)
+AND
+CharacterGetOwner(_Summon, _Player)
+THEN
+CharacterSetSummonLifetime(_Summon, 10);
+
+IF
+CharacterUsedSkillOnTarget(_Player, _Summon, "Target_LLSUMMONINF_RemoveSummonFromBlackList", _, _)
+AND
+IsTagged(_Summon, "TOTEM", 0)
+AND
+CharacterIsSummon((CHARACTERGUID)_Summon, 1)
+AND
+GetTemplate(_Summon, _Template)
+AND
+NOT DB_LLSUMMONINF_IgnoredTemplates(_Player, _Template)
+THEN
+ShowNotification(_Player, "LLSUMMONINF_Notification_SummonTemplateNotBlacklisted");
+
+IF
+CharacterUsedSkillOnTarget(_Player, _Summon, "Target_LLSUMMONINF_RemoveSummonFromBlackList", _, _)
+AND
+IsTagged(_Summon, "TOTEM", 0)
+AND
+CharacterIsSummon((CHARACTERGUID)_Summon, 1)
+AND
+GetTemplate(_Summon, _Template)
+AND
+DB_LLSUMMONINF_IgnoredTemplates(_Player, _Template)
+THEN
+NOT DB_LLSUMMONINF_IgnoredTemplates(_Player, _Template);
+ShowNotification(_Player, "LLSUMMONINF_Notification_SummonTemplateBlacklistRemoved");
+
+IF
+CharacterUsedSkillOnTarget(_Player, _Summon, "Target_LLSUMMONINF_RemoveSummonFromBlackList", _, _)
+AND
+IsTagged(_Summon, "TOTEM", 0)
+AND
+CharacterIsSummon((CHARACTERGUID)_Summon, 1)
+AND
+CharacterGetOwner(_Summon, _Player)
+THEN
+CharacterSetSummonLifetime(_Summon, -1);
+
+IF
+ObjectFlagSet("LLSUMMONINF_Commands_ClearBlacklist", (CHARACTERGUID)_Player, _)
+AND
+DB_LLSUMMONINF_IgnoredTemplates(_Player, _Template)
+THEN
+NOT DB_LLSUMMONINF_IgnoredTemplates(_Player, _Template);
+
+IF
+ObjectFlagSet("LLSUMMONINF_Commands_ClearBlacklist", (CHARACTERGUID)_Player, _)
+THEN
+ObjectClearFlag(_Player, "LLSUMMONINF_Commands_ClearBlacklist", 0);
+ShowNotification(_Player, "LLSUMMONINF_Notification_BlacklistCleared");
+//END_REGION
 EXITSECTION
 
 ENDEXITSECTION

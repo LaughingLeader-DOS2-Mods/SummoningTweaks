@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <save>
     <header version="2" />
     <version major="3" minor="6" revision="6" build="0" />
@@ -24,7 +24,7 @@
                     <attribute id="Tags" value="" type="30" />
                     <attribute id="Type" value="Add-on" type="22" />
                     <attribute id="UUID" value="e82024fc-7199-4ff9-a37a-a183125ada5c" type="22" />
-                    <attribute id="Version" value="301989888" type="4" />
+                    <attribute id="Version" value="302055424" type="4" />
                     <children>
                         <node id="PublishVersion">
                             <attribute id="Version" value="909321303" type="4" />

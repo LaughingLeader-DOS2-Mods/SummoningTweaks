@@ -949,6 +949,7 @@ DB_LeaderLib_ModApi_RegisterMenu("LaughingLeader.SummoningTweaks", "[Summoning T
 DB_LeaderLib_ModMenu_RegisteredMenu_OpenEvent("LaughingLeader.SummoningTweaks", "SummoningTweaks_SettingsMenu_OpenRequest");
 DB_LeaderLib_Treasure_TreasureItemTemplates("LeaderLib.LeaderTrader.ModBooks", "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 1, "");
 DB_LeaderLib_Treasure_ItemMaxAmount("LeaderLib.LeaderTrader.ModBooks", "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 4);
+DB_LeaderUpdater_RegisteredUUID("SummoningTweaks", "LaughingLeader", 9fd43c0f-96de-4343-ba47-6f491aef2819);
 
 PROC
 LLSUMMONINF_Updater_VersionChanged((STRING)_OldVersion, "1.0.2.0")
