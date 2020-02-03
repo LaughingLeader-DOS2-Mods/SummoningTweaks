@@ -565,7 +565,7 @@ GetVarString(_Player, "LLSUMMONINF_LastSummonTemplate", _Template)
 AND
 _Template != ""
 THEN
-LLSUMMONINF_SummonTemplateAtPosition(_Player, _Template, _x, _y, _z);
+LLSUMMONINF_SummonTemplateAtPosition_Start(_Player, _Template, _x, _y, _z);
 
 IF
 CharacterUsedSkillAtPosition(_Player, _x, _y, _z, "Target_LLSUMMONINF_CastLastSummon", _, _)
@@ -574,16 +574,41 @@ GetVarString(_Player, "LLSUMMONINF_LastSummonTemplate", _Template)
 AND
 _Template != ""
 THEN
-LLSUMMONINF_SummonTemplateAtPosition(_Player, _Template, _x, _y, _z);
+LLSUMMONINF_SummonTemplateAtPosition_Start(_Player, _Template, _x, _y, _z);
 
 PROC
-LLSUMMONINF_SummonTemplateAtPosition((CHARACTERGUID)_Player, (STRING)_Template, (REAL)_x, (REAL)_y, (REAL)_z)
+LLSUMMONINF_SummonTemplateAtPosition_Start((CHARACTERGUID)_Player, (STRING)_Template, (REAL)_x, (REAL)_y, (REAL)_z)
+AND
+NOT SysIsActive("LaughingLeader_SummoningTweaks_PermanentSummons")
+THEN
+LLSUMMONINF_SummonTemplateAtPosition(_Player, _Template, _x, _y, _z, 60.0);
+
+PROC
+LLSUMMONINF_SummonTemplateAtPosition_Start((CHARACTERGUID)_Player, (STRING)_Template, (REAL)_x, (REAL)_y, (REAL)_z)
+AND
+SysIsActive("LaughingLeader_SummoningTweaks_PermanentSummons") // Permanent lifetime
+AND
+NOT DB_LLSUMMONINF_IgnoredTemplates(_Player, _Template)
+THEN
+LLSUMMONINF_SummonTemplateAtPosition(_Player, _Template, _x, _y, _z, -1.0);
+
+PROC
+LLSUMMONINF_SummonTemplateAtPosition_Start((CHARACTERGUID)_Player, (STRING)_Template, (REAL)_x, (REAL)_y, (REAL)_z)
+AND
+SysIsActive("LaughingLeader_SummoningTweaks_PermanentSummons") // Permanent lifetime
+AND
+DB_LLSUMMONINF_IgnoredTemplates(_Player, _Template)
+THEN
+LLSUMMONINF_SummonTemplateAtPosition(_Player, _Template, _x, _y, _z, 60.0);
+
+PROC
+LLSUMMONINF_SummonTemplateAtPosition((CHARACTERGUID)_Player, (STRING)_Template, (REAL)_x, (REAL)_y, (REAL)_z, (REAL)_Lifetime)
 AND
 CharacterGetAbility(_Player, "Summoning", _SummoningAbilityLevel)
 AND
 CharacterGetLevel(_Player, _Level)
 AND
-CharacterSummonAtPosition(_Player, _Template, _x, _y, _z, -1.0, _Level, _SummoningAbilityLevel, _SummonedChar)
+CharacterSummonAtPosition(_Player, _Template, _x, _y, _z, _Lifetime, _Level, _SummoningAbilityLevel, _SummonedChar)
 AND
 RealSum(_y, 2.0, _ty)
 THEN

@@ -165,3 +165,4 @@ DB_LeaderLib_ModApi_GlobalSettings_Register_Flag 4
 DB_LeaderLib_ModApi_GlobalSettings_Register_Integer 4
 DB_LeaderLib_ModApi_GlobalSettings_SaveIntegerVariable 4
 DB_LeaderUpdater_RegisteredUUID 3
+DB_LLSUMMONINF_IgnoredTemplates 2
