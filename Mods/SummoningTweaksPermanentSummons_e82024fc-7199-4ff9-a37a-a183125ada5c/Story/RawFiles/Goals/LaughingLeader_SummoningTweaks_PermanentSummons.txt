@@ -69,7 +69,7 @@ IF
 DB_LLSUMMONINF_PS_RegisteredLeaderLibSettings(1)
 THEN
 DB_LeaderLib_ModApi_RegisterActiveGoal("SummoningTweaksPermanentSummons", "LaughingLeader", "LaughingLeader_SummoningTweaks_PermanentSummons");
-DB_LeaderLib_ModApi_RegisterMenu("LaughingLeader.SummoningTweaks", "[Summoning Tweaks] Settings", "LLSUMMONINF_PermanentSummons_Menu", "SummoningTweaksPermanentSummons", "LaughingLeader");
+DB_LeaderLib_ModApi_RegisterMenu("LaughingLeader.SummoningTweaksPermanentSummons", "[Summoning Tweaks - Permanent Summons] Settings", "LLSUMMONINF_PermanentSummons_Menu", "SummoningTweaksPermanentSummons", "LaughingLeader");
 DB_LeaderUpdater_RegisteredUUID("SummoningTweaksPermanentSummons", "LaughingLeader", e82024fc-7199-4ff9-a37a-a183125ada5c);
 //END_REGION
 
