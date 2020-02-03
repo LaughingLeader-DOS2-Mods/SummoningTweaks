@@ -64,13 +64,12 @@ CharacterIsSummon(_Summon, 1)
 AND
 CharacterGetOwner(_Summon, _Player)
 AND
-DB_IsPlayer(_Player)
+CharacterIsPlayer(_Player, 1)
 AND
 GetTemplate(_Summon, _Template)
 THEN
 SetVarString(_Player, "LLSUMMONINF_LastSummonTemplate", _Template);
 LLSUMMONINF_OnSummonAdded(_Player, _Summon);
-LLSUMMONINF_TryAddContract(_Player);
 //END_REGION
 
 //REGION TOTEM_COOLDOWN_RESET
@@ -100,6 +99,13 @@ AND
 NOT GlobalGetFlag("LLSUMMONINF_DismissSkillAutoAddingDisabled", 1)
 THEN
 LLSUMMONINF_AddSkill(_Player, "Target_LLSUMMONINF_DismissSummon", "LLSUMMONINF_AddedDismissSkillToSummoner");
+
+PROC
+LLSUMMONINF_OnSummonAdded((CHARACTERGUID)_Player, (CHARACTERGUID)_Summon)
+AND
+CharacterIsPartyFollower(_Player, 0)
+THEN
+LLSUMMONINF_TryAddContract(_Player);
 //END_REGION
 
 //REGION INITIALIZE_BOOKS
@@ -191,68 +197,6 @@ AND
 HasActiveStatus(_Player, "LLSUMMONINF_MAX_SUMMONS_INC", 1)
 THEN
 RemoveStatus(_Player, "LLSUMMONINF_MAX_SUMMONS_INC");
-//END_REGION
-
-//REGION DEBUG
-IF
-GameModeStarted(_, 1)
-AND
-NOT DB_Origins(_)
-THEN
-DB_Origins((CHARACTERGUID)S_GLO_CharacterCreationDummy_001_da072fe7-fdd5-42ae-9139-8bd4b9fca406);
-
-IF
-TextEventSet("llsummon_init")
-AND
-GetPosition(TRIGGERGUID_StartPoint_001_ab1e4726-a8e5-45a9-9dde-9816629646e3, _x, _y, _z)
-AND
-CharacterCreateAtPosition(_x, _y, _z, "Dwarves_Hero_Male_Beast_ca2b78c8-85f3-45f1-b8de-9e8363f1aa51", 0, _Host)
-THEN
-CharacterMakePlayer(_Host, NULL_00000000-0000-0000-0000-000000000000);
-DB_IsPlayer(_Host);
-//CharacterApplyPreset(_Host, "Conjurer_Act2");
-CharacterAddAbility(_Host, "Summoning", 5);
-CharacterAddAttribute(_Host, "Memory", 15);
-CharacterAddSkill(_Host, "Summon_Incarnate");
-CharacterAddSkill(_Host, "Summon_Cat");
-CharacterAddSkill(_Host, "Summon_Condor");
-CharacterAddSkill(_Host, "Summon_FireSlug");
-CharacterAddSkill(_Host, "Summon_SoulWolf");
-CharacterOverrideMaxSourcePoints(_Host, 10);
-CharacterAddSourcePoints(_Host, 10);
-ItemTemplateAddTo("BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", _Host, 1, 0);
-ItemTemplateAddTo("Scroll_LLSUMMONINF_Skill_InvokeContract_9c6b4bf8-54df-434d-a4bf-ecad2ce4851c", _Host, 1, 0);
-MakePlayerActive(_Host);
-
-IF
-TextEventSet("llsummon_setup")
-AND
-CharacterGetHostCharacter(_Host)
-THEN
-//CharacterApplyPreset(_Host, "Conjurer_Act2");
-CharacterMakePlayer(_Host, NULL_00000000-0000-0000-0000-000000000000);
-CharacterAddAbility(_Host, "Summoning", 5);
-CharacterAddAttribute(_Host, "Memory", 15);
-CharacterAddSkill(_Host, "Summon_Incarnate");
-CharacterAddSkill(_Host, "Summon_Cat");
-CharacterAddSkill(_Host, "Summon_Condor");
-CharacterAddSkill(_Host, "Summon_FireSlug");
-CharacterAddSkill(_Host, "Summon_SoulWolf");
-CharacterOverrideMaxSourcePoints(_Host, 10);
-CharacterAddSourcePoints(_Host, 10);
-ItemTemplateAddTo("BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", _Host, 1, 0);
-ItemTemplateAddTo("Scroll_LLSUMMONINF_Skill_InvokeContract_9c6b4bf8-54df-434d-a4bf-ecad2ce4851c", _Host, 1, 0);
-MakePlayerActive(_Host);
-
-IF
-GameStarted("_TMPL_Sandbox", 1)
-AND
-NOT GlobalGetFlag("LLSUMMONINF_Initialized", 1)
-THEN
-TimerCancel("LLSUMMONINF_Timers_InitPartyLeader");
-TimerLaunch("LLSUMMONINF_Timers_InitPartyLeader", 500);
-TimerCancel("LLSUMMONINF_Timers_FixAiControl");
-TimerLaunch("LLSUMMONINF_Timers_FixAiControl", 250);
 //END_REGION
 
 //REGION SETTINGS_MENU
@@ -507,7 +451,7 @@ THEN
 MakePlayerActive(_Summon);
 //END_REGION
 
-//REGION INVOKE_CONTRACT
+//REGION CONTRACT_ADD_BLOCK
 PROC
 LLSUMMONINF_TryAddContract((CHARACTERGUID)_Player)
 AND
@@ -545,11 +489,12 @@ NOT LLSUMMONINF_QRY_HasLastSummon(_Player)
 THEN
 ShowNotification(_Player, "LLSUMMONINF_StatusText_InvokeContractInvalid");
 DB_CustomUseItemResponse(_Player, _Item, 0);
+//END_REGION
 
+//REGION INVOKE_CONTRACT
 QRY
 LLSUMMONINF_QRY_HasLastSummon((CHARACTERGUID)_Player)
 AND
-//GetVarString(_Player, "LLSUMMONINF_LastSummoningSkillUsed", _Skill)
 GetVarString(_Player, "LLSUMMONINF_LastSummonTemplate", _Template)
 AND
 _Template != ""
@@ -562,19 +507,34 @@ AND
 GetPosition(_Target, _x, _y, _z)
 AND
 GetVarString(_Player, "LLSUMMONINF_LastSummonTemplate", _Template)
-AND
-_Template != ""
 THEN
-LLSUMMONINF_SummonTemplateAtPosition_Start(_Player, _Template, _x, _y, _z);
+LLSUMMONINF_SummonTemplateAtPosition_CheckTemplate(_Player, _Template, _x, _y, _z);
 
 IF
 CharacterUsedSkillAtPosition(_Player, _x, _y, _z, "Target_LLSUMMONINF_CastLastSummon", _, _)
 AND
 GetVarString(_Player, "LLSUMMONINF_LastSummonTemplate", _Template)
+THEN
+LLSUMMONINF_SummonTemplateAtPosition_CheckTemplate(_Player, _Template, _x, _y, _z);
+
+PROC
+LLSUMMONINF_SummonTemplateAtPosition_CheckTemplate((CHARACTERGUID)_Player, (STRING)_Template, (REAL)_x, (REAL)_y, (REAL)_z)
 AND
 _Template != ""
 THEN
 LLSUMMONINF_SummonTemplateAtPosition_Start(_Player, _Template, _x, _y, _z);
+
+PROC
+LLSUMMONINF_SummonTemplateAtPosition_CheckTemplate((CHARACTERGUID)_Player, "", (REAL)_x, (REAL)_y, (REAL)_z)
+THEN
+ShowNotification(_Player, "LLSUMMONINF_StatusText_InvokeContractInvalid");
+
+PROC
+LLSUMMONINF_SummonTemplateAtPosition_Start((CHARACTERGUID)_Player, (STRING)_Template, (REAL)_x, (REAL)_y, (REAL)_z)
+AND
+NOT LLSUMMONINF_QRY_HasLastSummon(_Player)
+THEN
+ShowNotification(_Player, "LLSUMMONINF_StatusText_InvokeContractInvalid");
 
 PROC
 LLSUMMONINF_SummonTemplateAtPosition_Start((CHARACTERGUID)_Player, (STRING)_Template, (REAL)_x, (REAL)_y, (REAL)_z)
@@ -608,14 +568,57 @@ CharacterGetAbility(_Player, "Summoning", _SummoningAbilityLevel)
 AND
 CharacterGetLevel(_Player, _Level)
 AND
-CharacterSummonAtPosition(_Player, _Template, _x, _y, _z, _Lifetime, _Level, _SummoningAbilityLevel, _SummonedChar)
+CharacterSummonAtPosition(_Player, _Template, _x, _y, _z, _Lifetime, _Level, _SummoningAbilityLevel, _Summon)
 AND
 RealSum(_y, 2.0, _ty)
 THEN
-ProcObjectTimer(_Player, "LLSUMMONINF_Timers_PlaySummonEffect", 900);
-PlayEffectAtPosition("RS3_FX_UI_Icon_SkipTurn_UsedScroll_01", _x, _ty, _z);
+PlayEffect(_Summon, "RS3_FX_UI_Icon_SkipTurn_UsedScroll_01", "Dummy_OverheadFX");
 PlayEffectAtPosition("LLSUMMONINF_Skills_InvokeContract_Cast_Summon_01", _x, _y, _z);
 PlayEffectAtPosition("RS3_FX_Skills_Totem_Target_Nebula_01", _x, _y, _z);
+//END_REGION
+
+//REGION EXTENDER_SUMMONING
+/*
+IF
+CharacterStatusApplied(_Summon, "SUMMONING", _)
+AND
+CharacterIsSummon(_Summon, 1)
+AND
+CharacterGetOwner(_Summon, _Player)
+AND
+CharacterIsPlayer(_Player, 1)
+AND
+GetTemplate(_Summon, _Template)
+AND
+IsTagged(_Summon, "TOTEM", _IsTotem)
+THEN
+DB_LLSUMMONINF_SummonTemplates(_Template, _IsTotem);
+SetVarString(_Player, "LLSUMMONINF_LastSummonTemplate", _Template);
+LLSUMMONINF_OnSummonAdded(_Player, _Summon);
+
+PROC
+LLSUMMONINF_SummonTemplateAtPosition((CHARACTERGUID)_Player, (STRING)_Template, (REAL)_x, (REAL)_y, (REAL)_z, (REAL)_Lifetime)
+AND
+DB_LLSUMMONINF_SummonTemplates(_Template, _IsTotem)
+THEN
+NRD_LuaCall("LLSUMMONINF_Ext_SummonTemplateAtPosition", (STRING)_Player, _Template, (STRING)_x, (STRING)_y, (STRING)_z, (STRING)_Lifetime, (STRING)_IsTotem);
+
+PROC
+LLSUMMONINF_SummonTemplateAtPosition((CHARACTERGUID)_Player, (STRING)_Template, (REAL)_x, (REAL)_y, (REAL)_z, (REAL)_Lifetime)
+AND
+DB_LLSUMMONINF_SummonTemplates(_Template, _IsTotem)
+AND
+CharacterGetLevel(_Player, _Level)
+AND
+NRD_Summon(_Player, (GUIDSTRING)_Template, _x, _y, _z, _Lifetime, _Level, _IsTotem, 1, _Summon)
+AND
+RealSum(_y, 2.0, _ty)
+THEN
+//PlayEffectAtPosition("RS3_FX_UI_Icon_SkipTurn_UsedScroll_01", _x, _ty, _z);
+PlayEffect(_Summon, "RS3_FX_UI_Icon_SkipTurn_UsedScroll_01", "Dummy_OverheadFX");
+PlayEffectAtPosition("LLSUMMONINF_Skills_InvokeContract_Cast_Summon_01", _x, _y, _z);
+PlayEffectAtPosition("RS3_FX_Skills_Totem_Target_Nebula_01", _x, _y, _z);
+*/
 //END_REGION
 
 //REGION DEMON_CODEX
@@ -1205,6 +1208,76 @@ THEN
 DebugBreak("[SummoningTweaks] Removing (LLSUMMONINF_AI_CONTROL) status influence from a character not in combat.");
 SetStoryEvent(_Char, "LLSUMMONINF_Autonomous_CombatEnded");
 
+//END_REGION
+
+
+//REGION DEBUG
+IF
+GameStarted(_,1)
+AND
+CharacterGetHostCharacter(_Host)
+THEN
+DB_IsPlayer(_Host);
+
+/* [OSITOOLS_ONLY]
+IF
+GameStarted(_,1)
+THEN
+NRD_LuaReset(1);
+*/
+
+IF
+TextEventSet("llsummon_init")
+AND
+GetPosition(TRIGGERGUID_StartPoint_001_ab1e4726-a8e5-45a9-9dde-9816629646e3, _x, _y, _z)
+AND
+CharacterCreateAtPosition(_x, _y, _z, "Dwarves_Hero_Male_Beast_ca2b78c8-85f3-45f1-b8de-9e8363f1aa51", 0, _Host)
+THEN
+CharacterMakePlayer(_Host, NULL_00000000-0000-0000-0000-000000000000);
+DB_IsPlayer(_Host);
+//CharacterApplyPreset(_Host, "Conjurer_Act2");
+CharacterAddAbility(_Host, "Summoning", 5);
+CharacterAddAttribute(_Host, "Memory", 15);
+CharacterAddSkill(_Host, "Summon_Incarnate");
+CharacterAddSkill(_Host, "Summon_Cat");
+CharacterAddSkill(_Host, "Summon_Condor");
+CharacterAddSkill(_Host, "Summon_FireSlug");
+CharacterAddSkill(_Host, "Summon_SoulWolf");
+CharacterOverrideMaxSourcePoints(_Host, 10);
+CharacterAddSourcePoints(_Host, 10);
+ItemTemplateAddTo("BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", _Host, 1, 0);
+ItemTemplateAddTo("Scroll_LLSUMMONINF_Skill_InvokeContract_9c6b4bf8-54df-434d-a4bf-ecad2ce4851c", _Host, 1, 0);
+MakePlayerActive(_Host);
+
+IF
+TextEventSet("llsummon_setup")
+AND
+CharacterGetHostCharacter(_Host)
+THEN
+//CharacterApplyPreset(_Host, "Conjurer_Act2");
+CharacterMakePlayer(_Host, NULL_00000000-0000-0000-0000-000000000000);
+CharacterAddAbility(_Host, "Summoning", 5);
+CharacterAddAttribute(_Host, "Memory", 15);
+CharacterAddSkill(_Host, "Summon_Incarnate");
+CharacterAddSkill(_Host, "Summon_Cat");
+CharacterAddSkill(_Host, "Summon_Condor");
+CharacterAddSkill(_Host, "Summon_FireSlug");
+CharacterAddSkill(_Host, "Summon_SoulWolf");
+CharacterOverrideMaxSourcePoints(_Host, 10);
+CharacterAddSourcePoints(_Host, 10);
+ItemTemplateAddTo("BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", _Host, 1, 0);
+ItemTemplateAddTo("Scroll_LLSUMMONINF_Skill_InvokeContract_9c6b4bf8-54df-434d-a4bf-ecad2ce4851c", _Host, 1, 0);
+MakePlayerActive(_Host);
+
+IF
+GameStarted("_TMPL_Sandbox", 1)
+AND
+NOT GlobalGetFlag("LLSUMMONINF_Initialized", 1)
+THEN
+TimerCancel("LLSUMMONINF_Timers_InitPartyLeader");
+TimerLaunch("LLSUMMONINF_Timers_InitPartyLeader", 500);
+TimerCancel("LLSUMMONINF_Timers_FixAiControl");
+TimerLaunch("LLSUMMONINF_Timers_FixAiControl", 250);
 //END_REGION
 EXITSECTION
 
