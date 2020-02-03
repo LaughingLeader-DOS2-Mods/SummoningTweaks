@@ -1,0 +1,6 @@
+{
+    "FeatureFlags": [
+        "OsirisExtensions",
+        "Preprocessor"
+    ]
+}

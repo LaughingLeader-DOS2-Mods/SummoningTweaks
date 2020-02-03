@@ -58,6 +58,8 @@ CharacterRemoveSkill(_Player, _Skill);
 IF
 CharacterStatusApplied(_Summon, "SUMMONING", _)
 AND
+IsTagged(_Summon, "TOTEM", 0)
+AND
 CharacterIsSummon(_Summon, 1)
 AND
 CharacterGetOwner(_Summon, _Player)
@@ -69,6 +71,19 @@ THEN
 SetVarString(_Player, "LLSUMMONINF_LastSummonTemplate", _Template);
 LLSUMMONINF_OnSummonAdded(_Player, _Summon);
 LLSUMMONINF_TryAddContract(_Player);
+//END_REGION
+
+//REGION TOTEM_COOLDOWN_RESET
+/* [OSITOOLS_ONLY]
+IF
+CharacterUsedSkill(_Player, "Summon_TotemFromSurface", _, _)
+AND
+DB_IsPlayer(_Player)
+AND
+CharacterIsInCombat(_Player, 0)
+THEN
+NRD_SkillSetCooldown(_Player, "Summon_TotemFromSurface", 0.0);
+*/
 //END_REGION
 
 //REGION SUMMON_ADDED
