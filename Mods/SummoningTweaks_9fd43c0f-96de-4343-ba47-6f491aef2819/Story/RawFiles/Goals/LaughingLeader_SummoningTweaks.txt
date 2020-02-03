@@ -1210,7 +1210,6 @@ SetStoryEvent(_Char, "LLSUMMONINF_Autonomous_CombatEnded");
 
 //END_REGION
 
-
 //REGION DEBUG
 IF
 GameStarted(_,1)
