@@ -54,55 +54,40 @@ THEN
 CharacterRemoveSkill(_Player, _Skill);
 //END_REGION
 
-//REGION SET_MAX_EVENTS
-QRY
-LLSUMMONINF_QRY_IsSummonSkill((STRING)_Skill)
-AND
-StringContains(_Skill, "Summon_", 1)
-THEN
-DB_NOOP(1);
-
-QRY
-LLSUMMONINF_QRY_IsSummonSkill("Target_BloatedCorpse")
-THEN
-DB_NOOP(1);
-
+//REGION SUMMONING_APPLIED
 IF
-SkillCast(_Player, _Skill, _, _)
+CharacterStatusApplied(_Summon, "SUMMONING", _)
 AND
-CharacterIsPlayer(_Player, 1)
+CharacterIsSummon(_Summon, 1)
 AND
-LLSUMMONINF_QRY_IsSummonSkill(_Skill)
+CharacterGetOwner(_Summon, _Player)
+AND
+DB_IsPlayer(_Player)
+AND
+GetTemplate(_Summon, _Template)
 THEN
-LLSUMMONINF_OnSummonSkillCast(_Player, _Skill);
-LLSUMMONINF_ContractCheck(_Player, _Skill);
+SetVarString(_Player, "LLSUMMONINF_LastSummonTemplate", _Template);
+LLSUMMONINF_OnSummonAdded(_Player, _Summon);
+LLSUMMONINF_TryAddContract(_Player);
+//END_REGION
 
+//REGION SUMMON_ADDED
 PROC
-LLSUMMONINF_ContractCheck((CHARACTERGUID)_Player, (STRING)_Skill)
-AND
-StringContains(_Skill, "Summon_", 1)
-THEN
-SetVarString(_Player, "LLSUMMONINF_LastSummoningSkillUsed", _Skill);
-LLSUMMONINF_AddContract(_Player);
-
-PROC
-LLSUMMONINF_OnSummonSkillCast((CHARACTERGUID)_Player, (STRING)_Skill)
+LLSUMMONINF_OnSummonAdded((CHARACTERGUID)_Player, (CHARACTERGUID)_Summon)
 AND
 NOT HasActiveStatus(_Player, "LLSUMMONINF_MAX_SUMMONS_INC", 1)
 THEN
 SetStoryEvent(_Player, "LLSUMMONINF_IncreaseMaxSummons");
 
-IF
-CharacterJoinedParty(_Summon)
-AND
-CharacterIsSummon(_Summon, 1)
+PROC
+LLSUMMONINF_OnSummonAdded((CHARACTERGUID)_Player, (CHARACTERGUID)_Summon)
 AND
 NOT GlobalGetFlag("LLSUMMONINF_DismissSkillAutoAddingDisabled", 1)
-AND
-CharacterGetOwner(_Summon, _Player)
 THEN
 LLSUMMONINF_AddSkill(_Player, "Target_LLSUMMONINF_DismissSummon", "LLSUMMONINF_AddedDismissSkillToSummoner");
+//END_REGION
 
+//REGION INITIALIZE_BOOKS
 IF
 GameStarted(_Level, _)
 AND
@@ -163,7 +148,9 @@ AND
 ItemTemplateIsInUserInventory(_Player, "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 0, 0)
 THEN
 ItemTemplateAddTo("BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", _Player, 1, 0);
+//END_REGION
 
+//REGION PARTY_EVENTS
 IF
 CharacterJoinedParty(_Player)
 AND
@@ -507,7 +494,7 @@ MakePlayerActive(_Summon);
 
 //REGION INVOKE_CONTRACT
 PROC
-LLSUMMONINF_AddContract((CHARACTERGUID)_Player)
+LLSUMMONINF_TryAddContract((CHARACTERGUID)_Player)
 AND
 NOT GlobalGetFlag("LLSUMMONINF_InvokeContractAutoAddDisabled", 1)
 AND
@@ -529,7 +516,7 @@ CharacterIsInCombat(_Player, 1)
 AND
 GetTemplate(_Item, "Scroll_LLSUMMONINF_Skill_InvokeContract_9c6b4bf8-54df-434d-a4bf-ecad2ce4851c")
 THEN
-CharacterStatusText(_Player, "LLSUMMONINF_StatusText_InvokeContractBlocked");
+ShowNotification(_Player, "LLSUMMONINF_StatusText_InvokeContractBlocked");
 DB_CustomUseItemResponse(_Player, _Item, 0);
 
 PROC
@@ -539,69 +526,56 @@ NOT DB_CustomUseItemResponse(_Player, _Item, _)
 AND
 GetTemplate(_Item, "Scroll_LLSUMMONINF_Skill_InvokeContract_9c6b4bf8-54df-434d-a4bf-ecad2ce4851c")
 AND
-NOT LLSUMMONINF_QRY_LastSummonSkillSet(_Player)
+NOT LLSUMMONINF_QRY_HasLastSummon(_Player)
 THEN
-CharacterStatusText(_Player, "LLSUMMONINF_StatusText_InvokeContractInvalid");
+ShowNotification(_Player, "LLSUMMONINF_StatusText_InvokeContractInvalid");
 DB_CustomUseItemResponse(_Player, _Item, 0);
 
 QRY
-LLSUMMONINF_QRY_LastSummonSkillSet((CHARACTERGUID)_Player)
+LLSUMMONINF_QRY_HasLastSummon((CHARACTERGUID)_Player)
 AND
-GetVarString(_Player, "LLSUMMONINF_LastSummoningSkillUsed", _Skill)
+//GetVarString(_Player, "LLSUMMONINF_LastSummoningSkillUsed", _Skill)
+GetVarString(_Player, "LLSUMMONINF_LastSummonTemplate", _Template)
 AND
-StringContains(_Skill, "Summon_", 1)
+_Template != ""
 THEN
 DB_NOOP(1);
 
 IF
+CharacterUsedSkillOnTarget(_Player, _Target, "Target_LLSUMMONINF_CastLastSummon", _, _)
+AND
+GetPosition(_Target, _x, _y, _z)
+AND
+GetVarString(_Player, "LLSUMMONINF_LastSummonTemplate", _Template)
+AND
+_Template != ""
+THEN
+LLSUMMONINF_SummonTemplateAtPosition(_Player, _Template, _x, _y, _z);
+
+IF
 CharacterUsedSkillAtPosition(_Player, _x, _y, _z, "Target_LLSUMMONINF_CastLastSummon", _, _)
 AND
-CharacterIsInCombat(_Player, 0)
+GetVarString(_Player, "LLSUMMONINF_LastSummonTemplate", _Template)
 AND
-LLSUMMONINF_QRY_LastSummonSkillSet(_Player)
+_Template != ""
 THEN
-DB_LLSUMMONINF_SummonEffectLocation(_Player, _x, _y, _z);
-ProcObjectTimer(_Player, "LLSUMMONINF_Timers_InvokeContract_Start", 100);
+LLSUMMONINF_SummonTemplateAtPosition(_Player, _Template, _x, _y, _z);
 
 PROC
-ProcObjectTimerFinished((CHARACTERGUID)_Player, "LLSUMMONINF_Timers_InvokeContract_Start")
+LLSUMMONINF_SummonTemplateAtPosition((CHARACTERGUID)_Player, (STRING)_Template, (REAL)_x, (REAL)_y, (REAL)_z)
 AND
-DB_LLSUMMONINF_SummonEffectLocation(_Player, _x, _y, _z)
+CharacterGetAbility(_Player, "Summoning", _SummoningAbilityLevel)
 AND
-GetVarString(_Player, "LLSUMMONINF_LastSummoningSkillUsed", _Skill)
+CharacterGetLevel(_Player, _Level)
 AND
-StringContains(_Skill, "Summon_", 1)
+CharacterSummonAtPosition(_Player, _Template, _x, _y, _z, -1.0, _Level, _SummoningAbilityLevel, _SummonedChar)
 AND
 RealSum(_y, 2.0, _ty)
 THEN
-//CharacterSetAnimationOverride(_Player, "skill_cast_summon_totem_01_cast");
-CharacterUseSkillAtPosition(_Player, _Skill, _x, _y, _z, 1, 0);
 ProcObjectTimer(_Player, "LLSUMMONINF_Timers_PlaySummonEffect", 900);
 PlayEffectAtPosition("RS3_FX_UI_Icon_SkipTurn_UsedScroll_01", _x, _ty, _z);
-
-//Failsafe
-PROC
-ProcObjectTimerFinished((CHARACTERGUID)_Player, "LLSUMMONINF_Timers_InvokeContract_Start")
-AND
-NOT DB_ObjectTimer(_Player, _, "LLSUMMONINF_Timers_PlaySummonEffect")
-AND
-DB_LLSUMMONINF_SummonEffectLocation(_Player, _x, _y, _z)
-THEN
-NOT DB_LLSUMMONINF_SummonEffectLocation(_Player, _x, _y, _z);
-
-PROC
-ProcObjectTimerFinished((CHARACTERGUID)_Player, "LLSUMMONINF_Timers_PlaySummonEffect")
-AND
-DB_LLSUMMONINF_SummonEffectLocation(_Player, _x, _y, _z)
-THEN
-NOT DB_LLSUMMONINF_SummonEffectLocation(_Player, _x, _y, _z);
 PlayEffectAtPosition("LLSUMMONINF_Skills_InvokeContract_Cast_Summon_01", _x, _y, _z);
 PlayEffectAtPosition("RS3_FX_Skills_Totem_Target_Nebula_01", _x, _y, _z);
-
-PROC
-ProcObjectTimerFinished((CHARACTERGUID)_Player, "LLSUMMONINF_Timers_ResetAnimOverride")
-THEN
-CharacterSetAnimationOverride(_Player, "");
 //END_REGION
 
 //REGION DEMON_CODEX
@@ -878,15 +852,15 @@ DebugBreak("[LaughingLeader_SummoningTweaks] Starting Summoning Tweaks.");
 IF
 DB_LLSUMMONINF_StoryStarted(1)
 THEN
-LLSUMMONINF_Updater_SetVersion("1.3.0.0");
+LLSUMMONINF_Updater_SetVersion("1.3.1.0");
 
 IF
 GameStarted(_,_)
 AND
-LLSUMMONINF_Updater_QRY_UpdateNeeded("1.3.0.0")
+LLSUMMONINF_Updater_QRY_UpdateNeeded("1.3.1.0")
 THEN
-LLSUMMONINF_Updater_RemoveOldVersions("1.3.0.0");
-LLSUMMONINF_Updater_SetVersion("1.3.0.0");
+LLSUMMONINF_Updater_RemoveOldVersions("1.3.1.0");
+LLSUMMONINF_Updater_SetVersion("1.3.1.0");
 
 QRY
 LLSUMMONINF_Updater_QRY_UpdateNeeded((STRING)_Version)
