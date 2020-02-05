@@ -72,16 +72,18 @@ SetVarString(_Player, "LLSUMMONINF_LastSummonTemplate", _Template);
 LLSUMMONINF_OnSummonAdded(_Player, _Summon);
 //END_REGION
 
-//REGION TOTEM_COOLDOWN_RESET
+//REGION COOLDOWN_RESET
 /* [OSITOOLS_ONLY]
 IF
-CharacterUsedSkill(_Player, "Summon_TotemFromSurface", _, _)
+CharacterUsedSkill(_Player, _Skill, "summon", _)
+AND
+GlobalGetFlag("LLSUMMONINF_InstantSummonCooldownDisabled", 0)
 AND
 DB_IsPlayer(_Player)
 AND
 CharacterIsInCombat(_Player, 0)
 THEN
-NRD_SkillSetCooldown(_Player, "Summon_TotemFromSurface", 0.0);
+NRD_SkillSetCooldown(_Player, _Skill, 0.0);
 */
 //END_REGION
 
@@ -1001,6 +1003,7 @@ LeaderLib_GlobalSettings_InitModRegistration()
 THEN
 DB_LeaderLib_ModApi_GlobalSettings_Register_Flag("SummoningTweaks", "LaughingLeader", "LLSUMMONINF_DismissSkillAutoAddingDisabled");
 DB_LeaderLib_ModApi_GlobalSettings_Register_Flag("SummoningTweaks", "LaughingLeader", "LLSUMMONINF_InvokeContractAutoAddDisabled");
+DB_LeaderLib_ModApi_GlobalSettings_Register_Flag("SummoningTweaks", "LaughingLeader", "LLSUMMONINF_InstantSummonCooldownDisabled");
 DB_LeaderLib_ModApi_GlobalSettings_Register_Integer("SummoningTweaks", "LaughingLeader", "LLSUMMONINF_MaxSummonsCap", 3);
 
 /* Automatically called by LeaderLib when global settings attempts to get an integer variable. 
