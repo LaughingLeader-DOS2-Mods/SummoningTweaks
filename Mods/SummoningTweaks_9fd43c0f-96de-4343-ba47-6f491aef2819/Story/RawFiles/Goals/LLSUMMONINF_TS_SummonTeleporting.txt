@@ -1,0 +1,53 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+IF
+CharacterTeleportToWaypoint(_Player, _)
+AND
+GlobalGetFlag("LLSUMMONINF_SummonTeleportingDisabled", 0)
+AND
+DB_LLSUMMONINF_Temp_ActiveSummons(_Player, _Summon)
+AND
+CharacterIsInCombat(_Summon, 0)
+THEN
+TeleportTo(_Summon, _Player, "", 0, 1, 1);
+
+IF
+CharacterTeleportToFleeWaypoint(_Player, _)
+AND
+GlobalGetFlag("LLSUMMONINF_SummonTeleportingDisabled", 0)
+AND
+DB_LLSUMMONINF_Temp_ActiveSummons(_Player, _Summon)
+AND
+CharacterIsInCombat(_Summon, 0)
+THEN
+TeleportTo(_Summon, _Player, "", 0, 1, 1);
+
+IF
+CharacterDied(_Summon)
+AND
+DB_LLSUMMONINF_Temp_ActiveSummons(_Player, _Summon)
+THEN
+NOT DB_LLSUMMONINF_Temp_ActiveSummons(_Player, _Summon);
+LLSUMMONINF_OnSummonRemoved(_Player, _Summon);
+
+/*
+IF
+CharacterTeleported(_Player, _Cause, _, _, _, _, _, _, _Skill)
+AND
+GlobalGetFlag("LLSUMMONINF_SummonTeleportingDisabled", 0)
+AND
+_Player == _Cause
+AND
+DB_LLSUMMONINF_Temp_ActiveSummons(_Player, _Summon)
+AND
+CharacterIsInCombat(_Summon, 0)
+THEN
+TeleportTo(_Summon, _Player, "", 0, 1, 1);
+*/
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LaughingLeader_SummoningTweaks"
