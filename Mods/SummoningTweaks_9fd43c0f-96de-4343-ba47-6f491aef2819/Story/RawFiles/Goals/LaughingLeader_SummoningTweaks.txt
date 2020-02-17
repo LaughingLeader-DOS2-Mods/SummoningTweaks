@@ -982,6 +982,7 @@ DB_Mods_Registered("SummoningTweaks", "LaughingLeader", _Version);
 //END_REGION
 
 //REGION LEADERLIB
+// [BEGIN_NO_OSITOOLS]
 IF
 StoryEvent(_, "LeaderLib_Initialized")
 AND
@@ -998,6 +999,15 @@ DB_LeaderLib_ModMenu_RegisteredMenu_OpenEvent("LaughingLeader.SummoningTweaks", 
 DB_LeaderLib_Treasure_TreasureItemTemplates("LeaderLib.LeaderTrader.ModBooks", "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 1, "");
 DB_LeaderLib_Treasure_ItemMaxAmount("LeaderLib.LeaderTrader.ModBooks", "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 4);
 DB_LeaderUpdater_RegisteredUUID("SummoningTweaks", "LaughingLeader", 9fd43c0f-96de-4343-ba47-6f491aef2819);
+// [END_NO_OSITOOLS]
+
+PROC
+LeaderLib_Mods_OnModRegistered(9fd43c0f-96de-4343-ba47-6f491aef2819, (INTEGER)_Version, (INTEGER)_Major, (INTEGER)_Minor, (INTEGER)_Revision, (INTEGER)_Build)
+THEN
+DB_LeaderLib_ModApi_RegisterMenu("LaughingLeader.SummoningTweaks", "[Summoning Tweaks] Settings", "LLSUMMONINF_SettingsMenu", "SummoningTweaks", "LaughingLeader");
+DB_LeaderLib_ModMenu_RegisteredMenu_OpenEvent("LaughingLeader.SummoningTweaks", "SummoningTweaks_SettingsMenu_OpenRequest");
+DB_LeaderLib_Treasure_TreasureItemTemplates("LeaderLib.LeaderTrader.ModBooks", "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 1, "");
+DB_LeaderLib_Treasure_ItemMaxAmount("LeaderLib.LeaderTrader.ModBooks", "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 4);
 
 PROC
 LLSUMMONINF_Updater_VersionChanged((STRING)_OldVersion, "1.0.2.0")
@@ -1028,27 +1038,27 @@ SetStoryEvent(_Host, "LeaderLib_Commands_SaveGlobalSettings");
 
 /* Automatically called by LeaderLib for mod variable registration */
 PROC
-LeaderLib_GlobalSettings_InitModRegistration()
+LeaderLib_Mods_OnModRegistered(9fd43c0f-96de-4343-ba47-6f491aef2819, (INTEGER)_Version, (INTEGER)_Major, (INTEGER)_Minor, (INTEGER)_Revision, (INTEGER)_Build)
 THEN
-DB_LeaderLib_ModApi_GlobalSettings_Register_Flag("SummoningTweaks", "LaughingLeader", "LLSUMMONINF_DismissSkillAutoAddingDisabled");
-DB_LeaderLib_ModApi_GlobalSettings_Register_Flag("SummoningTweaks", "LaughingLeader", "LLSUMMONINF_InvokeContractAutoAddDisabled");
-DB_LeaderLib_ModApi_GlobalSettings_Register_Flag("SummoningTweaks", "LaughingLeader", "LLSUMMONINF_InstantSummonCooldownDisabled");
-DB_LeaderLib_ModApi_GlobalSettings_Register_Integer("SummoningTweaks", "LaughingLeader", "LLSUMMONINF_MaxSummonsCap", 3);
+DB_LeaderLib_ModApi_GlobalSettings_Register_GlobalFlag(9fd43c0f-96de-4343-ba47-6f491aef2819, "LLSUMMONINF_DismissSkillAutoAddingDisabled");
+DB_LeaderLib_ModApi_GlobalSettings_Register_GlobalFlag(9fd43c0f-96de-4343-ba47-6f491aef2819, "LLSUMMONINF_InvokeContractAutoAddDisabled");
+DB_LeaderLib_ModApi_GlobalSettings_Register_GlobalFlag(9fd43c0f-96de-4343-ba47-6f491aef2819, "LLSUMMONINF_InstantSummonCooldownDisabled");
+DB_LeaderLib_ModApi_GlobalSettings_Register_GlobalInteger(9fd43c0f-96de-4343-ba47-6f491aef2819, "LLSUMMONINF_MaxSummonsCap", 3);
 
 /* Automatically called by LeaderLib when global settings attempts to get an integer variable. 
-LeaderLib will save the variable value when DB_LeaderLib_ModApi_GlobalSettings_SaveIntegerVariable is added to.*/
+LeaderLib will save the variable value when DB_LeaderLib_ModApi_GlobalSettings_SaveGlobalIntegerVariable is added to.*/
 PROC
-LeaderLib_GlobalSettings_GetIntegerVariable("SummoningTweaks", "LaughingLeader", "LLSUMMONINF_MaxSummonsCap")
+LeaderLib_GlobalSettings_GetIntegerVariable(9fd43c0f-96de-4343-ba47-6f491aef2819, "LLSUMMONINF_MaxSummonsCap")
 AND
 CharacterGetHostCharacter(_Host)
 AND
 GetVarInteger(_Host, "LLSUMMONINF_MaxSummonsCap", _Max)
 THEN
-DB_LeaderLib_ModApi_GlobalSettings_SaveIntegerVariable("SummoningTweaks", "LaughingLeader", "LLSUMMONINF_MaxSummonsCap", _Max);
+DB_LeaderLib_ModApi_GlobalSettings_SaveGlobalIntegerVariable(9fd43c0f-96de-4343-ba47-6f491aef2819, "LLSUMMONINF_MaxSummonsCap", _Max);
 
 /* Automatically called by LeaderLib when the variable is loaded from global settings*/
 PROC
-LeaderLib_GlobalSettings_SetIntegerVariable("SummoningTweaks", "LaughingLeader", "LLSUMMONINF_MaxSummonsCap", (INTEGER)_Cap)
+LeaderLib_GlobalSettings_SetIntegerVariable(9fd43c0f-96de-4343-ba47-6f491aef2819, "LLSUMMONINF_MaxSummonsCap", (INTEGER)_Cap)
 AND
 IntegerMax(_Cap, 1, _ClampedA)
 AND
@@ -1070,7 +1080,7 @@ StoryEvent(_, "LeaderLib_Initialized")
 AND
 NOT DB_LLSUMMONINF_RegisteredMimicrySettings(_)
 AND
-SysIsActive("LLMIME_ZZZ_Updater")
+SysStatus("LLMIME_ZZZ_Updater", _)
 THEN
 DB_LLSUMMONINF_RegisteredMimicrySettings(1);
 DB_LLMIME_Mimicking_Blacklist_Skills("SummoningTweaks", "Target_LLSUMMONINF_CastLastSummon");
