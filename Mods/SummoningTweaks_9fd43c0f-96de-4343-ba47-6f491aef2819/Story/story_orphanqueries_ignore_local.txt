@@ -136,7 +136,7 @@ DB_Origin_BlockLeavingWarningsDialogs 1
 DB_GLO_CharacterAnimation 2
 DB_PartyDecisionDialog_UltimatumSet 3
 DB_WaypointTuto 1
-DB_LeaderLib_ModApi_RegisterMenu 5
+DB_LeaderLib_ModApi_RegisterMenu 3
 DB_Event_CharacterDisappearedInSpotTrigger 2
 DB_HalfHour 2
 DB_Event_CharacterAppearedInSpotTrigger 2

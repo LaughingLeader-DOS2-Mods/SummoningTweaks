@@ -926,15 +926,15 @@ DebugBreak("[LaughingLeader_SummoningTweaks] Starting Summoning Tweaks.");
 IF
 DB_LLSUMMONINF_StoryStarted(1)
 THEN
-LLSUMMONINF_Updater_SetVersion("1.3.1.0");
+LLSUMMONINF_Updater_SetVersion("1.3.2.0");
 
 IF
 GameStarted(_,_)
 AND
-LLSUMMONINF_Updater_QRY_UpdateNeeded("1.3.1.0")
+LLSUMMONINF_Updater_QRY_UpdateNeeded("1.3.2.0")
 THEN
-LLSUMMONINF_Updater_RemoveOldVersions("1.3.1.0");
-LLSUMMONINF_Updater_SetVersion("1.3.1.0");
+LLSUMMONINF_Updater_RemoveOldVersions("1.3.2.0");
+LLSUMMONINF_Updater_SetVersion("1.3.2.0");
 
 QRY
 LLSUMMONINF_Updater_QRY_UpdateNeeded((STRING)_Version)
@@ -993,28 +993,21 @@ DB_LLSUMMONINF_RegisteredLeaderLibSettings(1);
 IF
 DB_LLSUMMONINF_RegisteredLeaderLibSettings(1)
 THEN
+DB_LeaderUpdater_RegisteredUUID("SummoningTweaks", "LaughingLeader", 9fd43c0f-96de-4343-ba47-6f491aef2819);
 DB_LeaderLib_ModApi_RegisterActiveGoal("SummoningTweaks", "LaughingLeader", "LaughingLeader_SummoningTweaks");
-DB_LeaderLib_ModApi_RegisterMenu("LaughingLeader.SummoningTweaks", "[Summoning Tweaks] Settings", "LLSUMMONINF_SettingsMenu", "SummoningTweaks", "LaughingLeader");
-DB_LeaderLib_ModMenu_RegisteredMenu_OpenEvent("LaughingLeader.SummoningTweaks", "SummoningTweaks_SettingsMenu_OpenRequest");
+DB_LeaderLib_ModApi_RegisterMenu("9fd43c0f-96de-4343-ba47-6f491aef2819", "LLSUMMONINF_SettingsMenu", "[Summoning Tweaks] Settings");
+DB_LeaderLib_ModMenu_RegisteredMenu_OpenEvent("9fd43c0f-96de-4343-ba47-6f491aef2819", "SummoningTweaks_SettingsMenu_OpenRequest");
 DB_LeaderLib_Treasure_TreasureItemTemplates("LeaderLib.LeaderTrader.ModBooks", "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 1, "");
 DB_LeaderLib_Treasure_ItemMaxAmount("LeaderLib.LeaderTrader.ModBooks", "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 4);
-DB_LeaderUpdater_RegisteredUUID("SummoningTweaks", "LaughingLeader", 9fd43c0f-96de-4343-ba47-6f491aef2819);
 // [END_NO_OSITOOLS]
 
 PROC
 LeaderLib_Mods_OnModRegistered(9fd43c0f-96de-4343-ba47-6f491aef2819, (INTEGER)_Version, (INTEGER)_Major, (INTEGER)_Minor, (INTEGER)_Revision, (INTEGER)_Build)
 THEN
-DB_LeaderLib_ModApi_RegisterMenu("LaughingLeader.SummoningTweaks", "[Summoning Tweaks] Settings", "LLSUMMONINF_SettingsMenu", "SummoningTweaks", "LaughingLeader");
-DB_LeaderLib_ModMenu_RegisteredMenu_OpenEvent("LaughingLeader.SummoningTweaks", "SummoningTweaks_SettingsMenu_OpenRequest");
+DB_LeaderLib_ModApi_RegisterMenu("9fd43c0f-96de-4343-ba47-6f491aef2819", "LLSUMMONINF_SettingsMenu", "[Summoning Tweaks] Settings");
+DB_LeaderLib_ModMenu_RegisteredMenu_OpenEvent("9fd43c0f-96de-4343-ba47-6f491aef2819", "SummoningTweaks_SettingsMenu_OpenRequest");
 DB_LeaderLib_Treasure_TreasureItemTemplates("LeaderLib.LeaderTrader.ModBooks", "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 1, "");
 DB_LeaderLib_Treasure_ItemMaxAmount("LeaderLib.LeaderTrader.ModBooks", "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 4);
-
-PROC
-LLSUMMONINF_Updater_VersionChanged((STRING)_OldVersion, "1.0.2.0")
-AND
-NOT DB_LeaderLib_ModMenu_RegisteredMenu_OpenEvent("LaughingLeader.SummoningTweaks", _)
-THEN
-DB_LeaderLib_ModMenu_RegisteredMenu_OpenEvent("LaughingLeader.SummoningTweaks", "SummoningTweaks_SettingsMenu_OpenRequest");
 //END_REGION
 
 //REGION LEADERLIB_GLOBAL_SETTINGS
