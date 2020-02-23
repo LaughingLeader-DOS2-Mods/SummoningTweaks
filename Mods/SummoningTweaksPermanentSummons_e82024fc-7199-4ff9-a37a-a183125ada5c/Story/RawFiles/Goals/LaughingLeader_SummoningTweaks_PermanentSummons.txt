@@ -1,16 +1,16 @@
 Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
-DB_Mods_Registered("SummoningTweaksPermanentSummons", "LaughingLeader", "1.2.1.0");
+DB_Mods_Registered("SummoningTweaksPermanentSummons", "LaughingLeader", "1.2.2.0");
 KBSECTION
 //REGION VERSIONING
 IF
 GameStarted(_,_)
 AND
-LLSUMMONINF_PS_Updater_QRY_UpdateNeeded("1.2.1.0")
+LLSUMMONINF_PS_Updater_QRY_UpdateNeeded("1.2.2.0")
 THEN
-LLSUMMONINF_PS_Updater_RemoveOldVersions("1.2.1.0");
-LLSUMMONINF_PS_Updater_SetVersion("1.2.1.0");
+LLSUMMONINF_PS_Updater_RemoveOldVersions("1.2.2.0");
+LLSUMMONINF_PS_Updater_SetVersion("1.2.2.0");
 
 QRY
 LLSUMMONINF_PS_Updater_QRY_UpdateNeeded((STRING)_Version)
@@ -69,7 +69,7 @@ IF
 DB_LLSUMMONINF_PS_RegisteredLeaderLibSettings(1)
 THEN
 DB_LeaderLib_ModApi_RegisterActiveGoal("SummoningTweaksPermanentSummons", "LaughingLeader", "LaughingLeader_SummoningTweaks_PermanentSummons");
-DB_LeaderLib_ModApi_RegisterMenu("LaughingLeader.SummoningTweaksPermanentSummons", "[Summoning Tweaks - Permanent Summons] Settings", "LLSUMMONINF_PermanentSummons_Menu", "SummoningTweaksPermanentSummons", "LaughingLeader");
+DB_LeaderLib_ModApi_RegisterMenu("e82024fc-7199-4ff9-a37a-a183125ada5c", "LLSUMMONINF_PermanentSummons_Menu", "[Summoning Tweaks Permanent Summons] Settings");
 DB_LeaderUpdater_RegisteredUUID("SummoningTweaksPermanentSummons", "LaughingLeader", e82024fc-7199-4ff9-a37a-a183125ada5c);
 //END_REGION
 
