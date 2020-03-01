@@ -1062,8 +1062,6 @@ AND
 GetVarInteger(_Host, "LLSUMMONINF_MaxSummonsCap", _Current)
 AND
 _Current != _ClampedB
-AND
-_ClampedB > _Current
 THEN
 SetVarInteger(_Host, "LLSUMMONINF_MaxSummonsCap", _ClampedB);
 SetStoryEvent(_Host, "LLSUMMONINF_SetMaxSummonsCapFromCharacter");
