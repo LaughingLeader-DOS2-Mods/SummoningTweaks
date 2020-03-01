@@ -11,12 +11,14 @@
 	<content contentuid="hcd12d23eg3e55g4299g8f40gd7f52a21e036" Source="LLSUMMONINF_SettingsMenu.lsj">&lt;b&gt;(Disabled - LeaderLib Required) &lt;/b&gt;Add &quot;Control Summon&quot; Skill.</content>
 	<content contentuid="h4504eca3g3804g4abfg8a50gb30e779ae2cc" Source="LLSUMMONINF_SettingsMenu.lsj">Updating limit...</content>
 	<content contentuid="he1fbe0c4gefedg483fg87b8ga37b88c81bb8" Source="LLSUMMONINF_SettingsMenu.lsj">Reset Limit to Summoning Tweaks Default (3)</content>
-	<content contentuid="h39767f05g0428g42a8gbcd8gc890e943d968" Source="LLSUMMONINF_SettingsMenu.lsj">Enable auto-adding the Summoner&apos;s Contract when a summon skill is used.</content>
+	<content contentuid="h39767f05g0428g42a8gbcd8gc890e943d968" Source="LLSUMMONINF_SettingsMenu.lsj">[GLOBAL] Enable auto-adding the Summoner&apos;s Contract when a summon skill is used. (Default)</content>
 	<content contentuid="h59ec3612g935dg49b4gbe0fg467efc9814b5" Source="LLSUMMONINF_SettingsMenu.lsj">Add &quot;Control Summon&quot; Skill. This lets you directly control summons you own, whose portraits are invisible.</content>
 	<content contentuid="hf5bdd15ag5069g4705gbeebg1bb5cedda2ab" Source="LLSUMMONINF_SettingsMenu.lsj">Max Summons: [LLSUMMONINF_MaxSummonLimit_89adccef-225e-47ab-8f10-5add6644ec3b]&lt;br&gt;&lt;i&gt;Note: Changing the limit will destroy most of your current summons.&lt;/i&gt;</content>
 	<content contentuid="h881c96ebg1d92g4036ga21fg99d517342ebc" Source="LLSUMMONINF_SettingsMenu.lsj">Remove &quot;Control Summon&quot; Skill.</content>
-	<content contentuid="hf89c1133g4364g4d58gb451gfdc64370119c" Source="LLSUMMONINF_SettingsMenu.lsj">Disable auto-adding the Dismiss Summon skill when summoning a creature.</content>
+	<content contentuid="hf89c1133g4364g4d58gb451gfdc64370119c" Source="LLSUMMONINF_SettingsMenu.lsj">[GLOBAL] Disable auto-adding the Dismiss Summon skill when summoning a creature.</content>
 	<content contentuid="h2331d655gbd5fg4922g982egf84176cd13f6" Source="LLSUMMONINF_SettingsMenu.lsj">Remove hidden &quot;Max Summon Increase&quot; status from all characters.</content>
+	<content contentuid="hb713a537gb6d8g4e81g9232g35b12629cfc9" Source="LLSUMMONINF_SettingsMenu.lsj">Settings</content>
+	<content contentuid="h403cd9aegbdb4g433ag8498g953deec77893" Source="LLSUMMONINF_SettingsMenu.lsj">[GLOBAL] Disable instant summon spell cooldowns when out of combat.</content>
 	<content contentuid="h572b78aeg1d9ag4857gb18eg4c78a750c49e" Source="LLSUMMONINF_SettingsMenu.lsj">Increase Limit by +5</content>
 	<content contentuid="h8ccdb4f8g8c7dg4ef6g8766g236912169c8f" Source="LLSUMMONINF_SettingsMenu.lsj">[Host] Remove all Autonomous tags from all characters.</content>
 	<content contentuid="hd47791fcg5411g44cegaee7geafe78573ad3" Source="LLSUMMONINF_SettingsMenu.lsj">Add Dismiss Summon Skill</content>
@@ -28,12 +30,15 @@
 	<content contentuid="h4394079dg8ce1g4f77gbe26g71c4a1d17a7e" Source="LLSUMMONINF_SettingsMenu.lsj"> (&lt;b&gt;Disabled&lt;/b&gt; - Host Only Menu) Set Max Summon Limit</content>
 	<content contentuid="hb1b7046ag4f6fg40a9gac83gf6f9260368a1" Source="LLSUMMONINF_SettingsMenu.lsj">Only the host can change the summon limit cap. Get them to change it for you!</content>
 	<content contentuid="h7e9017a9g4c12g4155ga7f4ga8b592aabbf3" Source="LLSUMMONINF_SettingsMenu.lsj">Decrease Limit by -5</content>
+	<content contentuid="hccaf071ag7113g47edgaeacg9f321b949ffa" Source="LLSUMMONINF_SettingsMenu.lsj">[Back]</content>
 	<content contentuid="h57a8c871g6f74g4e9cgbce2gf17c8e0453b0" Source="LLSUMMONINF_SettingsMenu.lsj">Remove Dismiss Summon Skill</content>
-	<content contentuid="ha8bfec7ag2b71g4787ga972g9d8188885053" Source="LLSUMMONINF_SettingsMenu.lsj">Enable auto-adding the Dismiss Summon skill when summoning a creature.</content>
+	<content contentuid="ha8bfec7ag2b71g4787ga972g9d8188885053" Source="LLSUMMONINF_SettingsMenu.lsj">[GLOBAL] Enable auto-adding the Dismiss Summon skill when summoning a creature. (Default)</content>
+	<content contentuid="hd443899ag5597g4b74gaf50g7c09bacdd425" Source="LLSUMMONINF_SettingsMenu.lsj">Settings Menu</content>
 	<content contentuid="h02b25705gdc04g4e73g870dg256073976ad9" Source="LLSUMMONINF_SettingsMenu.lsj">Settings updated.</content>
 	<content contentuid="h735eff53g0852g4e01gae56g8872762b7e36" Source="LLSUMMONINF_SettingsMenu.lsj">Summoning Tweaks Settings Menu</content>
+	<content contentuid="h07578528g4defg4923g9463g4e0239e36049" Source="LLSUMMONINF_SettingsMenu.lsj">[GLOBAL] Enable instant summon spell cooldowns when out of combat. (Default)</content>
 	<content contentuid="hb282ee97gd3b7g4b78gb1fegc53fc5df318e" Source="LLSUMMONINF_SettingsMenu.lsj">Reset Limit to DOS2DE Default (1)</content>
-	<content contentuid="h7e5e193dgec46g491cgbbabgb764977480af" Source="LLSUMMONINF_SettingsMenu.lsj">Disable auto-adding the Summoner&apos;s Contract when a summon skill is used.</content>
+	<content contentuid="h7e5e193dgec46g491cgbbabgb764977480af" Source="LLSUMMONINF_SettingsMenu.lsj">[GLOBAL] Disable auto-adding the Summoner&apos;s Contract when a summon skill is used.</content>
 	<content contentuid="hf7887dedgf86eg45d1g8024g4d9c57665643" Source="LLSUMMONINF_SettingsMenu.lsj">Commands Menu</content>
 	<content contentuid="h2826f28agdcecg4957g8a5egb71bf5465f37" Source="LLSUMMONINF_SettingsMenu.lsj">LeaderLib is required for the &quot;Control Summon&quot; skill, which lets you control summons whose portraits are invisible (a current bug with multiple summons).</content>
 	<content contentuid="hbbcc5824g3e4dg491bg931dgad9a1f9ae901" Source="LLSUMMONINF_SettingsMenu.lsj">Decrease Limit by -1</content>

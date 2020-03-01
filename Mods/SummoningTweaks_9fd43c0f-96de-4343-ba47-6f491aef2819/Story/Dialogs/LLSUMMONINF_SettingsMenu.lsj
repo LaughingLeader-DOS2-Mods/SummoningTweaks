@@ -206,7 +206,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "3535;1329"
+													"value": "5135;1329"
 												}
 											},
 											{
@@ -412,7 +412,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "1615;1986"
+													"value": "3215;1986"
 												}
 											},
 											{
@@ -664,7 +664,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "1615;891"
+													"value": "3215;891"
 												}
 											},
 											{
@@ -870,7 +870,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "3855;15"
+													"value": "5455;15"
 												}
 											},
 											{
@@ -895,6 +895,16 @@
 													"value": "Global"
 												},
 												"flag": [
+													{
+														"name": {
+															"type": 22,
+															"value": "LLSUMMONINF_SaveGlobalSettings"
+														},
+														"value": {
+															"type": 19,
+															"value": true
+														}
+													},
 													{
 														"name": {
 															"type": 22,
@@ -1097,7 +1107,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "3535;891"
+													"value": "5135;891"
 												}
 											},
 											{
@@ -1145,7 +1155,111 @@
 							{
 								"ShowOnce": {
 									"type": 19,
-									"value": true
+									"value": false
+								},
+								"UUID": {
+									"type": 22,
+									"value": "366563e7-b6f1-4468-9754-0f4c18722780"
+								},
+								"constructor": {
+									"type": 22,
+									"value": "Jump"
+								},
+								"endnode": {
+									"type": 19,
+									"value": false
+								},
+								"exclusive": {
+									"type": 19,
+									"value": false
+								},
+								"jumptarget": {
+									"type": 22,
+									"value": "bdec0e0e-7bd3-46b1-9a6d-4a84307f9771"
+								},
+								"jumptargetpoint": {
+									"type": 1,
+									"value": 1
+								},
+								"optional": {
+									"type": 19,
+									"value": false
+								},
+								"transitionmode": {
+									"type": 1,
+									"value": 0
+								},
+								"waittime": {
+									"type": 6,
+									"value": -1.0
+								},
+								"Tags": [
+									{}
+								],
+								"children": [
+									{}
+								],
+								"editorData": [
+									{
+										"data": [
+											{
+												"key": {
+													"type": 22,
+													"value": "ID"
+												},
+												"val": {
+													"type": 23,
+													"value": "N139"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "collapsed"
+												},
+												"val": {
+													"type": 23,
+													"value": "False"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "logicalname"
+												},
+												"val": {
+													"type": 23,
+													"value": "Jump"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "position"
+												},
+												"val": {
+													"type": 23,
+													"value": "1615;1548"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "sourcetemplate"
+												},
+												"val": {
+													"type": 23,
+													"value": ""
+												}
+											}
+										]
+									}
+								]
+							},
+							{
+								"ShowOnce": {
+									"type": 19,
+									"value": false
 								},
 								"UUID": {
 									"type": 22,
@@ -1177,7 +1291,7 @@
 								},
 								"stub": {
 									"type": 19,
-									"value": true
+									"value": false
 								},
 								"transitionmode": {
 									"type": 1,
@@ -1245,7 +1359,7 @@
 															{
 																"TagText": {
 																	"type": 28,
-																	"value": "Enable auto-adding the Summoner's Contract when a summon skill is used.",
+																	"value": "[GLOBAL] Enable auto-adding the Summoner's Contract when a summon skill is used. (Default)",
 																	"handle": "h39767f05g0428g42a8gbcd8gc890e943d968"
 																},
 																"stub": {
@@ -1371,7 +1485,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "335;672"
+													"value": "975;1767"
 												}
 											},
 											{
@@ -1619,7 +1733,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "1615;1110"
+													"value": "3215;1110"
 												}
 											},
 											{
@@ -1900,7 +2014,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "3215;-204"
+													"value": "4815;-204"
 												}
 											},
 											{
@@ -2127,7 +2241,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "1615;1329"
+													"value": "3215;1329"
 												}
 											},
 											{
@@ -2175,7 +2289,7 @@
 							{
 								"ShowOnce": {
 									"type": 19,
-									"value": true
+									"value": false
 								},
 								"UUID": {
 									"type": 22,
@@ -2207,7 +2321,7 @@
 								},
 								"stub": {
 									"type": 19,
-									"value": true
+									"value": false
 								},
 								"transitionmode": {
 									"type": 1,
@@ -2275,7 +2389,7 @@
 															{
 																"TagText": {
 																	"type": 28,
-																	"value": "Disable auto-adding the Dismiss Summon skill when summoning a creature.",
+																	"value": "[GLOBAL] Disable auto-adding the Dismiss Summon skill when summoning a creature.",
 																	"handle": "hf89c1133g4364g4d58gb451gfdc64370119c"
 																},
 																"stub": {
@@ -2401,7 +2515,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "335;891"
+													"value": "975;1986"
 												}
 											},
 											{
@@ -2653,7 +2767,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "1615;1548"
+													"value": "3215;1548"
 												}
 											},
 											{
@@ -2682,6 +2796,460 @@
 														"name": {
 															"type": 22,
 															"value": "LLSUMMONINF_RemoveMaxHiddenStatus"
+														},
+														"value": {
+															"type": 19,
+															"value": true
+														}
+													}
+												]
+											}
+										]
+									}
+								]
+							},
+							{
+								"ShowOnce": {
+									"type": 19,
+									"value": false
+								},
+								"UUID": {
+									"type": 22,
+									"value": "56964ac3-7516-40ea-8e61-24064dc7f16a"
+								},
+								"addressedspeaker": {
+									"type": 4,
+									"value": -1
+								},
+								"constructor": {
+									"type": 22,
+									"value": "TagQuestion"
+								},
+								"endnode": {
+									"type": 19,
+									"value": false
+								},
+								"exclusive": {
+									"type": 19,
+									"value": false
+								},
+								"optional": {
+									"type": 19,
+									"value": false
+								},
+								"speaker": {
+									"type": 4,
+									"value": 0
+								},
+								"stub": {
+									"type": 19,
+									"value": false
+								},
+								"transitionmode": {
+									"type": 1,
+									"value": 0
+								},
+								"waittime": {
+									"type": 6,
+									"value": -1.0
+								},
+								"GameData": [
+									{
+										"CameraTarget": {
+											"type": 4,
+											"value": -1
+										},
+										"CustomMovie": {
+											"type": 23,
+											"value": ""
+										},
+										"Emotion": {
+											"type": 23,
+											"value": "Default"
+										},
+										"ExtraWaitTime": {
+											"type": 4,
+											"value": 0
+										},
+										"SoundEvent": {
+											"type": 23,
+											"value": ""
+										},
+										"AiPersonalities": [
+											{}
+										],
+										"MusicInstrumentSounds": [
+											{}
+										],
+										"OriginSound": [
+											{}
+										]
+									}
+								],
+								"TaggedTexts": [
+									{
+										"TaggedText": [
+											{
+												"HasTagRule": {
+													"type": 19,
+													"value": true
+												},
+												"RuleGroup": [
+													{
+														"TagCombineOp": {
+															"type": 1,
+															"value": 0
+														},
+														"Rules": [
+															{}
+														]
+													}
+												],
+												"TagTexts": [
+													{
+														"TagText": [
+															{
+																"TagText": {
+																	"type": 28,
+																	"value": "Settings",
+																	"handle": "hb713a537gb6d8g4e81g9232g35b12629cfc9"
+																},
+																"stub": {
+																	"type": 19,
+																	"value": true
+																}
+															}
+														]
+													}
+												]
+											}
+										]
+									}
+								],
+								"Tags": [
+									{}
+								],
+								"checkflags": [
+									{}
+								],
+								"children": [
+									{
+										"child": [
+											{
+												"UUID": {
+													"type": 22,
+													"value": "bdec0e0e-7bd3-46b1-9a6d-4a84307f9771"
+												}
+											}
+										]
+									}
+								],
+								"editorData": [
+									{
+										"data": [
+											{
+												"key": {
+													"type": 22,
+													"value": "ID"
+												},
+												"val": {
+													"type": 23,
+													"value": "N136"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "NodeContext"
+												},
+												"val": {
+													"type": 23,
+													"value": ""
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "collapsed"
+												},
+												"val": {
+													"type": 23,
+													"value": "False"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "logicalname"
+												},
+												"val": {
+													"type": 23,
+													"value": "Question"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "position"
+												},
+												"val": {
+													"type": 23,
+													"value": "335;1329"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "sourcetemplate"
+												},
+												"val": {
+													"type": 23,
+													"value": ""
+												}
+											}
+										]
+									}
+								],
+								"setflags": [
+									{}
+								]
+							},
+							{
+								"ShowOnce": {
+									"type": 19,
+									"value": false
+								},
+								"UUID": {
+									"type": 22,
+									"value": "592b80af-09ca-43d4-8aa5-8025717f8a99"
+								},
+								"addressedspeaker": {
+									"type": 4,
+									"value": -1
+								},
+								"constructor": {
+									"type": 22,
+									"value": "TagQuestion"
+								},
+								"endnode": {
+									"type": 19,
+									"value": false
+								},
+								"exclusive": {
+									"type": 19,
+									"value": false
+								},
+								"optional": {
+									"type": 19,
+									"value": false
+								},
+								"speaker": {
+									"type": 4,
+									"value": 0
+								},
+								"stub": {
+									"type": 19,
+									"value": false
+								},
+								"transitionmode": {
+									"type": 1,
+									"value": 0
+								},
+								"waittime": {
+									"type": 6,
+									"value": -1.0
+								},
+								"GameData": [
+									{
+										"CameraTarget": {
+											"type": 4,
+											"value": -1
+										},
+										"CustomMovie": {
+											"type": 23,
+											"value": ""
+										},
+										"Emotion": {
+											"type": 23,
+											"value": "Default"
+										},
+										"ExtraWaitTime": {
+											"type": 4,
+											"value": 0
+										},
+										"SoundEvent": {
+											"type": 23,
+											"value": ""
+										},
+										"AiPersonalities": [
+											{}
+										],
+										"MusicInstrumentSounds": [
+											{}
+										],
+										"OriginSound": [
+											{}
+										]
+									}
+								],
+								"TaggedTexts": [
+									{
+										"TaggedText": [
+											{
+												"HasTagRule": {
+													"type": 19,
+													"value": true
+												},
+												"RuleGroup": [
+													{
+														"TagCombineOp": {
+															"type": 1,
+															"value": 0
+														},
+														"Rules": [
+															{}
+														]
+													}
+												],
+												"TagTexts": [
+													{
+														"TagText": [
+															{
+																"TagText": {
+																	"type": 28,
+																	"value": "[GLOBAL] Disable instant summon spell cooldowns when out of combat.",
+																	"handle": "h403cd9aegbdb4g433ag8498g953deec77893"
+																},
+																"stub": {
+																	"type": 19,
+																	"value": true
+																}
+															}
+														]
+													}
+												]
+											}
+										]
+									}
+								],
+								"Tags": [
+									{}
+								],
+								"checkflags": [
+									{
+										"flaggroup": [
+											{
+												"type": {
+													"type": 22,
+													"value": "Global"
+												},
+												"flag": [
+													{
+														"name": {
+															"type": 22,
+															"value": "LLSUMMONINF_InstantSummonCooldownDisabled"
+														},
+														"value": {
+															"type": 19,
+															"value": false
+														}
+													}
+												]
+											}
+										]
+									}
+								],
+								"children": [
+									{
+										"child": [
+											{
+												"UUID": {
+													"type": 22,
+													"value": "be2f1253-2900-4ed3-bced-2bef7d9b8302"
+												}
+											}
+										]
+									}
+								],
+								"editorData": [
+									{
+										"data": [
+											{
+												"key": {
+													"type": 22,
+													"value": "ID"
+												},
+												"val": {
+													"type": 23,
+													"value": "N143"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "NodeContext"
+												},
+												"val": {
+													"type": 23,
+													"value": ""
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "collapsed"
+												},
+												"val": {
+													"type": 23,
+													"value": "False"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "logicalname"
+												},
+												"val": {
+													"type": 23,
+													"value": "Question"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "position"
+												},
+												"val": {
+													"type": 23,
+													"value": "975;2424"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "sourcetemplate"
+												},
+												"val": {
+													"type": 23,
+													"value": ""
+												}
+											}
+										]
+									}
+								],
+								"setflags": [
+									{
+										"flaggroup": [
+											{
+												"type": {
+													"type": 22,
+													"value": "Global"
+												},
+												"flag": [
+													{
+														"name": {
+															"type": 22,
+															"value": "LLSUMMONINF_InstantSummonCooldownDisabled"
 														},
 														"value": {
 															"type": 19,
@@ -2880,7 +3448,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "3535;453"
+													"value": "5135;453"
 												}
 											},
 											{
@@ -3136,7 +3704,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "1615;2424"
+													"value": "3215;2424"
 												}
 											},
 											{
@@ -3330,7 +3898,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "4175;15"
+													"value": "5775;15"
 												}
 											},
 											{
@@ -3622,7 +4190,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "335;1329"
+													"value": "335;1767"
 												}
 											},
 											{
@@ -3828,7 +4396,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "1615;453"
+													"value": "3215;453"
 												}
 											},
 											{
@@ -4059,7 +4627,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "1615;1767"
+													"value": "3215;1767"
 												}
 											},
 											{
@@ -4290,7 +4858,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "3535;15"
+													"value": "5135;15"
 												}
 											},
 											{
@@ -4521,7 +5089,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "1935;453"
+													"value": "3535;453"
 												}
 											},
 											{
@@ -4727,7 +5295,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "3535;-204"
+													"value": "5135;-204"
 												}
 											},
 											{
@@ -5296,7 +5864,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "1935;234"
+													"value": "3535;234"
 												}
 											},
 											{
@@ -5705,7 +6273,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "3535;672"
+													"value": "5135;672"
 												}
 											},
 											{
@@ -5748,6 +6316,212 @@
 											}
 										]
 									}
+								]
+							},
+							{
+								"ShowOnce": {
+									"type": 19,
+									"value": false
+								},
+								"UUID": {
+									"type": 22,
+									"value": "9e66edc9-3311-4826-bc26-eba3ffc4e786"
+								},
+								"addressedspeaker": {
+									"type": 4,
+									"value": -1
+								},
+								"constructor": {
+									"type": 22,
+									"value": "TagQuestion"
+								},
+								"endnode": {
+									"type": 19,
+									"value": false
+								},
+								"exclusive": {
+									"type": 19,
+									"value": false
+								},
+								"optional": {
+									"type": 19,
+									"value": false
+								},
+								"speaker": {
+									"type": 4,
+									"value": 0
+								},
+								"stub": {
+									"type": 19,
+									"value": false
+								},
+								"transitionmode": {
+									"type": 1,
+									"value": 0
+								},
+								"waittime": {
+									"type": 6,
+									"value": -1.0
+								},
+								"GameData": [
+									{
+										"CameraTarget": {
+											"type": 4,
+											"value": -1
+										},
+										"CustomMovie": {
+											"type": 23,
+											"value": ""
+										},
+										"Emotion": {
+											"type": 23,
+											"value": "Default"
+										},
+										"ExtraWaitTime": {
+											"type": 4,
+											"value": 0
+										},
+										"SoundEvent": {
+											"type": 23,
+											"value": ""
+										},
+										"AiPersonalities": [
+											{}
+										],
+										"MusicInstrumentSounds": [
+											{}
+										],
+										"OriginSound": [
+											{}
+										]
+									}
+								],
+								"TaggedTexts": [
+									{
+										"TaggedText": [
+											{
+												"HasTagRule": {
+													"type": 19,
+													"value": true
+												},
+												"RuleGroup": [
+													{
+														"TagCombineOp": {
+															"type": 1,
+															"value": 0
+														},
+														"Rules": [
+															{}
+														]
+													}
+												],
+												"TagTexts": [
+													{
+														"TagText": [
+															{
+																"TagText": {
+																	"type": 28,
+																	"value": "[Back]",
+																	"handle": "hccaf071ag7113g47edgaeacg9f321b949ffa"
+																},
+																"stub": {
+																	"type": 19,
+																	"value": true
+																}
+															}
+														]
+													}
+												]
+											}
+										]
+									}
+								],
+								"Tags": [
+									{}
+								],
+								"checkflags": [
+									{}
+								],
+								"children": [
+									{
+										"child": [
+											{
+												"UUID": {
+													"type": 22,
+													"value": "c3f8b563-bffb-4422-8882-f4b74a611d52"
+												}
+											}
+										]
+									}
+								],
+								"editorData": [
+									{
+										"data": [
+											{
+												"key": {
+													"type": 22,
+													"value": "ID"
+												},
+												"val": {
+													"type": 23,
+													"value": "N140"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "NodeContext"
+												},
+												"val": {
+													"type": 23,
+													"value": ""
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "collapsed"
+												},
+												"val": {
+													"type": 23,
+													"value": "False"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "logicalname"
+												},
+												"val": {
+													"type": 23,
+													"value": "Question"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "position"
+												},
+												"val": {
+													"type": 23,
+													"value": "975;1329"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "sourcetemplate"
+												},
+												"val": {
+													"type": 23,
+													"value": ""
+												}
+											}
+										]
+									}
+								],
+								"setflags": [
+									{}
 								]
 							},
 							{
@@ -5927,7 +6701,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "1615;2862"
+													"value": "3215;2862"
 												}
 											},
 											{
@@ -6133,7 +6907,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "1615;672"
+													"value": "3215;672"
 												}
 											},
 											{
@@ -6265,7 +7039,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "3855;-204"
+													"value": "5455;-204"
 												}
 											},
 											{
@@ -6285,7 +7059,7 @@
 							{
 								"ShowOnce": {
 									"type": 19,
-									"value": true
+									"value": false
 								},
 								"UUID": {
 									"type": 22,
@@ -6317,7 +7091,7 @@
 								},
 								"stub": {
 									"type": 19,
-									"value": true
+									"value": false
 								},
 								"transitionmode": {
 									"type": 1,
@@ -6385,7 +7159,7 @@
 															{
 																"TagText": {
 																	"type": 28,
-																	"value": "Enable auto-adding the Dismiss Summon skill when summoning a creature.",
+																	"value": "[GLOBAL] Enable auto-adding the Dismiss Summon skill when summoning a creature. (Default)",
 																	"handle": "ha8bfec7ag2b71g4787ga972g9d8188885053"
 																},
 																"stub": {
@@ -6511,7 +7285,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "335;1110"
+													"value": "975;2205"
 												}
 											},
 											{
@@ -6550,6 +7324,248 @@
 											}
 										]
 									}
+								]
+							},
+							{
+								"ShowOnce": {
+									"type": 19,
+									"value": false
+								},
+								"UUID": {
+									"type": 22,
+									"value": "bdec0e0e-7bd3-46b1-9a6d-4a84307f9771"
+								},
+								"addressedspeaker": {
+									"type": 4,
+									"value": -1
+								},
+								"constructor": {
+									"type": 22,
+									"value": "TagAnswer"
+								},
+								"endnode": {
+									"type": 19,
+									"value": false
+								},
+								"exclusive": {
+									"type": 19,
+									"value": false
+								},
+								"optional": {
+									"type": 19,
+									"value": false
+								},
+								"speaker": {
+									"type": 4,
+									"value": 0
+								},
+								"stub": {
+									"type": 19,
+									"value": false
+								},
+								"transitionmode": {
+									"type": 1,
+									"value": 0
+								},
+								"waittime": {
+									"type": 6,
+									"value": -1.0
+								},
+								"GameData": [
+									{
+										"CameraTarget": {
+											"type": 4,
+											"value": -1
+										},
+										"CustomMovie": {
+											"type": 23,
+											"value": ""
+										},
+										"Emotion": {
+											"type": 23,
+											"value": "Default"
+										},
+										"ExtraWaitTime": {
+											"type": 4,
+											"value": 0
+										},
+										"SoundEvent": {
+											"type": 23,
+											"value": ""
+										},
+										"AiPersonalities": [
+											{}
+										],
+										"MusicInstrumentSounds": [
+											{}
+										],
+										"OriginSound": [
+											{}
+										]
+									}
+								],
+								"TaggedTexts": [
+									{
+										"TaggedText": [
+											{
+												"HasTagRule": {
+													"type": 19,
+													"value": true
+												},
+												"RuleGroup": [
+													{
+														"TagCombineOp": {
+															"type": 1,
+															"value": 0
+														},
+														"Rules": [
+															{}
+														]
+													}
+												],
+												"TagTexts": [
+													{
+														"TagText": [
+															{
+																"TagText": {
+																	"type": 28,
+																	"value": "Settings Menu",
+																	"handle": "hd443899ag5597g4b74gaf50g7c09bacdd425"
+																},
+																"stub": {
+																	"type": 19,
+																	"value": true
+																}
+															}
+														]
+													}
+												]
+											}
+										]
+									}
+								],
+								"Tags": [
+									{}
+								],
+								"checkflags": [
+									{}
+								],
+								"children": [
+									{
+										"child": [
+											{
+												"UUID": {
+													"type": 22,
+													"value": "9e66edc9-3311-4826-bc26-eba3ffc4e786"
+												}
+											},
+											{
+												"UUID": {
+													"type": 22,
+													"value": "e08f1ab7-eee7-4e4e-8765-e2069e676f2d"
+												}
+											},
+											{
+												"UUID": {
+													"type": 22,
+													"value": "3d18d0ba-68a8-4114-a6fb-d877f826a13e"
+												}
+											},
+											{
+												"UUID": {
+													"type": 22,
+													"value": "506cf6d2-b3cb-4b47-a751-c6302a7bd269"
+												}
+											},
+											{
+												"UUID": {
+													"type": 22,
+													"value": "bc907355-5803-492b-9a67-1a8dd11be105"
+												}
+											},
+											{
+												"UUID": {
+													"type": 22,
+													"value": "592b80af-09ca-43d4-8aa5-8025717f8a99"
+												}
+											},
+											{
+												"UUID": {
+													"type": 22,
+													"value": "c94fc5e0-d66c-4b7c-8c2e-ffc73ff4f284"
+												}
+											}
+										]
+									}
+								],
+								"editorData": [
+									{
+										"data": [
+											{
+												"key": {
+													"type": 22,
+													"value": "ID"
+												},
+												"val": {
+													"type": 23,
+													"value": "N137"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "NodeContext"
+												},
+												"val": {
+													"type": 23,
+													"value": ""
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "collapsed"
+												},
+												"val": {
+													"type": 23,
+													"value": "False"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "logicalname"
+												},
+												"val": {
+													"type": 23,
+													"value": "Answer"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "position"
+												},
+												"val": {
+													"type": 23,
+													"value": "655;1329"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "sourcetemplate"
+												},
+												"val": {
+													"type": 23,
+													"value": ""
+												}
+											}
+										]
+									}
+								],
+								"setflags": [
+									{}
 								]
 							},
 							{
@@ -6682,7 +7698,7 @@
 											{
 												"UUID": {
 													"type": 22,
-													"value": "fe59030b-4c71-4826-a85e-b770481d9f7f"
+													"value": "366563e7-b6f1-4468-9754-0f4c18722780"
 												}
 											}
 										]
@@ -6738,7 +7754,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "655;453"
+													"value": "1295;1548"
 												}
 											},
 											{
@@ -6755,7 +7771,28 @@
 									}
 								],
 								"setflags": [
-									{}
+									{
+										"flaggroup": [
+											{
+												"type": {
+													"type": 22,
+													"value": "Global"
+												},
+												"flag": [
+													{
+														"name": {
+															"type": 22,
+															"value": "LLSUMMONINF_SaveGlobalSettings"
+														},
+														"value": {
+															"type": 19,
+															"value": true
+														}
+													}
+												]
+											}
+										]
+									}
 								]
 							},
 							{
@@ -6845,7 +7882,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "2575;453"
+													"value": "4175;453"
 												}
 											},
 											{
@@ -7010,25 +8047,7 @@
 											{
 												"UUID": {
 													"type": 22,
-													"value": "e08f1ab7-eee7-4e4e-8765-e2069e676f2d"
-												}
-											},
-											{
-												"UUID": {
-													"type": 22,
-													"value": "3d18d0ba-68a8-4114-a6fb-d877f826a13e"
-												}
-											},
-											{
-												"UUID": {
-													"type": 22,
-													"value": "506cf6d2-b3cb-4b47-a751-c6302a7bd269"
-												}
-											},
-											{
-												"UUID": {
-													"type": 22,
-													"value": "bc907355-5803-492b-9a67-1a8dd11be105"
+													"value": "56964ac3-7516-40ea-8e61-24064dc7f16a"
 												}
 											},
 											{
@@ -7108,6 +8127,110 @@
 								],
 								"setflags": [
 									{}
+								]
+							},
+							{
+								"ShowOnce": {
+									"type": 19,
+									"value": false
+								},
+								"UUID": {
+									"type": 22,
+									"value": "c3f8b563-bffb-4422-8882-f4b74a611d52"
+								},
+								"constructor": {
+									"type": 22,
+									"value": "Jump"
+								},
+								"endnode": {
+									"type": 19,
+									"value": false
+								},
+								"exclusive": {
+									"type": 19,
+									"value": false
+								},
+								"jumptarget": {
+									"type": 22,
+									"value": "c25a72c4-b0fc-49f3-88eb-5146a7306cfc"
+								},
+								"jumptargetpoint": {
+									"type": 1,
+									"value": 1
+								},
+								"optional": {
+									"type": 19,
+									"value": false
+								},
+								"transitionmode": {
+									"type": 1,
+									"value": 0
+								},
+								"waittime": {
+									"type": 6,
+									"value": -1.0
+								},
+								"Tags": [
+									{}
+								],
+								"children": [
+									{}
+								],
+								"editorData": [
+									{
+										"data": [
+											{
+												"key": {
+													"type": 22,
+													"value": "ID"
+												},
+												"val": {
+													"type": 23,
+													"value": "N142"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "collapsed"
+												},
+												"val": {
+													"type": 23,
+													"value": "False"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "logicalname"
+												},
+												"val": {
+													"type": 23,
+													"value": "Jump"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "position"
+												},
+												"val": {
+													"type": 23,
+													"value": "1295;1329"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "sourcetemplate"
+												},
+												"val": {
+													"type": 23,
+													"value": ""
+												}
+											}
+										]
+									}
 								]
 							},
 							{
@@ -7296,7 +8419,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "1615;234"
+													"value": "3215;234"
 												}
 											},
 											{
@@ -7314,6 +8437,254 @@
 								],
 								"setflags": [
 									{}
+								]
+							},
+							{
+								"ShowOnce": {
+									"type": 19,
+									"value": false
+								},
+								"UUID": {
+									"type": 22,
+									"value": "c94fc5e0-d66c-4b7c-8c2e-ffc73ff4f284"
+								},
+								"addressedspeaker": {
+									"type": 4,
+									"value": -1
+								},
+								"constructor": {
+									"type": 22,
+									"value": "TagQuestion"
+								},
+								"endnode": {
+									"type": 19,
+									"value": false
+								},
+								"exclusive": {
+									"type": 19,
+									"value": false
+								},
+								"optional": {
+									"type": 19,
+									"value": false
+								},
+								"speaker": {
+									"type": 4,
+									"value": 0
+								},
+								"stub": {
+									"type": 19,
+									"value": false
+								},
+								"transitionmode": {
+									"type": 1,
+									"value": 0
+								},
+								"waittime": {
+									"type": 6,
+									"value": -1.0
+								},
+								"GameData": [
+									{
+										"CameraTarget": {
+											"type": 4,
+											"value": -1
+										},
+										"CustomMovie": {
+											"type": 23,
+											"value": ""
+										},
+										"Emotion": {
+											"type": 23,
+											"value": "Default"
+										},
+										"ExtraWaitTime": {
+											"type": 4,
+											"value": 0
+										},
+										"SoundEvent": {
+											"type": 23,
+											"value": ""
+										},
+										"AiPersonalities": [
+											{}
+										],
+										"MusicInstrumentSounds": [
+											{}
+										],
+										"OriginSound": [
+											{}
+										]
+									}
+								],
+								"TaggedTexts": [
+									{
+										"TaggedText": [
+											{
+												"HasTagRule": {
+													"type": 19,
+													"value": true
+												},
+												"RuleGroup": [
+													{
+														"TagCombineOp": {
+															"type": 1,
+															"value": 0
+														},
+														"Rules": [
+															{}
+														]
+													}
+												],
+												"TagTexts": [
+													{
+														"TagText": [
+															{
+																"TagText": {
+																	"type": 28,
+																	"value": "[GLOBAL] Enable instant summon spell cooldowns when out of combat. (Default)",
+																	"handle": "h07578528g4defg4923g9463g4e0239e36049"
+																},
+																"stub": {
+																	"type": 19,
+																	"value": true
+																}
+															}
+														]
+													}
+												]
+											}
+										]
+									}
+								],
+								"Tags": [
+									{}
+								],
+								"checkflags": [
+									{
+										"flaggroup": [
+											{
+												"type": {
+													"type": 22,
+													"value": "Global"
+												},
+												"flag": [
+													{
+														"name": {
+															"type": 22,
+															"value": "LLSUMMONINF_InstantSummonCooldownDisabled"
+														},
+														"value": {
+															"type": 19,
+															"value": true
+														}
+													}
+												]
+											}
+										]
+									}
+								],
+								"children": [
+									{
+										"child": [
+											{
+												"UUID": {
+													"type": 22,
+													"value": "be2f1253-2900-4ed3-bced-2bef7d9b8302"
+												}
+											}
+										]
+									}
+								],
+								"editorData": [
+									{
+										"data": [
+											{
+												"key": {
+													"type": 22,
+													"value": "ID"
+												},
+												"val": {
+													"type": 23,
+													"value": "N147"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "NodeContext"
+												},
+												"val": {
+													"type": 23,
+													"value": ""
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "collapsed"
+												},
+												"val": {
+													"type": 23,
+													"value": "False"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "logicalname"
+												},
+												"val": {
+													"type": 23,
+													"value": "Question"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "position"
+												},
+												"val": {
+													"type": 23,
+													"value": "975;2643"
+												}
+											},
+											{
+												"key": {
+													"type": 22,
+													"value": "sourcetemplate"
+												},
+												"val": {
+													"type": 23,
+													"value": ""
+												}
+											}
+										]
+									}
+								],
+								"setflags": [
+									{
+										"flaggroup": [
+											{
+												"type": {
+													"type": 22,
+													"value": "Global"
+												},
+												"flag": [
+													{
+														"name": {
+															"type": 22,
+															"value": "LLSUMMONINF_InstantSummonCooldownDisabled"
+														},
+														"value": {
+															"type": 19,
+															"value": false
+														}
+													}
+												]
+											}
+										]
+									}
 								]
 							},
 							{
@@ -7403,7 +8774,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "4495;15"
+													"value": "6095;15"
 												}
 											},
 											{
@@ -7606,7 +8977,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "3535;1110"
+													"value": "5135;1110"
 												}
 											},
 											{
@@ -7654,7 +9025,7 @@
 							{
 								"ShowOnce": {
 									"type": 19,
-									"value": true
+									"value": false
 								},
 								"UUID": {
 									"type": 22,
@@ -7686,7 +9057,7 @@
 								},
 								"stub": {
 									"type": 19,
-									"value": true
+									"value": false
 								},
 								"transitionmode": {
 									"type": 1,
@@ -7754,7 +9125,7 @@
 															{
 																"TagText": {
 																	"type": 28,
-																	"value": "Disable auto-adding the Summoner's Contract when a summon skill is used.",
+																	"value": "[GLOBAL] Disable auto-adding the Summoner's Contract when a summon skill is used.",
 																	"handle": "h7e5e193dgec46g491cgbbabgb764977480af"
 																},
 																"stub": {
@@ -7880,7 +9251,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "335;453"
+													"value": "975;1548"
 												}
 											},
 											{
@@ -8179,7 +9550,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "1295;234"
+													"value": "2895;234"
 												}
 											},
 											{
@@ -8385,7 +9756,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "2255;891"
+													"value": "3855;891"
 												}
 											},
 											{
@@ -8695,7 +10066,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "3535;234"
+													"value": "5135;234"
 												}
 											},
 											{
@@ -8926,7 +10297,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "1615;2643"
+													"value": "3215;2643"
 												}
 											},
 											{
@@ -9157,7 +10528,7 @@
 												},
 												"val": {
 													"type": 23,
-													"value": "1615;2205"
+													"value": "3215;2205"
 												}
 											},
 											{
@@ -9197,110 +10568,6 @@
 														}
 													}
 												]
-											}
-										]
-									}
-								]
-							},
-							{
-								"ShowOnce": {
-									"type": 19,
-									"value": false
-								},
-								"UUID": {
-									"type": 22,
-									"value": "fe59030b-4c71-4826-a85e-b770481d9f7f"
-								},
-								"constructor": {
-									"type": 22,
-									"value": "Jump"
-								},
-								"endnode": {
-									"type": 19,
-									"value": false
-								},
-								"exclusive": {
-									"type": 19,
-									"value": false
-								},
-								"jumptarget": {
-									"type": 22,
-									"value": "c25a72c4-b0fc-49f3-88eb-5146a7306cfc"
-								},
-								"jumptargetpoint": {
-									"type": 1,
-									"value": 1
-								},
-								"optional": {
-									"type": 19,
-									"value": false
-								},
-								"transitionmode": {
-									"type": 1,
-									"value": 0
-								},
-								"waittime": {
-									"type": 6,
-									"value": -1.0
-								},
-								"Tags": [
-									{}
-								],
-								"children": [
-									{}
-								],
-								"editorData": [
-									{
-										"data": [
-											{
-												"key": {
-													"type": 22,
-													"value": "ID"
-												},
-												"val": {
-													"type": 23,
-													"value": "N82"
-												}
-											},
-											{
-												"key": {
-													"type": 22,
-													"value": "collapsed"
-												},
-												"val": {
-													"type": 23,
-													"value": "False"
-												}
-											},
-											{
-												"key": {
-													"type": 22,
-													"value": "logicalname"
-												},
-												"val": {
-													"type": 23,
-													"value": "Jump"
-												}
-											},
-											{
-												"key": {
-													"type": 22,
-													"value": "position"
-												},
-												"val": {
-													"type": 23,
-													"value": "975;453"
-												}
-											},
-											{
-												"key": {
-													"type": 22,
-													"value": "sourcetemplate"
-												},
-												"val": {
-													"type": 23,
-													"value": ""
-												}
 											}
 										]
 									}
@@ -9539,7 +10806,7 @@
 				},
 				"nextNodeId": {
 					"type": 5,
-					"value": 129
+					"value": 154
 				}
 			}
 		}
