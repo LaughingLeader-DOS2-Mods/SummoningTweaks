@@ -97,14 +97,14 @@ ObjectClearFlag(_Player, "LLSUMMONINF_Commands_RemoveBlacklistSkills", 0);
 //END_REGION
 
 QRY
-LLSUMMONINF_PlayeracterIsPlayer((CHARACTERGUID)_Player)
+LLSUMMONINF_CharacterIsPlayer((CHARACTERGUID)_Player)
 AND
 DB_IsPlayer(_Player)
 THEN
 DB_NOOP(1);
 
 QRY
-LLSUMMONINF_PlayeracterIsPlayer((CHARACTERGUID)_Player)
+LLSUMMONINF_CharacterIsPlayer((CHARACTERGUID)_Player)
 AND
 CharacterIsSummon(_Player, 0)
 AND
@@ -112,7 +112,7 @@ CharacterIsPartyFollower(_Player, 0)
 AND
 CharacterIsPlayer(_Player, _a)
 AND
-CharacterIsPartyMember(_Player, _b)
+CharacterGameMaster(_Player, _b)
 AND
 IntegerMax(_a,_b,1)
 THEN
@@ -125,7 +125,7 @@ IsTagged(_Summon, "TOTEM", 0)
 AND
 CharacterGetOwner(_Summon, _Player)
 AND
-LLSUMMONINF_PlayeracterIsPlayer(_Player)
+LLSUMMONINF_CharacterIsPlayer(_Player)
 AND
 GetTemplate(_Summon, _Template)
 AND
