@@ -1,4 +1,24 @@
-function LLSUMMONINF_Ext_SummonTemplateAtPosition(player, template, xs, ys, zs, lifetimestr, totemstr)
+PersistentVars = {
+	MaxSummons = 3,
+	SummonAmountPerAbility = 1
+}
+
+---@type ModSettings
+Settings = nil
+local initSettings = Ext.Require("LeaderLibGlobalSettings.lua")
+
+Ext.RegisterListener("SessionLoaded", function()
+	if Mods.LeaderLib ~= nil then
+		local b,result = xpcall(initSettings, debug.traceback)
+		if not b then
+			Ext.PrintError(result)
+		else
+			Settings = result
+		end
+	end
+end)
+
+function SummonTemplateAtPosition(player, template, xs, ys, zs, lifetimestr, totemstr)
 	local x = tonumber(xs)
 	local y = tonumber(ys)
 	local z = tonumber(zs)
@@ -16,3 +36,17 @@ function LLSUMMONINF_Ext_SummonTemplateAtPosition(player, template, xs, ys, zs, 
 	PlayEffectAtPosition("LLSUMMONINF_Skills_InvokeContract_Cast_Summon_01", x, y, z)
 	PlayEffectAtPosition("RS3_FX_Skills_Totem_Target_Nebula_01", x, y, z)
 end
+
+function UpdateMaxSummons(uuid)
+	local player = Ext.GetCharacter(uuid)
+	Ext.EnableExperimentalPropertyWrites()
+	player.Stats.MaxSummons = PersistentVars.MaxSummons
+end
+
+function ClearMaxSummons(uuid)
+	local player = Ext.GetCharacter(uuid)
+	Ext.EnableExperimentalPropertyWrites()
+	player.Stats.MaxSummons = 0
+end
+
+Ext.AddPathOverride("Public/SummoningTweaks_9fd43c0f-96de-4343-ba47-6f491aef2819/Scripts/LLSUMMONINF_Main.gameScript", "Public/SummoningTweaks_9fd43c0f-96de-4343-ba47-6f491aef2819/Scripts/LLSUMMONINF_MainDisabled.gameScript")

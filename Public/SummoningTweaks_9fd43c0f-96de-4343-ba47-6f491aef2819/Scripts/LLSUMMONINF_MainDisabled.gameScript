@@ -1,0 +1,47 @@
+INIT
+
+EVENTS
+
+
+EVENT LLSUMMONINF_AiControl_TagApplied
+VARS
+	CHARACTER:_Char
+ON
+	OnCharacterEvent(_Char, "LLSUMMONINF_AutonomousSet")
+	OnCharacterStatusRemoved(_Char, RESURRECT)
+ACTIONS
+IF "c1"
+	IsTagged(_Char, "LLSUMMONINF_Autonomous")
+THEN
+	CharacterApplyStatus(_Char, LLSUMMONINF_AUTONOMOUS, -1, 0, _Char)
+	IF "c1"
+		IsInCombat(_Char)
+	THEN
+		CharacterApplyStatus(_Char, LLSUMMONINF_AI_CONTROL, -1, 0, _Char)
+	ENDIF
+ENDIF
+
+EVENT LLSUMMONINF_AiControl_TagRemoved
+VARS
+	CHARACTER:_Char
+ON
+	OnCharacterEvent(_Char, "LLSUMMONINF_AutonomousRemoved")
+ACTIONS
+	CharacterRemoveStatus(_Char, LLSUMMONINF_AUTONOMOUS)
+	CharacterRemoveStatus(_Char, LLSUMMONINF_AI_CONTROL)
+
+EVENT LLSUMMONINF_AiControl_CombatStarted
+VARS
+	CHARACTER:_Char
+ON
+	OnCharacterEvent(_Char, "LLSUMMONINF_Autonomous_CombatStarted")
+ACTIONS
+	CharacterApplyStatus(_Char, LLSUMMONINF_AI_CONTROL, -1, 0, _Char)
+
+EVENT LLSUMMONINF_AiControl_CombatEnded
+VARS
+	CHARACTER:_Char
+ON
+	OnCharacterEvent(_Char, "LLSUMMONINF_Autonomous_CombatEnded")
+ACTIONS
+	CharacterRemoveStatus(_Char, LLSUMMONINF_AI_CONTROL)

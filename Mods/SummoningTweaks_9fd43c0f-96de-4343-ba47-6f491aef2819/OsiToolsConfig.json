@@ -1,4 +1,6 @@
 {
+    "RequiredExtensionVersion": 52,
+    "ModTable": "LLSummoningTweaks",
     "FeatureFlags": [
         "OsirisExtensions",
         "Preprocessor",
