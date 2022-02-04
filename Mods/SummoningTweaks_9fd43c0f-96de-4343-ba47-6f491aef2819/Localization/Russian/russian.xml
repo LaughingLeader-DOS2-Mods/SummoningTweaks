@@ -9,6 +9,10 @@
 	<content contentuid="h57d2385dgc271g4290g9d3ag31621d05a0c0" Source="" Key="LLSUMMONINF_AUTONOMOUS_Description">Character will dictate their own actions in combat.</content>
 	<content contentuid="hd242f631gaaa6g4b48g998fg034b24ddc6eb" Source="" Key="LLSUMMONINF_AUTONOMOUS_DisplayName">Autonomous</content>
 	<content contentuid="hb80fe619g7effg437eg8de6ga2bf15ab154f" Source="" Key="LLSUMMONINF_AUTONOMOUS_TOGGLE_DisplayName">Toggle Autonomous Behavior</content>
+	<content contentuid="hb6120bd2g52e4g404eg899egbe303aa7f290" Source="" Key="LLSUMMONINF_Buttons_AddInfusionSkills">Add Copy/Apply Infusions Skills</content>
+	<content contentuid="h822d3c64g15fag4a8cg937bg70e99a39b27b" Source="" Key="LLSUMMONINF_Buttons_AddInfusionSkills_Description">Add a copy and apply skill that allows you to copy a summon&apos;s infusions, for applying them to other summons.</content>
+	<content contentuid="h584bb6dbg88bfg412ega2fcg4965083041a9" Source="" Key="LLSUMMONINF_Buttons_RemoveInfusionSkills">Remove Copy/Apply Infusions Skills</content>
+	<content contentuid="h9280fb14g0827g47f4gb1c3gdb042362a447" Source="" Key="LLSUMMONINF_Buttons_RemoveInfusionSkills_Description">Remove the copy and apply infusion skills, if added to this character.</content>
 	<content contentuid="h614a9dbcg9b81g4df4gae85g65d6f6d94fde" Source="" Key="LLSUMMONINF_COPY_INFUSIONS_DisplayName">Copy Infusions</content>
 	<content contentuid="h19f4e1a2g14e5g4bc5g8147g4d143eec6498" Source="" Key="LLSUMMONINF_InstantSummonCooldownDisabled">Instant Summon Cooldown Outside of Combat</content>
 	<content contentuid="h66ef256dg7ecag4b76g8f01g33fbec774e8b" Source="" Key="LLSUMMONINF_InstantSummonCooldownDisabled_Description">If enabled, summons skills will have no cooldown outside of combat.</content>
