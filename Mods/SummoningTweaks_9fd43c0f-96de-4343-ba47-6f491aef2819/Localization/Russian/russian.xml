@@ -60,7 +60,7 @@
 	<content contentuid="hcd12d23eg3e55g4299g8f40gd7f52a21e036">&lt;b&gt;(Disabled - LeaderLib Required) &lt;/b&gt;Add &quot;Control Summon&quot; Skill.</content>
 	<content contentuid="hcde1ede8g60e1g4a6cg8d00g9ad0468a863b">&lt;font color=&apos;#FF0000&apos;&gt;Summon a creature before invoking the contract!&lt;/font&gt;</content>
 	<content contentuid="hd0065be4g937bg46f8gb4d7g724a27f72a18">Invoke Contract</content>
-	<content contentuid="hd239fbc6gc473g4ac0ga32fgdee44b1fb438">Applies copied infusions to targeted summons within a [1]m radius within [2]m.&lt;br&gt;&lt;font color=&apos;#FF6347&apos;&gt;Only infusions with matching, memorized skills are applied.&lt;/font&gt;</content>
+	<content contentuid="hd239fbc6gc473g4ac0ga32fgdee44b1fb438">Applies copied infusions to targeted summons within a [1] radius within [2].&lt;br&gt;&lt;font color=&apos;#FF6347&apos;&gt;Only infusions with matching, memorized skills are applied.&lt;/font&gt;</content>
 	<content contentuid="hd242f631gaaa6g4b48g998fg034b24ddc6eb">Autonomous</content>
 	<content contentuid="hd443899ag5597g4b74gaf50g7c09bacdd425">Settings Menu</content>
 	<content contentuid="hd47791fcg5411g44cegaee7geafe78573ad3">Add Dismiss Summon Skill</content>
@@ -76,7 +76,7 @@
 	<content contentuid="he9bcccc6g24e2g4f73g87cfg6a922115b907">Tiny Devil&apos;s Codex</content>
 	<content contentuid="hea75d5b5g9a75g470dga772g56f2af803ae0">Copies and stores the current infusions on a summon.&lt;br&gt;&lt;font color=&apos;#FF6347&apos;&gt;Only infusions with matching, memorized skills are stored.&lt;/font&gt;&lt;br&gt;Cast again on another summon to override the previously copied infusions.</content>
 	<content contentuid="heaf1bc0ag4bfag4532g9b94g20b5d0b522b6">Increase Limit by +1</content>
-	<content contentuid="heeb4229bg5807g4071ga91cg43b590bdba11">Applies copied infusions to targeted &lt;font color=&apos;#c7a758&apos;&gt;Incarnates&lt;/font&gt; within a [1]m radius within [2]m.&lt;br&gt;&lt;font color=&apos;#FF6347&apos;&gt;Only infusions with matching, memorized skills are applied.&lt;/font&gt;</content>
+	<content contentuid="heeb4229bg5807g4071ga91cg43b590bdba11">Applies copied infusions to targeted &lt;font color=&apos;#c7a758&apos;&gt;Incarnates&lt;/font&gt; within a [1] radius within [2].&lt;br&gt;&lt;font color=&apos;#FF6347&apos;&gt;Only infusions with matching, memorized skills are applied.&lt;/font&gt;</content>
 	<content contentuid="hf0dc5a29g9074g44c2g8730g710c1fbe3870">&lt;font color=&apos;#00FF00&apos;&gt;Infusions Copied&lt;/font&gt;</content>
 	<content contentuid="hf5bdd15ag5069g4705gbeebg1bb5cedda2ab">Max Summons: [LLSUMMONINF_MaxSummonLimit_89adccef-225e-47ab-8f10-5add6644ec3b]&lt;br&gt;&lt;i&gt;Note: Changing the limit will destroy most of your current summons.&lt;/i&gt;</content>
 	<content contentuid="hf7887dedgf86eg45d1g8024g4d9c57665643">Commands Menu</content>
