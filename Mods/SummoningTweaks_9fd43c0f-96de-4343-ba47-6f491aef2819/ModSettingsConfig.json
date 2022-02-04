@@ -1,0 +1,32 @@
+{
+	"TitleColor": "#C12BFD",
+	"Data": {
+		"Flags": [
+			{
+				"Type" : "Global",
+				"Entries" : [
+					"LLSUMMONINF_InstantSummonCooldownDisabled"
+				]
+			}
+		],
+		"Variables": {
+			"NamePrefix" : "LLSUMMONINF_Variables_",
+			"Entries" : {
+				"MaxSummons" : {
+					"Max" : 99,
+					"Min" : 1,
+					"Value": 3,
+					"Increment": 1
+				}
+			}
+		}
+	},
+	"MenuOrder": [
+		{
+			"Entries" : [
+				"MaxSummons",
+				"LLSUMMONINF_InstantSummonCooldownDisabled"
+			]
+		}
+	]
+}

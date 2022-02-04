@@ -3,9 +3,28 @@ PersistentVars = {
 	SummonAmountPerAbility = 1
 }
 
----@type ModSettings
-Settings = nil
-local initSettings = Ext.Require("LeaderLibGlobalSettings.lua")
+local checkSessionLoaded = false
+
+local function RegisterSettingsListener()
+	if Mods.LeaderLib ~= nil then
+		Mods.LeaderLib.RegisterListener("ModSettingsLoaded", ModuleUUID, function ()
+			---@type ModSettings
+			local settings = Mods.LeaderLib.SettingsManager.GetMod(ModuleUUID, false)
+			if settings and settings.Global.Variables.MaxSummons then
+				settings.Global.Variables.MaxSummons:AddListener(function (id, value)
+					PersistentVars.MaxSummons = value
+					for player in Mods.LeaderLib.GameHelpers.Character.GetPlayers() do
+						UpdateMaxSummons(player.MyGuid)
+					end
+				end)
+			end
+		end)
+	else
+		checkSessionLoaded = true
+	end
+end
+
+RegisterSettingsListener()
 
 Ext.RegisterListener("SessionLoaded", function()
 	if PersistentVars == nil then
@@ -21,13 +40,8 @@ Ext.RegisterListener("SessionLoaded", function()
 			PersistentVars.SummonAmountPerAbility = 1
 		end
 	end
-	if Mods.LeaderLib ~= nil then
-		local b,result = xpcall(initSettings, debug.traceback)
-		if not b then
-			Ext.PrintError(result)
-		else
-			Settings = result
-		end
+	if checkSessionLoaded then
+		RegisterSettingsListener()
 	end
 end)
 
