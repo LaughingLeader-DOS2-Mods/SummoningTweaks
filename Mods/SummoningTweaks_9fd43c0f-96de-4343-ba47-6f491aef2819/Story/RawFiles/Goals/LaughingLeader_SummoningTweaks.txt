@@ -122,13 +122,6 @@ NRD_ModCall("LLSummoningTweaks", "ApplyInfusions", _UUID1, _UUID2);
 PROC
 LLSUMMONINF_OnSummonAdded((CHARACTERGUID)_Player, (CHARACTERGUID)_Summon)
 AND
-CharacterIsPartyFollower(_Player, 0)
-THEN
-LLSUMMONINF_TryAddContract(_Player);
-
-PROC
-LLSUMMONINF_OnSummonAdded((CHARACTERGUID)_Player, (CHARACTERGUID)_Summon)
-AND
 DB_IsPlayer(_Player)
 THEN
 DB_LLSUMMONINF_Temp_ActiveSummons(_Player, _Summon);
@@ -178,7 +171,6 @@ THEN
 SetVarString(_Player, "LLSUMMONINF_LastSummonTemplate", _Template);
 LLSUMMONINF_OnSummonAdded(_Player, _Summon);
 //END_REGION
-
 
 EXITSECTION
 

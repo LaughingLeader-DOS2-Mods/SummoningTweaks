@@ -40,6 +40,13 @@ AND
 NOT HasActiveStatus(_Player, "LLSUMMONINF_MAX_SUMMONS_INC", 1)
 THEN
 SetStoryEvent(_Player, "LLSUMMONINF_IncreaseMaxSummons");
+
+PROC
+LLSUMMONINF_OnSummonAdded((CHARACTERGUID)_Player, (CHARACTERGUID)_Summon)
+AND
+CharacterIsPartyFollower(_Player, 0)
+THEN
+LLSUMMONINF_TryAddContract(_Player);
 //END_REGION
 
 //REGION INITIALIZE_BOOKS
