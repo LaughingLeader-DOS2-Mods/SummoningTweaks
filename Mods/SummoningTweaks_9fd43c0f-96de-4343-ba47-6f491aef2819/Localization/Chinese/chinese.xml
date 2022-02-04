@@ -21,7 +21,7 @@
 	<content contentuid="hcde1ede8g60e1g4a6cg8d00g9ad0468a863b" Source="" Key="LLSUMMONINF_StatusText_InvokeContractInvalid">&lt;font color=&apos;#FF0000&apos;&gt;Summon a creature before invoking the contract!&lt;/font&gt;</content>
 	<content contentuid="h130f3b27g8e7ag4a82g9ea5g4c94a45c8124" Source="" Key="LLSUMMONINF_StatusText_SettingsBookBlocked">&lt;font color=&apos;#FF0000&apos;&gt;You can&apos;t open the settings menu in combat!</content>
 	<content contentuid="h7581fad5ga7f0g43aeg9062gd4be9023b4ac" Source="" Key="LLSUMMONINF_Variables_MaxSummons">Max Summons</content>
-	<content contentuid="hddcc0547g30deg44c5ga7b6gae50294c25d6" Source="" Key="LLSUMMONINF_Variables_MaxSummons_Description">The total max summon amount for players.</content>
+	<content contentuid="hddcc0547g30deg44c5ga7b6gae50294c25d6" Source="" Key="LLSUMMONINF_Variables_MaxSummons_Description">The total max summon limit for players.</content>
 	<content contentuid="h9da360efga333g4b98g9c43g202f2019172f" Source="">Read Codex</content>
 	<content contentuid="he82d5b8bg5ea3g4068g8f77gd2ea31e73f2d" Source="">Open Settings Menu</content>
 	<content contentuid="hd0065be4g937bg46f8gb4d7g724a27f72a18" Source="">Invoke Contract</content>

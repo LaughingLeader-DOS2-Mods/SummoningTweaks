@@ -1,5 +1,5 @@
 Key	Content	Handle
 LLSUMMONINF_Variables_MaxSummons	Max Summons	h7581fad5ga7f0g43aeg9062gd4be9023b4ac
-LLSUMMONINF_Variables_MaxSummons_Description	The total max summon amount for players.	hddcc0547g30deg44c5ga7b6gae50294c25d6
+LLSUMMONINF_Variables_MaxSummons_Description	The total max summon limit for players.	hddcc0547g30deg44c5ga7b6gae50294c25d6
 LLSUMMONINF_InstantSummonCooldownDisabled	Instant Summon Cooldown Outside of Combat	h19f4e1a2g14e5g4bc5g8147g4d143eec6498
 LLSUMMONINF_InstantSummonCooldownDisabled_Description	If enabled, summons skills will have no cooldown outside of combat.	h66ef256dg7ecag4b76g8f01g33fbec774e8b
