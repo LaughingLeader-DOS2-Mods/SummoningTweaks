@@ -951,166 +951,6 @@ DB_LLMIME_Mimicking_Blacklist_Skills("SummoningTweaks", "Target_LLSUMMONINF_Copy
 DB_LLMIME_Mimicking_Blacklist_Skills("SummoningTweaks", "Target_LLSUMMONINF_ApplyInfusions_LarianModVersion");
 //END_REGION
 
-//REGION AI_CONTROL
-QRY
-LLSUMMONINF_QRY_CanMakeAutonomous((CHARACTERGUID)_Source, (CHARACTERGUID)_Target)
-AND
-CharacterGetOwner(_Target, _Source)
-THEN
-DB_NOOP(1);
-
-QRY
-LLSUMMONINF_QRY_CanMakeAutonomous((CHARACTERGUID)_Source, (CHARACTERGUID)_Target)
-AND
-CharacterGetReservedUserID(_Source, _ID)
-AND
-CharacterGetReservedUserID(_Target, _ID)
-THEN
-DB_NOOP(1);
-
-QRY
-LLSUMMONINF_QRY_StillHasControllingCharacter((CHARACTERGUID)_Source, (CHARACTERGUID)_Target)
-AND
-IsTagged(_Source, "LLSUMMONINF_Autonomous", 0)
-AND
-_Target != _Source
-THEN
-DB_NOOP(1);
-
-QRY
-LLSUMMONINF_QRY_StillHasControllingCharacter((CHARACTERGUID)_Source, (CHARACTERGUID)_Target)
-AND
-DB_IsPlayer(_Player)
-AND
-IsTagged(_Player, "LLSUMMONINF_Autonomous", 0)
-THEN
-DB_NOOP(1);
-
-/*
-IF
-CharacterStatusApplied(_Char, "LLSUMMONINF_AUTONOMOUS_TOGGLE", (CHARACTERGUID)_Source)
-AND
-NOT LLSUMMONINF_QRY_StillHasControllingCharacter(_Source, _Char)
-THEN
-ShowNotification(_Source, "LLSUMMONINF_Notification_LastControllableCharacter");
-*/
-
-IF
-CharacterStatusApplied(_Char, "LLSUMMONINF_AUTONOMOUS_TOGGLE", (CHARACTERGUID)_Source)
-AND
-LLSUMMONINF_QRY_CanMakeAutonomous(_Source, _Char)
-//AND
-//LLSUMMONINF_QRY_StillHasControllingCharacter(_Source, _Char)
-AND
-IsTagged(_Char, "LLSUMMONINF_Autonomous", _HasTag)
-THEN
-LLSUMMONINF_ToggleTag(_Char, "LLSUMMONINF_Autonomous", _HasTag);
-
-PROC
-LLSUMMONINF_ToggleTag((CHARACTERGUID)_Char, (STRING)_Tag, 0)
-THEN
-SetTag(_Char, "LLSUMMONINF_Autonomous");
-
-PROC
-LLSUMMONINF_ToggleTag((CHARACTERGUID)_Char, (STRING)_Tag, 1)
-THEN
-ClearTag(_Char, "LLSUMMONINF_Autonomous");
-
-IF
-CharacterStatusRemoved(_Char, "LLSUMMONINF_AUTONOMOUS", _)
-AND
-IsTagged(_Char, "LLSUMMONINF_Autonomous", 1)
-AND
-CharacterIsDead(_Char, 0)
-THEN
-ProcObjectTimer(_Char, "LLSUMMONINF_Timers_ReapplyAutonomous", 250);
-
-PROC
-ProcObjectTimerFinished((CHARACTERGUID)_Char, "LLSUMMONINF_Timers_ReapplyAutonomous")
-AND
-IsTagged(_Char, "LLSUMMONINF_Autonomous", 1)
-AND
-NOT GetStatusTurns(_Char, "LLSUMMONINF_AUTONOMOUS", -1)
-THEN
-ApplyStatus(_Char, "LLSUMMONINF_AUTONOMOUS", -1.0, 1, _Char);
-
-IF
-CharacterStatusRemoved(_Char, "LLSUMMONINF_AI_CONTROL", _)
-AND
-IsTagged(_Char, "LLSUMMONINF_Autonomous", 1)
-AND
-CharacterIsDead(_Char, 0)
-AND
-CharacterIsInCombat(_Char, 1)
-THEN
-ProcObjectTimer(_Char, "LLSUMMONINF_Timers_ReapplyAiControl", 250);
-
-PROC
-ProcObjectTimerFinished((CHARACTERGUID)_Char, "LLSUMMONINF_Timers_ReapplyAiControl")
-AND
-IsTagged(_Char, "LLSUMMONINF_Autonomous", 1)
-AND
-NOT GetStatusTurns(_Char, "LLSUMMONINF_AI_CONTROL", -1)
-THEN
-ApplyStatus(_Char, "LLSUMMONINF_AI_CONTROL", -1.0, 1, _Char);
-
-IF
-ObjectEnteredCombat(_Char, _)
-AND
-IsTagged(_Char, "LLSUMMONINF_Autonomous", 1)
-THEN
-SetStoryEvent(_Char, "LLSUMMONINF_Autonomous_CombatStarted");
-
-IF
-ObjectLeftCombat(_Char, _)
-AND
-IsTagged(_Char, "LLSUMMONINF_Autonomous", 1)
-THEN
-SetStoryEvent(_Char, "LLSUMMONINF_Autonomous_CombatEnded");
-
-IF
-ObjectWasTagged((CHARACTERGUID)_Char, "LLSUMMONINF_Autonomous")
-THEN
-SetStoryEvent(_Char, "LLSUMMONINF_AutonomousSet");
-
-IF
-ObjectLostTag((CHARACTERGUID)_Char, "LLSUMMONINF_Autonomous")
-THEN
-SetStoryEvent(_Char, "LLSUMMONINF_AutonomousRemoved");
-
-//Failsafe
-IF
-GameStarted(_Region, _)
-AND
-IsGameLevel(_Region, 1)
-AND
-DB_IsPlayer(_Char)
-AND
-HasActiveStatus(_Char, "LLSUMMONINF_AI_CONTROL", 1)
-AND
-NOT DB_CombatCharacters(_Char, _)
-THEN
-TimerCancel("LLSUMMONINF_Timers_FixAiControl");
-TimerLaunch("LLSUMMONINF_Timers_FixAiControl", 250);
-
-IF
-TimerFinished("LLSUMMONINF_Timers_FixAiControl")
-THEN
-IterateParties("LLSUMMONINF_AutomonousAiControlCheck");
-
-IF
-StoryEvent((CHARACTERGUID)_Char, "LLSUMMONINF_AutomonousAiControlCheck")
-AND
-HasActiveStatus(_Char, "LLSUMMONINF_AI_CONTROL", 1)
-AND
-//CharacterIsInCombat(_Char, 0)
-NOT DB_CombatCharacters(_Char, _)
-THEN
-DebugBreak("[SummoningTweaks] Removing (LLSUMMONINF_AI_CONTROL) status influence from a character not in combat.");
-SetStoryEvent(_Char, "LLSUMMONINF_Autonomous_CombatEnded");
-
-//END_REGION
-
 //REGION DEBUG
 IF
 TextEventSet("llsummon_init")
@@ -1165,6 +1005,20 @@ TimerLaunch("LLSUMMONINF_Timers_InitPartyLeader", 500);
 TimerCancel("LLSUMMONINF_Timers_FixAiControl");
 TimerLaunch("LLSUMMONINF_Timers_FixAiControl", 250);
 //END_REGION
+
+//REGION COOLDOWN
+IF
+SkillCast(_Player, _Skill, "summon", _)
+AND
+DB_IsPlayer(_Player)
+AND
+GlobalGetFlag("LLSUMMONINF_InstantSummonCooldownDisabled", 0)
+AND
+CharacterIsInCombat(_Player, 0)
+THEN
+CharacterResetCooldowns(_Player);
+//END_REGION
+
 EXITSECTION
 ENDEXITSECTION
 ParentTargetEdge "LaughingLeader_SummoningTweaks"
