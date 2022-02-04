@@ -43,8 +43,11 @@ end
 
 RegisterSettingsListener()
 
-local _infusionStatuses = {}
-local _largeIncarnateInfusionStatus = {}
+InfusionCopyingData = {
+	Skills = {},
+	Statuses = {},
+	LargeInfusionStatus = {}
+}
 
 Ext.RegisterListener("SessionLoaded", function()
 	if PersistentVars == nil then
@@ -61,16 +64,34 @@ Ext.RegisterListener("SessionLoaded", function()
 	end
 
 	for i,v in pairs(Ext.GetStatEntries("StatusData")) do
-		local stat = Ext.GetStat(v)
-		if string.find(string.lower(v), "infusion") then
-			_infusionStatuses[v] = true
-		else
-			if string.find(string.lower(stat.StatsId), "infusion") then
-				_infusionStatuses[v] = true
+		if not string.find(v, "LLSUMMONINF") then
+			local stat = Ext.GetStat(v)
+			if string.find(string.lower(v), "infusion") then
+				InfusionCopyingData.Statuses[v] = true
+			else
+				if string.find(string.lower(stat.StatsId), "infusion") then
+					InfusionCopyingData.Statuses[v] = true
+				end
+			end
+			if InfusionCopyingData.Statuses[stat.Using] then
+				InfusionCopyingData.LargeInfusionStatus[stat.Using] = v
 			end
 		end
-		if _infusionStatuses[stat.Using] then
-			_largeIncarnateInfusionStatus[stat.Using] = v
+	end
+
+	for _,id in pairs(Ext.GetStatEntries("SkillData")) do
+		if id ~= "Summon_Incarnate" then
+			local stat = Ext.GetStat(id)
+			if stat.SkillProperties then
+				for _,prop in pairs(stat.SkillProperties) do
+					if prop.Type == "Status" and InfusionCopyingData.Statuses[prop.Action] then
+						if InfusionCopyingData.Skills[prop.Action] == nil then
+							InfusionCopyingData.Skills[prop.Action] = {}
+						end
+						InfusionCopyingData.Skills[prop.Action][id] = true
+					end
+				end
+			end
 		end
 	end
 end)
@@ -136,15 +157,29 @@ Ext.RegisterOsirisListener("SkillCast", 4, "after", function (char, skill, skill
 			RefreshSkill(char, skill)
 		else
 			local stat = Ext.GetStat(skill)
-			for _,v in pairs(stat.SkillProperties) do
-				if v.Type == "Summon" then
-					RefreshSkill(char, skill)
-					break
+			if stat.SkillProperties then
+				for _,v in pairs(stat.SkillProperties) do
+					if v.Type == "Summon" then
+						RefreshSkill(char, skill)
+						break
+					end
 				end
 			end
 		end
 	end
 end)
+
+local function OwnerHasInfusionSkill(owner, statusId)
+	local skills = InfusionCopyingData.Skills[statusId]
+	if skills then
+		for id,b in pairs(skills) do
+			if CharacterHasSkill(owner, id) == 1 then
+				return true
+			end
+		end
+	end
+	return false
+end
 
 function CopyInfusions(owner, summon)
 	local summon = Ext.GetCharacter(summon)
@@ -152,7 +187,7 @@ function CopyInfusions(owner, summon)
 		local success = false
 		PersistentVars.CopiedInfusions[owner] = {}
 		for _,statusId in pairs(summon:GetStatuses()) do
-			if _infusionStatuses[statusId] then
+			if InfusionCopyingData.Statuses[statusId] and OwnerHasInfusionSkill(owner, statusId) then
 				PersistentVars.CopiedInfusions[owner][statusId] = true
 				success = true
 			end
@@ -171,7 +206,7 @@ function ApplyInfusions(owner, summon)
 		for id,b in pairs(statusIds) do
 			local targetStatus = id
 			if IsTagged(summon, "INCARNATE_G") == 1 then
-				local largeVersion = _largeIncarnateInfusionStatus[id]
+				local largeVersion = InfusionCopyingData.LargeInfusionStatus[id]
 				if largeVersion then
 					targetStatus = largeVersion
 				end

@@ -39,10 +39,11 @@ function AddInfusionSkills(netid)
 			--Pet Power
 			if Ext.IsModLoaded("d2507d43-efce-48b8-ba5e-5dd136c715a7") then
 				CharacterAddSkill(player.MyGuid, "Target_LLSUMMONINF_CopyInfusions_LarianModVersion", 1)
+				CharacterAddSkill(player.MyGuid, "Target_LLSUMMONINF_ApplyInfusions_LarianModVersion", 1)
 			else
 				CharacterAddSkill(player.MyGuid, "Target_LLSUMMONINF_CopyInfusions", 1)
+				CharacterAddSkill(player.MyGuid, "Target_LLSUMMONINF_ApplyInfusions", 1)
 			end
-			CharacterAddSkill(player.MyGuid, "Target_LLSUMMONINF_ApplyInfusions", 1)
 		end
 	end
 end
@@ -55,6 +56,7 @@ function RemoveInfusionSkills(netid)
 		local player = Ext.GetCharacter(netid)
 		if player then
 			CharacterRemoveSkill(player.MyGuid, "Target_LLSUMMONINF_CopyInfusions_LarianModVersion")
+			CharacterRemoveSkill(player.MyGuid, "Target_LLSUMMONINF_ApplyInfusions_LarianModVersion")
 			CharacterRemoveSkill(player.MyGuid, "Target_LLSUMMONINF_CopyInfusions")
 			CharacterRemoveSkill(player.MyGuid, "Target_LLSUMMONINF_ApplyInfusions")
 		end

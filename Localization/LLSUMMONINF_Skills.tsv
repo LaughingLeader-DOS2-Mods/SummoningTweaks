@@ -1,7 +1,7 @@
 Key	Content	Handle
-Target_LLSUMMONINF_ApplyInfusions_Description	Applies copied infusions to targeted <font color='#c7a758'>Incarnates</font> within a [1]m radius within [2]m.<br><font color='#FF6347'>Only infusions with matching, memorized skills are applied.</font>	heeb4229bg5807g4071ga91cg43b590bdba11
+Target_LLSUMMONINF_ApplyInfusions_Description	Applies copied infusions to targeted <font color='#c7a758'>Incarnates</font> within a [1] radius within [2].<br><font color='#FF6347'>Only infusions with matching, memorized skills are applied.</font>	heeb4229bg5807g4071ga91cg43b590bdba11
 Target_LLSUMMONINF_ApplyInfusions_DisplayName	Apply Infusions	h0d0018a8gdc26g4056g90d4g05cf52782376
-Target_LLSUMMONINF_ApplyInfusions_LarianModVersion_Description	Applies copied infusions to targeted summons within a [1]m radius within [2]m.<br><font color='#FF6347'>Only infusions with matching, memorized skills are applied.</font>	hd239fbc6gc473g4ac0ga32fgdee44b1fb438
+Target_LLSUMMONINF_ApplyInfusions_LarianModVersion_Description	Applies copied infusions to targeted summons within a [1] radius within [2].<br><font color='#FF6347'>Only infusions with matching, memorized skills are applied.</font>	hd239fbc6gc473g4ac0ga32fgdee44b1fb438
 Target_LLSUMMONINF_CastLastSummon_Description	Summon another creature you last conjured at the target location.<br><font color='#FF6347'>Totems are ignored by the contract.</font>	h550403f2g8fd1g4dbagaeaeg833e29971c90
 Target_LLSUMMONINF_CastLastSummon_DisplayName	Invoke Contract	ha59f04c9geeaeg4c42ga58fg71c1b43ae099
 Target_LLSUMMONINF_CopyInfusions_Description	Copies and stores the current infusions on an <font color='#c7a758'>Incarnate</font>.<br><font color='#FF6347'>Only infusions with matching, memorized skills are stored.</font><br>Cast again on another Incarnate to override the previously copied infusions.	h9424aa76g9f77g4c3cgac96g6c8167daad7e
