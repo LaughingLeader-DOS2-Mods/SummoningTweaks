@@ -1,0 +1,13 @@
+Key	Content	Handle
+Target_LLSUMMONINF_ApplyInfusions_Description	Applies copied infusions to targeted <font color='#c7a758'>Incarnates</font> within a [1]m radius within [2]m.<br><font color='#FF6347'>Only infusions with matching, memorized skills are applied.</font>	heeb4229bg5807g4071ga91cg43b590bdba11
+Target_LLSUMMONINF_ApplyInfusions_DisplayName	Apply Infusions	h0d0018a8gdc26g4056g90d4g05cf52782376
+Target_LLSUMMONINF_ApplyInfusions_LarianModVersion_Description	Applies copied infusions to targeted summons within a [1]m radius within [2]m.<br><font color='#FF6347'>Only infusions with matching, memorized skills are applied.</font>	hd239fbc6gc473g4ac0ga32fgdee44b1fb438
+Target_LLSUMMONINF_CastLastSummon_Description	Summon another creature you last conjured at the target location.<br><font color='#FF6347'>Totems are ignored by the contract.</font>	h550403f2g8fd1g4dbagaeaeg833e29971c90
+Target_LLSUMMONINF_CastLastSummon_DisplayName	Invoke Contract	ha59f04c9geeaeg4c42ga58fg71c1b43ae099
+Target_LLSUMMONINF_CopyInfusions_Description	Copies and stores the current infusions on an <font color='#c7a758'>Incarnate</font>.<br><font color='#FF6347'>Only infusions with matching, memorized skills are stored.</font><br>Cast again on another Incarnate to override the previously copied infusions.	h9424aa76g9f77g4c3cgac96g6c8167daad7e
+Target_LLSUMMONINF_CopyInfusions_DisplayName	Copy Infusions	h05c89a8dg5b2cg4552g93d3g7b698ba024f4
+Target_LLSUMMONINF_CopyInfusions_LarianModVersion_Description	Copies and stores the current infusions on a summon.<br><font color='#FF6347'>Only infusions with matching, memorized skills are stored.</font><br>Cast again on another summon to override the previously copied infusions.	hea75d5b5g9a75g470dga772g56f2af803ae0
+Target_LLSUMMONINF_DismissSummon_Description	Dismiss targeted summons you own within a [1] area of effect.	h22e2a9e7g46bbg4b36ga88bg498bfe02588f
+Target_LLSUMMONINF_DismissSummon_DisplayName	Dismiss Summon	h4f0102b1g9f5ag41f5g8d86ga05591ac9921
+Target_LLSUMMONINF_ToggleAiControl_Description	Commands the targeted (owned) character to control their own actions in combat.<br><font color='#FFDD00'>Toggles this behavior on or off, depending on the target's current behavior.</font><br><font color='#33FF33'>This behavior can be toggled for summons, party members you control, and even yourself.</font>	h37b0c9cdg59b9g4faega680gb968651d8c2a
+Target_LLSUMMONINF_ToggleAiControl_DisplayName	<font color='#FF33FF'>Toggle Autonomous Behavior</font>	hc51f00dfg2fe8g4c4agb3e4gcf71149b1c5c

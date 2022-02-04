@@ -1,0 +1,9 @@
+Key	Content	Handle
+LLSUMMONINF_Notification_AlreadyHaveDemonCodex	<font color='#FF0000'>You already have a Tiny Demon's Codex!</font>	h9c848462g2092g4898g9ed9g43b0a5841769
+LLSUMMONINF_Notification_InfusionsCleared	<font color='#FF4500'>Stored Infusions Cleared</font>	h01b4e350gb6a6g48cagb1ecg41cdf173a688
+LLSUMMONINF_Notification_InfusionsStored	<font color='#00FF00'>Infusions Copied</font>	hf0dc5a29g9074g44c2g8730g710c1fbe3870
+LLSUMMONINF_Notification_LastControllableCharacter	<font color='#FF0000'>Autonomous behavior skipped for safety reasons.</font>	h0ec18240gd0fcg4bf6gb376g73bbd43ef3de
+LLSUMMONINF_Notification_NoInfusionsStored	<font color='#FF0000'>No Infusions Stored</font>	h15478bfdgc814g4f0agb8bdg5aa8daa180f0
+LLSUMMONINF_StatusText_InvokeContractBlocked	<font color='#FF0000'>*You can't use the contract in combat!*</font>	h1d949fb3g4123g4d6egae56g6f0c8dc67147
+LLSUMMONINF_StatusText_InvokeContractInvalid	<font color='#FF0000'>Summon a creature before invoking the contract!</font>	hcde1ede8g60e1g4a6cg8d00g9ad0468a863b
+LLSUMMONINF_StatusText_SettingsBookBlocked	<font color='#FF0000'>You can't open the settings menu in combat!	h130f3b27g8e7ag4a82g9ea5g4c94a45c8124

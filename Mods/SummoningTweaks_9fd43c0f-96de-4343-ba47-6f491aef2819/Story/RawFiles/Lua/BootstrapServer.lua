@@ -8,6 +8,19 @@ Settings = nil
 local initSettings = Ext.Require("LeaderLibGlobalSettings.lua")
 
 Ext.RegisterListener("SessionLoaded", function()
+	if PersistentVars == nil then
+		PersistentVars = {
+			MaxSummons = 3,
+			SummonAmountPerAbility = 1
+		}
+	else
+		if PersistentVars.MaxSummons == nil then
+			PersistentVars.MaxSummons = 3
+		end
+		if PersistentVars.SummonAmountPerAbility == nil then
+			PersistentVars.SummonAmountPerAbility = 1
+		end
+	end
 	if Mods.LeaderLib ~= nil then
 		local b,result = xpcall(initSettings, debug.traceback)
 		if not b then
@@ -39,14 +52,48 @@ end
 
 function UpdateMaxSummons(uuid)
 	local player = Ext.GetCharacter(uuid)
-	Ext.EnableExperimentalPropertyWrites()
-	player.Stats.MaxSummons = PersistentVars.MaxSummons
+	if player then
+		if player.Stats.MaxSummons ~= PersistentVars.MaxSummons then
+			local boost = PersistentVars.MaxSummons - player.Stats.DynamicStats[1].MaxSummons
+			if boost > 0 then
+				NRD_CharacterSetPermanentBoostInt(uuid, "MaxSummons", boost)
+				CharacterAddAttribute(uuid, "Dummy", 0)
+			end
+		end
+	end
 end
 
 function ClearMaxSummons(uuid)
-	local player = Ext.GetCharacter(uuid)
-	Ext.EnableExperimentalPropertyWrites()
-	player.Stats.MaxSummons = 0
+	NRD_CharacterSetPermanentBoostInt(uuid, "MaxSummons", 0)
+	CharacterAddAttribute(uuid, "Dummy", 0)
 end
 
 Ext.AddPathOverride("Public/SummoningTweaks_9fd43c0f-96de-4343-ba47-6f491aef2819/Scripts/LLSUMMONINF_Main.gameScript", "Public/SummoningTweaks_9fd43c0f-96de-4343-ba47-6f491aef2819/Scripts/LLSUMMONINF_MainDisabled.gameScript")
+
+local function RefreshSkill(char, skill)
+	NRD_SkillSetCooldown(char, skill, 0.0)
+	if Mods.LeaderLib then
+		Mods.LeaderLib.Timer.StartOneshot("", 250, function()
+			NRD_SkillSetCooldown(char, skill, 0)
+		end)
+	end
+end
+
+Ext.RegisterOsirisListener("SkillCast", 4, "after", function (char, skill, skillType, skillElement)
+	if CharacterIsInCombat(char) == 0
+	and CharacterIsPlayer(char) == 1
+	and GlobalGetFlag("LLSUMMONINF_InstantSummonCooldownDisabled") == 0
+	then
+		if skillType == "summon" then
+			RefreshSkill(char, skill)
+		else
+			local stat = Ext.GetStat(skill)
+			for _,v in pairs(stat.SkillProperties) do
+				if v.Type == "Summon" then
+					RefreshSkill(char, skill)
+					break
+				end
+			end
+		end
+	end
+end)

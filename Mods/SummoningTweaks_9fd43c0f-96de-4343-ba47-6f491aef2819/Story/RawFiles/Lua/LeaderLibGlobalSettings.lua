@@ -11,20 +11,26 @@ local function InitSettings()
 	---@type ModSettings
 	local ModSettings = Mods.LeaderLib.Classes.ModSettingsClasses.ModSettings
 	settings = ModSettings:Create("9fd43c0f-96de-4343-ba47-6f491aef2819")
-	settings.Global:AddFlags({
-		"LLSUMMONINF_InvokeContractAutoAddDisabled",
-		"LLSUMMONINF_ScaleCapWithSummoningLevel",
-	})
-	settings.Global:AddVariable("MaxSummons", 3)
-	settings.Global:AddVariable("SummonAmountPerAbility", 1)
+	settings.Global:AddLocalizedFlag("LLSUMMONINF_InstantSummonCooldownDisabled")
+	settings.Global:AddLocalizedVariable("MaxSummons", "LLSUMMONINF_Variables_MaxSummons", 3)
+	--settings.Global:AddLocalizedVariable("SummonAmountPerAbility", "LLSUMMONINF_Variables_SummonAmountPerAbility", 1)
 
-	---@param self SettingsData
-	---@param name string
-	---@param data VariableData
-	settings.UpdateVariable = function(self, name, data)
-		
-	end
 	Mods.LeaderLib.SettingsManager.AddSettings(settings)
+
+	if Ext.IsServer() then
+		local function ApplyToPersistentVars(id, value)
+			if PersistentVars[id] then
+				PersistentVars[id] = value
+			end
+			for player in Mods.LeaderLib.GameHelpers.Character.GetPlayers() do
+				UpdateMaxSummons(player.MyGuid)
+			end
+		end
+	
+		settings.Global.Variables.MaxSummons:AddListener(ApplyToPersistentVars)
+		--settings.Global.Variables.SummonAmountPerAbility:AddListener(ApplyToPersistentVars)
+	end
+
 	return settings
 end
 
