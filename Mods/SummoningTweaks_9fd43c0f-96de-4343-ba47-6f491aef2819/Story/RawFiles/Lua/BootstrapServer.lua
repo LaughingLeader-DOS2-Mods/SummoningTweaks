@@ -1,3 +1,5 @@
+Ext.Require("Shared.lua")
+
 PersistentVars = {
 	MaxSummons = 3,
 	SummonAmountPerAbility = 1
@@ -12,9 +14,11 @@ local function RegisterSettingsListener()
 			local settings = Mods.LeaderLib.SettingsManager.GetMod(ModuleUUID, false)
 			if settings and settings.Global.Variables.MaxSummons then
 				settings.Global.Variables.MaxSummons:AddListener(function (id, value)
-					PersistentVars.MaxSummons = value
-					for player in Mods.LeaderLib.GameHelpers.Character.GetPlayers() do
-						UpdateMaxSummons(player.MyGuid)
+					if Ext.OsirisIsCallable() then
+						PersistentVars.MaxSummons = value
+						for player in Mods.LeaderLib.GameHelpers.Character.GetPlayers() do
+							UpdateMaxSummons(player.MyGuid)
+						end
 					end
 				end)
 			end

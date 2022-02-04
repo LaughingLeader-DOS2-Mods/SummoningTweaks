@@ -19,7 +19,19 @@
 					"Increment": 1
 				}
 			}
-		}
+		},
+		"Buttons": [
+			{
+				"ID" : "AddInfusionSkills",
+				"NamePrefix" : "LLSUMMONINF_Buttons_",
+				"Callback" : "AddInfusionSkills_Button"
+			},
+			{
+				"ID" : "RemoveInfusionSkills",
+				"NamePrefix" : "LLSUMMONINF_Buttons_",
+				"Callback" : "RemoveInfusionSkills_Button"
+			}
+		]
 	},
 	"MenuOrder": [
 		{
