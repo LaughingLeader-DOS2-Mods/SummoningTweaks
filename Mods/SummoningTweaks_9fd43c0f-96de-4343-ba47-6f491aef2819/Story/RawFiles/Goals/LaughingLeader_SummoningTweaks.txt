@@ -99,6 +99,24 @@ AND
 GetUUID(_Player, _UUID)
 THEN
 NRD_ModCall("LLSummoningTweaks", "UpdateMaxSummons", _UUID);
+
+IF
+CharacterStatusApplied(_Target, "LLSUMMONINF_COPY_INFUSIONS", (CHARACTERGUID)_Summoner)
+AND
+GetUUID(_Summoner, _UUID1)
+AND
+GetUUID(_Target, _UUID2)
+THEN
+NRD_ModCall("LLSummoningTweaks", "CopyInfusions", _UUID1, _UUID2);
+
+IF
+CharacterStatusApplied(_Target, "LLSUMMONINF_APPLY_INFUSIONS", (CHARACTERGUID)_Summoner)
+AND
+GetUUID(_Summoner, _UUID1)
+AND
+GetUUID(_Target, _UUID2)
+THEN
+NRD_ModCall("LLSummoningTweaks", "ApplyInfusions", _UUID1, _UUID2);
 */
 
 PROC

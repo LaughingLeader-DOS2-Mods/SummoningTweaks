@@ -1,9 +1,22 @@
 Ext.Require("Shared.lua")
 
-PersistentVars = {
+---@class SummoningTweaksPersistentVars
+local defaultPersistentVars = {
 	MaxSummons = 3,
-	SummonAmountPerAbility = 1
+	SummonAmountPerAbility = 1,
+	CopiedInfusions = {}
 }
+
+local function CopyTable(target)
+	local tbl = {}
+	for k,v in pairs(target) do
+		tbl[k] = v
+	end
+	return tbl
+end
+
+---@type SummoningTweaksPersistentVars
+PersistentVars = CopyTable(defaultPersistentVars)
 
 local checkSessionLoaded = false
 
@@ -30,22 +43,35 @@ end
 
 RegisterSettingsListener()
 
+local _infusionStatuses = {}
+local _largeIncarnateInfusionStatus = {}
+
 Ext.RegisterListener("SessionLoaded", function()
 	if PersistentVars == nil then
-		PersistentVars = {
-			MaxSummons = 3,
-			SummonAmountPerAbility = 1
-		}
+		PersistentVars = CopyTable(defaultPersistentVars)
 	else
-		if PersistentVars.MaxSummons == nil then
-			PersistentVars.MaxSummons = 3
-		end
-		if PersistentVars.SummonAmountPerAbility == nil then
-			PersistentVars.SummonAmountPerAbility = 1
+		for k,v in pairs(defaultPersistentVars) do
+			if PersistentVars[k] == nil then
+				PersistentVars[k] = v
+			end
 		end
 	end
 	if checkSessionLoaded then
 		RegisterSettingsListener()
+	end
+
+	for i,v in pairs(Ext.GetStatEntries("StatusData")) do
+		local stat = Ext.GetStat(v)
+		if string.find(string.lower(v), "infusion") then
+			_infusionStatuses[v] = true
+		else
+			if string.find(string.lower(stat.StatsId), "infusion") then
+				_infusionStatuses[v] = true
+			end
+		end
+		if _infusionStatuses[stat.Using] then
+			_largeIncarnateInfusionStatus[stat.Using] = v
+		end
 	end
 end)
 
@@ -71,10 +97,14 @@ end
 function UpdateMaxSummons(uuid)
 	local player = Ext.GetCharacter(uuid)
 	if player then
+		if type(PersistentVars.MaxSummons) ~= "number" then
+			PersistentVars.MaxSummons = 3
+		end
 		if player.Stats.MaxSummons ~= PersistentVars.MaxSummons then
 			local boost = PersistentVars.MaxSummons - player.Stats.DynamicStats[1].MaxSummons
 			if boost > 0 then
 				NRD_CharacterSetPermanentBoostInt(uuid, "MaxSummons", boost)
+				player.Stats.MaxSummons = PersistentVars.MaxSummons
 				CharacterAddAttribute(uuid, "Dummy", 0)
 			end
 		end
@@ -115,3 +145,38 @@ Ext.RegisterOsirisListener("SkillCast", 4, "after", function (char, skill, skill
 		end
 	end
 end)
+
+function CopyInfusions(owner, summon)
+	local summon = Ext.GetCharacter(summon)
+	if summon then
+		local success = false
+		PersistentVars.CopiedInfusions[owner] = {}
+		for _,statusId in pairs(summon:GetStatuses()) do
+			if _infusionStatuses[statusId] then
+				PersistentVars.CopiedInfusions[owner][statusId] = true
+				success = true
+			end
+		end
+		if success then
+			ShowNotification(owner, "LLSUMMONINF_Notification_InfusionsStored")
+		else
+			ShowNotification(owner, "LLSUMMONINF_Notification_NoInfusionsStored")
+		end
+	end
+end
+
+function ApplyInfusions(owner, summon)
+	local statusIds = PersistentVars.CopiedInfusions[owner]
+	if statusIds then
+		for id,b in pairs(statusIds) do
+			local targetStatus = id
+			if IsTagged(summon, "INCARNATE_G") == 1 then
+				local largeVersion = _largeIncarnateInfusionStatus[id]
+				if largeVersion then
+					targetStatus = largeVersion
+				end
+			end
+			ApplyStatus(summon, targetStatus, -1.0, 0, owner)
+		end
+	end
+end
