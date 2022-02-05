@@ -115,11 +115,19 @@ function SummonTemplateAtPosition(player, template, xs, ys, zs, lifetimestr, tot
 	PlayEffectAtPosition("RS3_FX_Skills_Totem_Target_Nebula_01", x, y, z)
 end
 
+--local me = Ext.GetCharacter(CharacterGetHostCharacter()); print(me.Stats.MaxSummons)
 function UpdateMaxSummons(uuid)
 	local player = Ext.GetCharacter(uuid)
 	if player then
 		if type(PersistentVars.MaxSummons) ~= "number" then
 			PersistentVars.MaxSummons = 3
+		end
+		if Mods.LeaderLib then
+			---@type ModSettings
+			local settings = Mods.LeaderLib.SettingsManager.GetMod(ModuleUUID, false)
+			if settings then
+				PersistentVars.MaxSummons = settings.Global:GetVariable("MaxSummons", PersistentVars.MaxSummons)
+			end
 		end
 		if player.Stats.MaxSummons ~= PersistentVars.MaxSummons then
 			local boost = PersistentVars.MaxSummons - player.Stats.DynamicStats[1].MaxSummons
@@ -127,6 +135,7 @@ function UpdateMaxSummons(uuid)
 				NRD_CharacterSetPermanentBoostInt(uuid, "MaxSummons", boost)
 				player.Stats.MaxSummons = PersistentVars.MaxSummons
 				CharacterAddAttribute(uuid, "Dummy", 0)
+				ApplyStatus(player.MyGuid, "LLSUMMONINF_MAX_SUMMONS_INC", 0.0, 0, player.MyGuid)
 			end
 		end
 	end
