@@ -2,6 +2,20 @@ INIT
 
 EVENTS
 
+EVENT LLSUMMONINF_DismissSummon_PlayAD
+VARS
+	CHARACTER:_Player
+	INT:_Ran
+ON
+	OnSkillCast(_Player, Target_LLSUMMONINF_DismissSummon)
+ACTIONS
+	GetRandomBetween(_Ran, 0, 100)
+IF "!c1&c2"
+	IsInAutomatedDialog(_Player)
+	IsGreaterThen(_Ran, 70)
+THEN
+	DialogStart(_, "LLSUMMONINF_AD_DismissSummon", _Player)
+ENDIF
 
 EVENT LLSUMMONINF_AiControl_TagApplied
 VARS

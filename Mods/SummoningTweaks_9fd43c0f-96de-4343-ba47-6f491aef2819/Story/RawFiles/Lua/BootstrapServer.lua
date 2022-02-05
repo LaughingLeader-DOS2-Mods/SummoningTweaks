@@ -154,6 +154,36 @@ end
 
 Ext.AddPathOverride("Public/SummoningTweaks_9fd43c0f-96de-4343-ba47-6f491aef2819/Scripts/LLSUMMONINF_Main.gameScript", "Public/SummoningTweaks_9fd43c0f-96de-4343-ba47-6f491aef2819/Scripts/LLSUMMONINF_MainDisabled.gameScript")
 
+local ModifyMaxFlags = {
+	LLSUMMONINF_MaxSummons_Increase = 1,
+	LLSUMMONINF_MaxSummons_Increase_5 = 5,
+	LLSUMMONINF_MaxSummons_Decrease = -1,
+	LLSUMMONINF_MaxSummons_Decrease_5 = -1,
+}
+
+local function SetMaxSummons(amount, player)
+	PersistentVars.MaxSummons = math.max(0, amount)
+	if Ext.OsirisIsCallable()  then
+		DialogSetVariableInt("LLSUMMONINF_SettingsMenu", "LLSUMMONINF_MaxSummonLimit_89adccef-225e-47ab-8f10-5add6644ec3b", amount)
+		if player then
+			CharacterStatusText(player, string.format("Max Summons Set to <font color='#00FF00' size='26'>%i</font>", amount))	
+		end
+		for i,v in pairs(Osi.DB_IsPlayer:Get(nil)) do
+			UpdateMaxSummons(v[1])
+		end
+	end
+end
+
+Ext.RegisterOsirisListener("ObjectFlagSet", 3, "after", function (flag, obj, inst)
+	if ModifyMaxFlags[flag] then
+		SetMaxSummons(PersistentVars.MaxSummons + ModifyMaxFlags[flag], obj)
+	elseif flag == "LLSUMMONINF_MaxSummons_Reset" then
+		SetMaxSummons(3, obj)
+	elseif flag == "LLSUMMONINF_MaxSummons_ResetToDOS2Default" then
+		SetMaxSummons(1, obj)
+	end
+end)
+
 local function RefreshSkill(char, skill)
 	NRD_SkillSetCooldown(char, skill, 0.0)
 	if Mods.LeaderLib then

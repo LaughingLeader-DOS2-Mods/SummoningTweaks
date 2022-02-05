@@ -332,6 +332,17 @@ DebugBreak("[SummoningTweaks] Removing (LLSUMMONINF_AI_CONTROL) status influence
 SetStoryEvent(_Char, "LLSUMMONINF_Autonomous_CombatEnded");
 //END_REGION
 
+IF
+GlobalFlagSet("LLSUMMONINF_RemoveMaxHiddenStatus")
+THEN
+GlobalClearFlag("LLSUMMONINF_RemoveMaxHiddenStatus");
+IterateParties("LLSUMMONINF_Iterate_RemoveMaxCapStatus");
+
+IF
+StoryEvent(_Obj, "LLSUMMONINF_Iterate_RemoveMaxCapStatus")
+THEN
+RemoveStatus(_Obj, "LLSUMMONINF_MAX_SUMMONS_INC");
+
 EXITSECTION
 
 ENDEXITSECTION

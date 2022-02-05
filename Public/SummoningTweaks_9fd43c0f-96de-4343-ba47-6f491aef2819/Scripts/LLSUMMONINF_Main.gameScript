@@ -94,23 +94,6 @@ ENDIF
 	
 //END_REGION
 
-//REGION FLAG_COMMANDS
-EVENT LLSUMMONINF_DialogCommands_RemoveStatus
-ON
-	OnGlobalFlagSet("LLSUMMONINF_RemoveMaxHiddenStatus")
-ACTIONS
-	ClearGlobalFlag("LLSUMMONINF_RemoveMaxHiddenStatus")
-	IterateParty("LLSUMMONINF_Iterate_RemoveMaxCapStatus")
-	
-EVENT LLSUMMONINF_DialogCommands_RemoveStatus_OnIterate
-VARS
-	CHARACTER:_Character
-ON
-	OnIterateCharacter(_Character, "LLSUMMONINF_Iterate_RemoveMaxCapStatus")
-ACTIONS
-	CharacterRemoveStatus(_Character, LLSUMMONINF_MAX_SUMMONS_INC, null, 0)
-//END_REGION
-
 //REGION DIALOG_EVENTS
 EVENT LLSUMMONINF_DialogVar_Init
 VARS
@@ -129,7 +112,7 @@ VARS
 ON
 	OnCharacterEvent(_Character, "LLSUMMONINF_MaxSummons_DisplayCurrentMax")
 ACTIONS
-	Print(_Str, "Max Summons Set to  <font color='#00FF00' size='26'>[1]</font>", %LLSUMMONINF_MaxSummonsCap)
+	Print(_Str, "Max Summons Set to <font color='#00FF00' size='26'>[1]</font>", %LLSUMMONINF_MaxSummonsCap)
 	Cast(_StatusStr, _Str)
 	StatusText(_Character, _StatusStr)
 	
