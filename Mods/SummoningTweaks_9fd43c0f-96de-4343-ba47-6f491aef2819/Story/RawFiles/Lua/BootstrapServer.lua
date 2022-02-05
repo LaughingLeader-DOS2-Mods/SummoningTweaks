@@ -21,6 +21,7 @@ PersistentVars = CopyTable(defaultPersistentVars)
 local checkSessionLoaded = false
 
 local function RegisterSettingsListener()
+	checkSessionLoaded = true
 	if Mods.LeaderLib ~= nil then
 		Mods.LeaderLib.RegisterListener("ModSettingsLoaded", ModuleUUID, function ()
 			---@type ModSettings
@@ -32,10 +33,9 @@ local function RegisterSettingsListener()
 						UpdateMaxSummons(player.MyGuid)
 					end
 				end)
+				checkSessionLoaded = false
 			end
 		end)
-	else
-		checkSessionLoaded = true
 	end
 end
 
