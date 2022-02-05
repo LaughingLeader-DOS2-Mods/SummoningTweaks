@@ -27,11 +27,9 @@ local function RegisterSettingsListener()
 			local settings = Mods.LeaderLib.SettingsManager.GetMod(ModuleUUID, false)
 			if settings and settings.Global.Variables.MaxSummons then
 				settings.Global.Variables.MaxSummons:AddListener(function (id, value)
-					if Ext.OsirisIsCallable() then
-						PersistentVars.MaxSummons = value
-						for player in Mods.LeaderLib.GameHelpers.Character.GetPlayers() do
-							UpdateMaxSummons(player.MyGuid)
-						end
+					PersistentVars.MaxSummons = value
+					for player in Mods.LeaderLib.GameHelpers.Character.GetPlayers() do
+						UpdateMaxSummons(player.MyGuid)
 					end
 				end)
 			end
@@ -116,6 +114,7 @@ function SummonTemplateAtPosition(player, template, xs, ys, zs, lifetimestr, tot
 end
 
 --local me = Ext.GetCharacter(CharacterGetHostCharacter()); print(me.Stats.MaxSummons)
+--RemoveStatus(CharacterGetHostCharacter(), "LLSUMMONINF_MAX_SUMMONS_INC")
 function UpdateMaxSummons(uuid)
 	local player = Ext.GetCharacter(uuid)
 	if player then
@@ -132,10 +131,16 @@ function UpdateMaxSummons(uuid)
 		if player.Stats.MaxSummons ~= PersistentVars.MaxSummons then
 			local boost = PersistentVars.MaxSummons - player.Stats.DynamicStats[1].MaxSummons
 			if boost > 0 then
-				NRD_CharacterSetPermanentBoostInt(uuid, "MaxSummons", boost)
+				--NRD_CharacterSetPermanentBoostInt(uuid, "MaxSummons", boost)
+				player.Stats.DynamicStats[2].MaxSummons = boost
 				player.Stats.MaxSummons = PersistentVars.MaxSummons
-				CharacterAddAttribute(uuid, "Dummy", 0)
-				ApplyStatus(player.MyGuid, "LLSUMMONINF_MAX_SUMMONS_INC", 0.0, 0, player.MyGuid)
+				if Ext.OsirisIsCallable() then
+					CharacterAddAttribute(uuid, "Dummy", 0)
+					ApplyStatus(player.MyGuid, "LLSUMMONINF_MAX_SUMMONS_INC", 0.0, 0, player.MyGuid)
+				else
+					local status = Ext.PrepareStatus(player.Handle, "LLSUMMONINF_MAX_SUMMONS_INC", 0.0)
+					Ext.ApplyStatus(status)
+				end
 			end
 		end
 	end
@@ -144,6 +149,7 @@ end
 function ClearMaxSummons(uuid)
 	NRD_CharacterSetPermanentBoostInt(uuid, "MaxSummons", 0)
 	CharacterAddAttribute(uuid, "Dummy", 0)
+	RemoveStatus(uuid, "LLSUMMONINF_MAX_SUMMONS_INC")
 end
 
 Ext.AddPathOverride("Public/SummoningTweaks_9fd43c0f-96de-4343-ba47-6f491aef2819/Scripts/LLSUMMONINF_Main.gameScript", "Public/SummoningTweaks_9fd43c0f-96de-4343-ba47-6f491aef2819/Scripts/LLSUMMONINF_MainDisabled.gameScript")
