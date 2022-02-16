@@ -1,5 +1,7 @@
 Ext.Require("Shared.lua")
 
+local _EXTVERSION = Ext.Version()
+
 ---@class SummoningTweaksPersistentVars
 local defaultPersistentVars = {
 	MaxSummons = 3,
@@ -131,9 +133,16 @@ function UpdateMaxSummons(uuid)
 		if player.Stats.MaxSummons ~= PersistentVars.MaxSummons then
 			local boost = PersistentVars.MaxSummons - player.Stats.DynamicStats[1].MaxSummons
 			if boost > 0 then
-				--NRD_CharacterSetPermanentBoostInt(uuid, "MaxSummons", boost)
-				player.Stats.DynamicStats[2].MaxSummons = boost
-				player.Stats.MaxSummons = PersistentVars.MaxSummons
+				if _EXTVERSION >= 56 then
+					player.Stats.DynamicStats[2].MaxSummons = boost
+					player.Stats.MaxSummons = PersistentVars.MaxSummons
+				else
+					if Ext.OsirisIsCallable() then
+						NRD_CharacterSetPermanentBoostInt(uuid, "MaxSummons", boost)
+					else
+						player.Stats.DynamicStats[2].MaxSummons = boost
+					end
+				end
 				if Ext.OsirisIsCallable() then
 					CharacterAddAttribute(uuid, "Dummy", 0)
 					ApplyStatus(player.MyGuid, "LLSUMMONINF_MAX_SUMMONS_INC", 0.0, 0, player.MyGuid)
