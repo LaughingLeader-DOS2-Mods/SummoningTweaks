@@ -133,16 +133,14 @@ function UpdateMaxSummons(uuid, skipUpdatingSettings)
 		end
 		if player.Stats.MaxSummons ~= PersistentVars.MaxSummons then
 			local boost = PersistentVars.MaxSummons - player.Stats.DynamicStats[1].MaxSummons
-			if boost > 0 then
-				if _EXTVERSION >= 56 then
-					player.Stats.DynamicStats[2].MaxSummons = boost
-					player.Stats.MaxSummons = PersistentVars.MaxSummons
+			if _EXTVERSION >= 56 then
+				player.Stats.DynamicStats[2].MaxSummons = boost
+				player.Stats.MaxSummons = PersistentVars.MaxSummons
+			else
+				if Ext.OsirisIsCallable() then
+					NRD_CharacterSetPermanentBoostInt(uuid, "MaxSummons", boost)
 				else
-					if Ext.OsirisIsCallable() then
-						NRD_CharacterSetPermanentBoostInt(uuid, "MaxSummons", boost)
-					else
-						player.Stats.DynamicStats[2].MaxSummons = boost
-					end
+					player.Stats.DynamicStats[2].MaxSummons = boost
 				end
 			end
 		end
@@ -168,7 +166,7 @@ local ModifyMaxFlags = {
 	LLSUMMONINF_MaxSummons_Increase = 1,
 	LLSUMMONINF_MaxSummons_Increase_5 = 5,
 	LLSUMMONINF_MaxSummons_Decrease = -1,
-	LLSUMMONINF_MaxSummons_Decrease_5 = -1,
+	LLSUMMONINF_MaxSummons_Decrease_5 = -5,
 }
 
 local function SetMaxSummons(amount, player, fromFlag)
