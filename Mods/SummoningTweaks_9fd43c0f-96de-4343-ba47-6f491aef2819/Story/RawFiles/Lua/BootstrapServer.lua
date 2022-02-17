@@ -32,7 +32,7 @@ local function RegisterSettingsListener()
 				settings.Global.Variables.MaxSummons:AddListener(function (id, value)
 					PersistentVars.MaxSummons = value
 					for player in Mods.LeaderLib.GameHelpers.Character.GetPlayers() do
-						UpdateMaxSummons(player.MyGuid)
+						UpdateMaxSummons(player.MyGuid, true)
 					end
 				end)
 				checkSessionLoaded = false
@@ -117,13 +117,13 @@ end
 
 --local me = Ext.GetCharacter(CharacterGetHostCharacter()); print(me.Stats.MaxSummons)
 --RemoveStatus(CharacterGetHostCharacter(), "LLSUMMONINF_MAX_SUMMONS_INC")
-function UpdateMaxSummons(uuid)
+function UpdateMaxSummons(uuid, skipUpdatingSettings)
 	local player = Ext.GetCharacter(uuid)
 	if player then
 		if type(PersistentVars.MaxSummons) ~= "number" then
 			PersistentVars.MaxSummons = 3
 		end
-		if Mods.LeaderLib then
+		if not skipUpdatingSettings and Mods.LeaderLib then
 			---@type ModSettings
 			local settings = Mods.LeaderLib.SettingsManager.GetMod(ModuleUUID, false)
 			if settings then
@@ -170,15 +170,27 @@ local ModifyMaxFlags = {
 	LLSUMMONINF_MaxSummons_Decrease_5 = -1,
 }
 
-local function SetMaxSummons(amount, player)
-	PersistentVars.MaxSummons = math.max(0, amount)
+local function SetMaxSummons(amount, player, fromFlag)
+	amount = math.max(0, amount)
+	local amountChanged = PersistentVars.MaxSummons ~= amount
+	PersistentVars.MaxSummons = amount
 	if Ext.OsirisIsCallable()  then
 		DialogSetVariableInt("LLSUMMONINF_SettingsMenu", "LLSUMMONINF_MaxSummonLimit_89adccef-225e-47ab-8f10-5add6644ec3b", amount)
 		if player then
-			CharacterStatusText(player, string.format("Max Summons Set to <font color='#00FF00' size='26'>%i</font>", amount))	
+			CharacterStatusText(player, string.format("Max Summons Set to <font color='#00FF00' size='26'>%i</font>", amount))
 		end
 		for i,v in pairs(Osi.DB_IsPlayer:Get(nil)) do
-			UpdateMaxSummons(v[1])
+			UpdateMaxSummons(v[1], true)
+		end
+	end
+	if Mods.LeaderLib then
+		---@type ModSettings
+		local settings = Mods.LeaderLib.SettingsManager.GetMod(ModuleUUID, false)
+		if settings then
+			settings.Global.Variables.MaxSummons.Value = amount
+		end
+		if amountChanged and fromFlag then
+			Mods.LeaderLib.SaveGlobalSettings()
 		end
 	end
 end
@@ -190,11 +202,11 @@ end
 
 Ext.RegisterOsirisListener("ObjectFlagSet", 3, "after", function (flag, obj, inst)
 	if ModifyMaxFlags[flag] then
-		SetMaxSummons(PersistentVars.MaxSummons + ModifyMaxFlags[flag], obj)
+		SetMaxSummons(PersistentVars.MaxSummons + ModifyMaxFlags[flag], obj, true)
 	elseif flag == "LLSUMMONINF_MaxSummons_Reset" then
-		SetMaxSummons(3, obj)
+		SetMaxSummons(3, obj, true)
 	elseif flag == "LLSUMMONINF_MaxSummons_ResetToDOS2Default" then
-		SetMaxSummons(1, obj)
+		SetMaxSummons(1, obj, true)
 	end
 end)
 
