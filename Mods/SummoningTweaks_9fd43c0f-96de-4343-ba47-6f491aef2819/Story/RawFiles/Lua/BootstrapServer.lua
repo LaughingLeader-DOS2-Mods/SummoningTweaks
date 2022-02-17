@@ -120,6 +120,7 @@ end
 function UpdateMaxSummons(uuid, skipUpdatingSettings)
 	local player = Ext.GetCharacter(uuid)
 	if player then
+		RemoveStatus(player.MyGuid, "LLSUMMONINF_MAX_SUMMONS_INC")
 		if type(PersistentVars.MaxSummons) ~= "number" then
 			PersistentVars.MaxSummons = 3
 		end
@@ -143,14 +144,14 @@ function UpdateMaxSummons(uuid, skipUpdatingSettings)
 						player.Stats.DynamicStats[2].MaxSummons = boost
 					end
 				end
-				if Ext.OsirisIsCallable() then
-					CharacterAddAttribute(uuid, "Dummy", 0)
-					ApplyStatus(player.MyGuid, "LLSUMMONINF_MAX_SUMMONS_INC", 0.0, 0, player.MyGuid)
-				else
-					local status = Ext.PrepareStatus(player.Handle, "LLSUMMONINF_MAX_SUMMONS_INC", 0.0)
-					Ext.ApplyStatus(status)
-				end
 			end
+		end
+		if Ext.OsirisIsCallable() then
+			CharacterAddAttribute(uuid, "Dummy", 0)
+			ApplyStatus(player.MyGuid, "LLSUMMONINF_MAX_SUMMONS_INC", 0.0, 0, player.MyGuid)
+		else
+			local status = Ext.PrepareStatus(player.Handle, "LLSUMMONINF_MAX_SUMMONS_INC", 0.0)
+			Ext.ApplyStatus(status)
 		end
 	end
 end
@@ -190,7 +191,10 @@ local function SetMaxSummons(amount, player, fromFlag)
 			settings.Global.Variables.MaxSummons.Value = amount
 		end
 		if amountChanged and fromFlag then
-			Mods.LeaderLib.SaveGlobalSettings()
+			Mods.LeaderLib.Timer.StartOneshot("LLSUMMONINF_SyncGlobalSettings", 250, function ()
+				Mods.LeaderLib.SaveGlobalSettings()
+				Mods.LeaderLib.SettingsManager.SyncGlobalSettings()
+			end)
 		end
 	end
 end
