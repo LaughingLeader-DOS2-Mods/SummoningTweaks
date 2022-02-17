@@ -2,37 +2,6 @@ Version 1
 SubGoalCombiner SGC_AND
 INITSECTION
 KBSECTION
-//REGION SETTINGS
-IF
-RegionStarted(_)
-AND
-NOT DB_LLSUMMONINF_SettingsInitialized(1)
-THEN
-LLSUMMONINF_InitSettings();
-DB_LLSUMMONINF_SettingsInitialized(1);
-
-PROC
-LLSUMMONINF_InitSettings()
-THEN
-LLSUMMONINF_InitDemonCodexSettings();
-LLSUMMONINF_InitLarianModSettings();
-
-PROC
-LLSUMMONINF_Updater_VersionChanged((STRING)_OldVersion, "1.2.0.1")
-THEN
-LLSUMMONINF_InitSettings();
-//END_REGION
-
-//REGION LARIAN_MOD_ENABLED
-QRY
-LLSUMMONINF_QRY_LarianSummoningModIsEnabled()
-AND
-SysIsActive("CMP_SummoningImproved_Statuses")
-THEN
-DB_NOOP(1);
-//END_REGION
-
-
 //REGION SUMMON_ADDED
 PROC
 LLSUMMONINF_OnSummonAdded((CHARACTERGUID)_Player, (CHARACTERGUID)_Summon)
@@ -40,172 +9,7 @@ AND
 NOT HasActiveStatus(_Player, "LLSUMMONINF_MAX_SUMMONS_INC", 1)
 THEN
 SetStoryEvent(_Player, "LLSUMMONINF_IncreaseMaxSummons");
-
-PROC
-LLSUMMONINF_OnSummonAdded((CHARACTERGUID)_Player, (CHARACTERGUID)_Summon)
-AND
-CharacterIsPartyFollower(_Player, 0)
-THEN
-LLSUMMONINF_TryAddContract(_Player);
 //END_REGION
-
-//REGION INITIALIZE_BOOKS
-IF
-GameStarted(_Level, _)
-AND
-NOT GlobalGetFlag("LLSUMMONINF_Initialized", 1)
-AND
-IsGameLevel(_Level, 1)
-THEN
-TimerCancel("LLSUMMONINF_Timers_InitPartyLeader");
-TimerLaunch("LLSUMMONINF_Timers_InitPartyLeader", 250);
-
-IF
-TimerFinished("LLSUMMONINF_Timers_InitPartyLeader")
-AND
-CharacterGetHostCharacter(_Host)
-AND
-CharacterGameMaster(_Host, _IsGM)
-THEN
-LLSUMMONINF_InitializePartyLeader(_Host, _IsGM);
-
-PROC
-LLSUMMONINF_InitializePartyLeader((CHARACTERGUID)_Host, 0)
-THEN
-GlobalSetFlag("LLSUMMONINF_Initialized");
-SetStoryEvent(_Host, "LLSUMMONINF_MaxSummons_UpdatePlayers");
-
-PROC
-LLSUMMONINF_InitializePartyLeader((CHARACTERGUID)_Host, 0)
-AND
-GlobalGetFlag("LeaderLib_AutoAddModMenuBooksDisabled", 0)
-AND
-ItemTemplateIsInUserInventory(_Host, "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 0, 0)
-THEN
-ItemTemplateAddTo("BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", _Host, 1, 0);
-
-//GM Mode
-PROC
-LLSUMMONINF_InitializePartyLeader((CHARACTERGUID)_Host, 1)
-AND
-DB_IsPlayer(_Player)
-AND
-_Player != _Host
-AND
-NOT GlobalGetFlag("LLSUMMONINF_Initialized", 1)
-THEN
-GlobalSetFlag("LLSUMMONINF_Initialized");
-SetStoryEvent(_Player, "LLSUMMONINF_MaxSummons_UpdatePlayers");
-
-//GM Mode
-PROC
-LLSUMMONINF_InitializePartyLeader((CHARACTERGUID)_Host, 1)
-AND
-GlobalGetFlag("LeaderLib_AutoAddModMenuBooksDisabled", 0)
-AND
-DB_IsPlayer(_Player)
-AND
-_Player != _Host
-AND
-ItemTemplateIsInUserInventory(_Player, "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 0, 0)
-THEN
-ItemTemplateAddTo("BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", _Player, 1, 0);
-//END_REGION
-
-//REGION PARTY_EVENTS
-IF
-CharacterJoinedParty(_Player)
-AND
-CharacterIsSummon(_Player, 0)
-AND
-NOT HasActiveStatus(_Player, "LLSUMMONINF_MAX_SUMMONS_INC", 1)
-AND
-CharacterGetHostCharacter(_Host)
-AND
-GetVarInteger(_Host, "LLSUMMONINF_MaxSummonsCap", _Max)
-AND
-_Max > 1
-THEN
-SetStoryEvent(_Player, "LLSUMMONINF_IncreaseMaxSummons");
-
-IF
-CharacterLeftParty(_Player)
-AND
-CharacterIsSummon(_Player, 0)
-AND
-CharacterIsControlled(_Player, 0)
-AND
-HasActiveStatus(_Player, "LLSUMMONINF_MAX_SUMMONS_INC", 1)
-THEN
-RemoveStatus(_Player, "LLSUMMONINF_MAX_SUMMONS_INC");
-//END_REGION
-
-//REGION SETTINGS_MENU
-PROC
-ProcBlockUseOfItem(_Player, _Book)
-AND
-GetTemplate(_Book, "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b")
-AND
-NOT QRY_SpeakerIsAvailable(_Player)
-AND
-CharacterIsInCombat(_Player, 1)
-THEN
-CharacterStatusText(_Player, "LLSUMMONINF_StatusText_SettingsBookBlocked");
-DB_CustomUseItemResponse(_Player, _Book, 0);
-
-IF
-CharacterUsedItemTemplate(_Player, "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", _Book)
-AND
-QRY_SpeakerIsAvailable(_Player)
-THEN
-DebugBreak("[SummoningTweaks] Opening settings menu.");
-SetStoryEvent(_Player, "LLSUMMONINF_MaxSummons_InitDialogVar");
-Proc_StartDialog(0, "LLSUMMONINF_SettingsMenu", _Player);
-
-IF
-StoryEvent(_Player, "SummoningTweaks_SettingsMenu_OpenRequest")
-AND
-QRY_SpeakerIsAvailable(_Player)
-THEN
-SetStoryEvent(_Player, "LLSUMMONINF_MaxSummons_InitDialogVar");
-Proc_StartDialog(0, "LLSUMMONINF_SettingsMenu", _Player);
-
-//Set by LLSUMMONINF_Main.gameScript
-IF
-StoryEvent(_Player, "LLSUMMONINF_MaxSummons_UpdateDialogVar")
-AND
-GetVarInteger(_Player, "LLSUMMONINF_MaxSummonsCap", _Max)
-THEN
-DialogSetVariableInt("LLSUMMONINF_SettingsMenu", "LLSUMMONINF_MaxSummonLimit_89adccef-225e-47ab-8f10-5add6644ec3b", _Max);
-
-IF
-StoryEvent((CHARACTERGUID)_Player, "LLSUMMONINF_MaxSummons_InitDialogVar")
-AND
-LLSUMMONINF_QRY_IsHost(_Player)
-THEN
-UserSetFlag(_Player, "LLSUMMONINF_IsHost");
-
-QRY
-LLSUMMONINF_QRY_IsHost((CHARACTERGUID)_Player)
-AND
-CharacterGetHostCharacter(_Host)
-AND
-_Player == _Host
-THEN
-DB_NOOP(1);
-
-QRY
-LLSUMMONINF_QRY_IsHost((CHARACTERGUID)_Player)
-AND
-CharacterGetHostCharacter(_Host)
-AND
-_Player != _Host
-AND
-CharacterGetReservedUserID(_Host, _ID)
-AND
-CharacterGetReservedUserID(_Player, _ID)
-THEN
-DB_NOOP(1);
 
 IF
 DialogStarted("LLSUMMONINF_SettingsMenu", (INTEGER)_Instance)
@@ -244,110 +48,33 @@ DB_LLSUMMONINF_Temp_StartingMaxSummons(_Player, _Max)
 THEN
 NOT DB_LLSUMMONINF_Temp_StartingMaxSummons(_Player, _Max);
 UserClearFlag(_Player, "LLSUMMONINF_IsHost", 0);
-//END_REGION
 
-//REGION DIALOG_COMMANDS
-QRY
-LLSUMMONINF_QRY_ClearFlag((GUIDSTRING)_Object, (STRING)_Flag)
-THEN
-ObjectClearFlag(_Object, _Flag);
-
+//REGION PARTY_EVENTS
 IF
-ObjectFlagSet("LLSUMMONINF_Commands_AddDemonCodex", (CHARACTERGUID)_Player, _)
+CharacterJoinedParty(_Player)
 AND
-LLSUMMONINF_QRY_ClearFlag(_Player, "LLSUMMONINF_Commands_AddDemonCodex")
+CharacterIsSummon(_Player, 0)
 AND
-NOT CharacterGetItemTemplateCount(_Player, "BOOK_LLSUMMONINF_DemonCodex_48957893-b552-4642-b864-98f114a6d7fb", 0)
-THEN
-ShowNotification(_Player, "LLSUMMONINF_Notification_AlreadyHaveDemonCodex");
-
-IF
-ObjectFlagSet("LLSUMMONINF_Commands_AddDemonCodex", (CHARACTERGUID)_Player, _)
+NOT HasActiveStatus(_Player, "LLSUMMONINF_MAX_SUMMONS_INC", 1)
 AND
-LLSUMMONINF_QRY_ClearFlag(_Player, "LLSUMMONINF_Commands_AddDemonCodex")
+CharacterGetHostCharacter(_Host)
 AND
-CharacterGetItemTemplateCount(_Player, "BOOK_LLSUMMONINF_DemonCodex_48957893-b552-4642-b864-98f114a6d7fb", 0)
-THEN
-ItemTemplateAddTo("BOOK_LLSUMMONINF_DemonCodex_48957893-b552-4642-b864-98f114a6d7fb", _Player, 1);
-PlayEffect(_Player, "RS3_FX_Skills_Totem_Cast_Target_Totem_Void_Root_02");
-PlayEffect(_Player, "RS3_FX_Skills_Totem_Impact_Summon_Void_01");
-
-IF
-ObjectFlagSet("LLSUMMONINF_LeaderLib_AddControlSkill", (CHARACTERGUID)_Player, _)
+GetVarInteger(_Host, "LLSUMMONINF_MaxSummonsCap", _Max)
 AND
-LLSUMMONINF_QRY_ClearFlag(_Player, "LLSUMMONINF_LeaderLib_AddControlSkill")
+_Max > 1
+THEN
+SetStoryEvent(_Player, "LLSUMMONINF_IncreaseMaxSummons");
+
+IF
+CharacterLeftParty(_Player)
 AND
-CharacterHasSkill(_Player, "Target_LeaderLib_ControlSummon", 0)
-THEN
-CharacterAddSkill(_Player, "Target_LeaderLib_ControlSummon", 1);
-
-IF
-ObjectFlagSet("LLSUMMONINF_LeaderLib_RemoveControlSkill", (CHARACTERGUID)_Player, _)
+CharacterIsSummon(_Player, 0)
 AND
-LLSUMMONINF_QRY_ClearFlag(_Player, "LLSUMMONINF_LeaderLib_RemoveControlSkill")
+CharacterIsControlled(_Player, 0)
 AND
-CharacterHasSkill(_Player, "Target_LeaderLib_ControlSummon", 1)
+HasActiveStatus(_Player, "LLSUMMONINF_MAX_SUMMONS_INC", 1)
 THEN
-CharacterRemoveSkill(_Player, "Target_LeaderLib_ControlSummon");
-
-IF
-ObjectFlagSet("LLSUMMONINF_Commands_AddDismissSkill", (CHARACTERGUID)_Player, _)
-THEN
-ObjectClearFlag(_Player, "LLSUMMONINF_Commands_AddDismissSkill");
-LLSUMMONINF_AddSkill(_Player, "Target_LLSUMMONINF_DismissSummon", "LLSUMMONINF_AddedDismissSkillToSummoner");
-
-IF
-ObjectFlagSet("LLSUMMONINF_Commands_RemoveDismissSkill", (CHARACTERGUID)_Player, _)
-THEN
-ObjectClearFlag(_Player, "LLSUMMONINF_Commands_RemoveDismissSkill");
-LLSUMMONINF_RemoveSkill(_Player, "Target_LLSUMMONINF_DismissSummon");
-
-IF
-ObjectFlagSet("LLSUMMONINF_Commands_AddAiToggleSkill", (CHARACTERGUID)_Player, _)
-THEN
-ObjectClearFlag(_Player, "LLSUMMONINF_Commands_AddAiToggleSkill");
-LLSUMMONINF_AddSkill(_Player, "Target_LLSUMMONINF_ToggleAiControl", "LLSUMMONINF_AddedAiControlSkill");
-
-IF
-ObjectFlagSet("LLSUMMONINF_Commands_RemoveAiToggleSkill", (CHARACTERGUID)_Player, _)
-THEN
-ObjectClearFlag(_Player, "LLSUMMONINF_Commands_RemoveAiToggleSkill");
-LLSUMMONINF_RemoveSkill(_Player, "Target_LLSUMMONINF_ToggleAiControl");
-
-IF
-ObjectFlagSet("LLSUMMONINF_Commands_HostRemoveAllAutonomous", (CHARACTERGUID)_Player, _)
-THEN
-ObjectClearFlag(_Player, "LLSUMMONINF_Commands_HostRemoveAllAutonomous");
-IterateParties("LLSUMMONINF_RemoveAutomonousTag");
-
-IF
-StoryEvent(_Char, "LLSUMMONINF_RemoveAutomonousTag")
-THEN
-ClearTag(_Char, "LLSUMMONINF_Autonomous");
-
-IF
-ObjectFlagSet("LLSUMMONINF_Commands_OwnerRemoveAllAutonomous", (CHARACTERGUID)_Player, _)
-THEN
-ObjectClearFlag(_Player, "LLSUMMONINF_Commands_OwnerRemoveAllAutonomous");
-DB_LLSUMMONINF_Temp_RemovingAutonomousTag(_Player);
-IterateParty(_Player, "LLSUMMONINF_RemoveAutomonousTag_ByOwner");
-ProcObjectTimer(_Player, "LLSUMMONINF_Timers_ClearAutonomousDBIterator", 250);
-
-IF
-StoryEvent((CHARACTERGUID)_Char, "LLSUMMONINF_Timers_ClearAutonomousDBIterator")
-AND
-DB_LLSUMMONINF_Temp_RemovingAutonomousTag(_Player)
-AND
-LLSUMMONINF_QRY_CanMakeAutonomous(_Player, _Char)
-THEN
-ClearTag(_Char, "LLSUMMONINF_Autonomous");
-
-PROC
-ProcObjectTimerFinished((CHARACTERGUID)_Player, "LLSUMMONINF_Timers_ClearAutonomousDBIterator")
-AND
-DB_LLSUMMONINF_Temp_RemovingAutonomousTag(_Player)
-THEN
-NOT DB_LLSUMMONINF_Temp_RemovingAutonomousTag(_Player);
+RemoveStatus(_Player, "LLSUMMONINF_MAX_SUMMONS_INC");
 //END_REGION
 
 //REGION COMBAT_ACTIVE_FIX
@@ -390,132 +117,6 @@ AND
 CharacterIsControlled(_Summon, 0)
 THEN
 MakePlayerActive(_Summon);
-//END_REGION
-
-//REGION CONTRACT_ADD_BLOCK
-PROC
-LLSUMMONINF_TryAddContract((CHARACTERGUID)_Player)
-AND
-NOT GlobalGetFlag("LLSUMMONINF_InvokeContractAutoAddDisabled", 1)
-AND
-HasActiveStatus(_Player, "LLSUMMONINF_MAX_SUMMONS_INC", 1)
-AND
-ItemTemplateIsInCharacterInventory(_Player, "Scroll_LLSUMMONINF_Skill_InvokeContract_9c6b4bf8-54df-434d-a4bf-ecad2ce4851c", 0)
-AND
-ObjectGetFlag(_Player, "LLSUMMONINF_AddedContractToSummoner", _Val)
-AND
-IntegerSubtract(1, _Val, _Notify) // x = 1 - x :)
-THEN
-ObjectSetFlag(_Player, "LLSUMMONINF_AddedContractToSummoner");
-ItemTemplateAddTo("Scroll_LLSUMMONINF_Skill_InvokeContract_9c6b4bf8-54df-434d-a4bf-ecad2ce4851c", _Player, 1, _Notify);
-
-PROC
-ProcBlockUseOfItem(_Player, _Item)
-AND
-CharacterIsInCombat(_Player, 1)
-AND
-GetTemplate(_Item, "Scroll_LLSUMMONINF_Skill_InvokeContract_9c6b4bf8-54df-434d-a4bf-ecad2ce4851c")
-THEN
-ShowNotification(_Player, "LLSUMMONINF_StatusText_InvokeContractBlocked");
-DB_CustomUseItemResponse(_Player, _Item, 0);
-
-PROC
-ProcBlockUseOfItem(_Player, _Item)
-AND
-NOT DB_CustomUseItemResponse(_Player, _Item, _)
-AND
-GetTemplate(_Item, "Scroll_LLSUMMONINF_Skill_InvokeContract_9c6b4bf8-54df-434d-a4bf-ecad2ce4851c")
-AND
-NOT LLSUMMONINF_QRY_HasLastSummon(_Player)
-THEN
-ShowNotification(_Player, "LLSUMMONINF_StatusText_InvokeContractInvalid");
-DB_CustomUseItemResponse(_Player, _Item, 0);
-//END_REGION
-
-//REGION INVOKE_CONTRACT
-QRY
-LLSUMMONINF_QRY_HasLastSummon((CHARACTERGUID)_Player)
-AND
-GetVarString(_Player, "LLSUMMONINF_LastSummonTemplate", _Template)
-AND
-_Template != ""
-THEN
-DB_NOOP(1);
-
-IF
-CharacterUsedSkillOnTarget(_Player, _Target, "Target_LLSUMMONINF_CastLastSummon", _, _)
-AND
-GetPosition(_Target, _x, _y, _z)
-AND
-GetVarString(_Player, "LLSUMMONINF_LastSummonTemplate", _Template)
-THEN
-LLSUMMONINF_SummonTemplateAtPosition_CheckTemplate(_Player, _Template, _x, _y, _z);
-
-IF
-CharacterUsedSkillAtPosition(_Player, _x, _y, _z, "Target_LLSUMMONINF_CastLastSummon", _, _)
-AND
-GetVarString(_Player, "LLSUMMONINF_LastSummonTemplate", _Template)
-THEN
-LLSUMMONINF_SummonTemplateAtPosition_CheckTemplate(_Player, _Template, _x, _y, _z);
-
-PROC
-LLSUMMONINF_SummonTemplateAtPosition_CheckTemplate((CHARACTERGUID)_Player, (STRING)_Template, (REAL)_x, (REAL)_y, (REAL)_z)
-AND
-_Template != ""
-THEN
-LLSUMMONINF_SummonTemplateAtPosition_Start(_Player, _Template, _x, _y, _z);
-
-PROC
-LLSUMMONINF_SummonTemplateAtPosition_CheckTemplate((CHARACTERGUID)_Player, "", (REAL)_x, (REAL)_y, (REAL)_z)
-THEN
-ShowNotification(_Player, "LLSUMMONINF_StatusText_InvokeContractInvalid");
-
-PROC
-LLSUMMONINF_SummonTemplateAtPosition_Start((CHARACTERGUID)_Player, (STRING)_Template, (REAL)_x, (REAL)_y, (REAL)_z)
-AND
-NOT LLSUMMONINF_QRY_HasLastSummon(_Player)
-THEN
-ShowNotification(_Player, "LLSUMMONINF_StatusText_InvokeContractInvalid");
-
-PROC
-LLSUMMONINF_SummonTemplateAtPosition_Start((CHARACTERGUID)_Player, (STRING)_Template, (REAL)_x, (REAL)_y, (REAL)_z)
-AND
-NOT SysIsActive("LaughingLeader_SummoningTweaks_PermanentSummons")
-THEN
-LLSUMMONINF_SummonTemplateAtPosition(_Player, _Template, _x, _y, _z, 60.0);
-
-PROC
-LLSUMMONINF_SummonTemplateAtPosition_Start((CHARACTERGUID)_Player, (STRING)_Template, (REAL)_x, (REAL)_y, (REAL)_z)
-AND
-SysIsActive("LaughingLeader_SummoningTweaks_PermanentSummons") // Permanent lifetime
-AND
-NOT DB_LLSUMMONINF_IgnoredTemplates(_Player, _Template)
-THEN
-LLSUMMONINF_SummonTemplateAtPosition(_Player, _Template, _x, _y, _z, -1.0);
-
-PROC
-LLSUMMONINF_SummonTemplateAtPosition_Start((CHARACTERGUID)_Player, (STRING)_Template, (REAL)_x, (REAL)_y, (REAL)_z)
-AND
-SysIsActive("LaughingLeader_SummoningTweaks_PermanentSummons") // Permanent lifetime
-AND
-DB_LLSUMMONINF_IgnoredTemplates(_Player, _Template)
-THEN
-LLSUMMONINF_SummonTemplateAtPosition(_Player, _Template, _x, _y, _z, 60.0);
-
-PROC
-LLSUMMONINF_SummonTemplateAtPosition((CHARACTERGUID)_Player, (STRING)_Template, (REAL)_x, (REAL)_y, (REAL)_z, (REAL)_Lifetime)
-AND
-CharacterGetAbility(_Player, "Summoning", _SummoningAbilityLevel)
-AND
-CharacterGetLevel(_Player, _Level)
-AND
-CharacterSummonAtPosition(_Player, _Template, _x, _y, _z, _Lifetime, _Level, _SummoningAbilityLevel, _Summon)
-AND
-RealSum(_y, 2.0, _ty)
-THEN
-PlayEffect(_Summon, "RS3_FX_UI_Icon_SkipTurn_UsedScroll_01", "Dummy_OverheadFX");
-PlayEffectAtPosition("LLSUMMONINF_Skills_InvokeContract_Cast_Summon_01", _x, _y, _z);
-PlayEffectAtPosition("RS3_FX_Skills_Totem_Target_Nebula_01", _x, _y, _z);
 //END_REGION
 
 //REGION DEMON_CODEX
@@ -696,79 +297,6 @@ THEN
 ApplyStatus(_Summon, _Status, -1.0, 0, _Summoner);
 //END_REGION
 
-//REGION LARIAN_MOD_APPLY_COPY_INFUSIONS_SKILLS
-PROC
-LLSUMMONINF_InitLarianModSettings()
-THEN
-//The Larian versions use more generic targeting conditions since any Larian summon can be infused
-DB_LLSUMMONINF_LarianSummonModSkillVersions("Target_LLSUMMONINF_CopyInfusions", "Target_LLSUMMONINF_CopyInfusions_LarianModVersion");
-DB_LLSUMMONINF_LarianSummonModSkillVersions("Target_LLSUMMONINF_ApplyInfusions", "Target_LLSUMMONINF_ApplyInfusions_LarianModVersion");
-
-IF
-SkillAdded(_Char, "Target_LLSUMMONINF_CopyInfusions", _)
-AND
-LLSUMMONINF_QRY_LarianSummoningModIsEnabled()
-THEN
-CharacterRemoveSkill(_Char, "Target_LLSUMMONINF_CopyInfusions");
-CharacterAddSkill(_Char, "Target_LLSUMMONINF_CopyInfusions_LarianModVersion", 0);
-
-IF
-SkillAdded(_Char, "Target_LLSUMMONINF_ApplyInfusions", _)
-AND
-LLSUMMONINF_QRY_LarianSummoningModIsEnabled()
-THEN
-CharacterRemoveSkill(_Char, "Target_LLSUMMONINF_ApplyInfusions");
-CharacterAddSkill(_Char, "Target_LLSUMMONINF_ApplyInfusions_LarianModVersion", 0);
-
-IF
-GameStarted(_Region,_)
-AND
-IsGameLevel(_Region, 1)
-AND
-LLSUMMONINF_QRY_LarianSummoningModIsEnabled()
-AND
-NOT DB_LLSUMMONINF_LarianSummonModActived(_)
-THEN
-DB_LLSUMMONINF_LarianSummonModActived(1);
-LLSUMMONINF_OnLarianSummonModActivated();
-
-PROC
-LLSUMMONINF_OnLarianSummonModActivated()
-AND
-DB_IsPlayer(_Char)
-AND
-DB_LLSUMMONINF_LarianSummonModSkillVersions(_BaseSkill, _LarianVersionSkill)
-AND
-CharacterHasSkill(_Char, _BaseSkill, 1)
-THEN
-CharacterRemoveSkill(_Char, _BaseSkill);
-CharacterAddSkill(_Char, _LarianVersionSkill, 0);
-
-IF
-GameStarted(_Region,_)
-AND
-IsGameLevel(_Region, 1)
-AND
-NOT LLSUMMONINF_QRY_LarianSummoningModIsEnabled()
-AND
-DB_LLSUMMONINF_LarianSummonModActived(1)
-THEN
-NOT DB_LLSUMMONINF_LarianSummonModActived(1);
-LLSUMMONINF_OnLarianSummonModDeactivated();
-
-PROC
-LLSUMMONINF_OnLarianSummonModDeactivated()
-AND
-DB_IsPlayer(_Char)
-AND
-DB_LLSUMMONINF_LarianSummonModSkillVersions(_BaseSkill, _LarianVersionSkill)
-AND
-CharacterHasSkill(_Char, _LarianVersionSkill, 1)
-THEN
-CharacterRemoveSkill(_Char, _LarianVersionSkill);
-CharacterAddSkill(_Char, _BaseSkill, 0);
-//END_REGION
-
 //REGION START
 IF
 GameEventSet("GAMEEVENT_GameStarted")
@@ -847,35 +375,6 @@ THEN
 DB_Mods_Registered("SummoningTweaks", "LaughingLeader", _Version);
 //END_REGION
 
-//REGION LEADERLIB
-// [BEGIN_NO_OSITOOLS]
-IF
-StoryEvent(_, "LeaderLib_Initialized")
-AND
-NOT DB_LLSUMMONINF_RegisteredLeaderLibSettings(_)
-THEN
-DB_LLSUMMONINF_RegisteredLeaderLibSettings(1);
-
-IF
-DB_LLSUMMONINF_RegisteredLeaderLibSettings(1)
-THEN
-DB_LeaderUpdater_RegisteredUUID("SummoningTweaks", "LaughingLeader", 9fd43c0f-96de-4343-ba47-6f491aef2819);
-DB_LeaderLib_ModApi_RegisterActiveGoal("SummoningTweaks", "LaughingLeader", "LaughingLeader_SummoningTweaks");
-DB_LeaderLib_ModApi_RegisterMenu("9fd43c0f-96de-4343-ba47-6f491aef2819", "LLSUMMONINF_SettingsMenu", "[Summoning Tweaks] Settings");
-DB_LeaderLib_ModMenu_RegisteredMenu_OpenEvent("9fd43c0f-96de-4343-ba47-6f491aef2819", "SummoningTweaks_SettingsMenu_OpenRequest");
-DB_LeaderLib_Treasure_TreasureItemTemplates("LeaderLib.LeaderTrader.ModBooks", "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 1, "");
-DB_LeaderLib_Treasure_ItemMaxAmount("LeaderLib.LeaderTrader.ModBooks", "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 4);
-// [END_NO_OSITOOLS]
-
-PROC
-LeaderLib_Mods_OnModRegistered(9fd43c0f-96de-4343-ba47-6f491aef2819, (INTEGER)_Version, (INTEGER)_Major, (INTEGER)_Minor, (INTEGER)_Revision, (INTEGER)_Build)
-THEN
-DB_LeaderLib_ModApi_RegisterMenu("9fd43c0f-96de-4343-ba47-6f491aef2819", "LLSUMMONINF_SettingsMenu", "[Summoning Tweaks] Settings");
-DB_LeaderLib_ModMenu_RegisteredMenu_OpenEvent("9fd43c0f-96de-4343-ba47-6f491aef2819", "SummoningTweaks_SettingsMenu_OpenRequest");
-DB_LeaderLib_Treasure_TreasureItemTemplates("LeaderLib.LeaderTrader.ModBooks", "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 1, "");
-DB_LeaderLib_Treasure_ItemMaxAmount("LeaderLib.LeaderTrader.ModBooks", "BOOK_LLSUMMONINF_SettingsMenu_bc6991cb-cadc-42a6-a73a-3e9fd1cda02b", 4);
-//END_REGION
-
 //REGION LEADERLIB_GLOBAL_SETTINGS
 IF
 GlobalFlagSet("LLSUMMONINF_SaveGlobalSettings")
@@ -931,24 +430,6 @@ _Current != _ClampedB
 THEN
 SetVarInteger(_Host, "LLSUMMONINF_MaxSummonsCap", _ClampedB);
 SetStoryEvent(_Host, "LLSUMMONINF_SetMaxSummonsCapFromCharacter");
-//END_REGION
-
-//REGION MIMICRY
-IF
-StoryEvent(_, "LeaderLib_Initialized")
-AND
-NOT DB_LLSUMMONINF_RegisteredMimicrySettings(_)
-AND
-SysStatus("LLMIME_ZZZ_Updater", _)
-THEN
-DB_LLSUMMONINF_RegisteredMimicrySettings(1);
-DB_LLMIME_Mimicking_Blacklist_Skills("SummoningTweaks", "Target_LLSUMMONINF_CastLastSummon");
-DB_LLMIME_Mimicking_Blacklist_Skills("SummoningTweaks", "Target_LLSUMMONINF_DismissSummon");
-DB_LLMIME_Mimicking_Blacklist_Skills("SummoningTweaks", "Target_LLSUMMONINF_CopyInfusions");
-DB_LLMIME_Mimicking_Blacklist_Skills("SummoningTweaks", "Target_LLSUMMONINF_ApplyInfusions");
-DB_LLMIME_Mimicking_Blacklist_Skills("SummoningTweaks", "Target_LLSUMMONINF_ToggleAiControl");
-DB_LLMIME_Mimicking_Blacklist_Skills("SummoningTweaks", "Target_LLSUMMONINF_CopyInfusions_LarianModVersion");
-DB_LLMIME_Mimicking_Blacklist_Skills("SummoningTweaks", "Target_LLSUMMONINF_ApplyInfusions_LarianModVersion");
 //END_REGION
 
 //REGION DEBUG

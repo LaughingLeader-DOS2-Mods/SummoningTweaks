@@ -183,6 +183,11 @@ local function SetMaxSummons(amount, player)
 	end
 end
 
+function UpdateDialogVars()
+	local maxValue = PersistentVars.MaxSummons or 3
+	DialogSetVariableInt("LLSUMMONINF_SettingsMenu", "LLSUMMONINF_MaxSummonLimit_89adccef-225e-47ab-8f10-5add6644ec3b", maxValue)
+end
+
 Ext.RegisterOsirisListener("ObjectFlagSet", 3, "after", function (flag, obj, inst)
 	if ModifyMaxFlags[flag] then
 		SetMaxSummons(PersistentVars.MaxSummons + ModifyMaxFlags[flag], obj)
