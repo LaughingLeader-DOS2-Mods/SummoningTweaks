@@ -3,6 +3,8 @@ LLSUMMONINF_Variables_MaxSummons	Max Summons	h7581fad5ga7f0g43aeg9062gd4be9023b4
 LLSUMMONINF_Variables_MaxSummons_Description	The total max summon limit for players.	hddcc0547g30deg44c5ga7b6gae50294c25d6
 LLSUMMONINF_InstantSummonCooldownDisabled	Instant Summon Cooldown Outside of Combat	h19f4e1a2g14e5g4bc5g8147g4d143eec6498
 LLSUMMONINF_InstantSummonCooldownDisabled_Description	If enabled, summons skills will have no cooldown outside of combat.	h66ef256dg7ecag4b76g8f01g33fbec774e8b
+LLSUMMONINF_InvokeContractAutoAddDisabled	Automatically Add the [Handle:ha3db9492g994eg4761g8929ge5e39c9a2774]	h0cdc1342g2de1g47f1g8231g62ac5fd4449e
+LLSUMMONINF_InvokeContractAutoAddDisabled_Description	If enabled, the [Handle:ha3db9492g994eg4761g8929ge5e39c9a2774] will be added when you summon anything, allowing you to resummon it with the codex.	he1722d64g6372g47b6gbde9g8a1f3acec940
 LLSUMMONINF_Buttons_AddInfusionSkills	Add Copy/Apply Infusions Skills	hb6120bd2g52e4g404eg899egbe303aa7f290
 LLSUMMONINF_Buttons_AddInfusionSkills_Description	Add a copy and apply skill that allows you to copy a summon's infusions, for applying them to other summons.	h822d3c64g15fag4a8cg937bg70e99a39b27b
 LLSUMMONINF_Buttons_RemoveInfusionSkills	Remove Copy/Apply Infusions Skills	h584bb6dbg88bfg412ega2fcg4965083041a9

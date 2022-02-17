@@ -5,7 +5,8 @@
 			{
 				"Type" : "Global",
 				"Entries" : [
-					"LLSUMMONINF_InstantSummonCooldownDisabled"
+					"LLSUMMONINF_InstantSummonCooldownDisabled",
+					"LLSUMMONINF_InvokeContractAutoAddDisabled"
 				]
 			}
 		],
@@ -37,7 +38,10 @@
 		{
 			"Entries" : [
 				"MaxSummons",
-				"LLSUMMONINF_InstantSummonCooldownDisabled"
+				"LLSUMMONINF_InstantSummonCooldownDisabled",
+				"LLSUMMONINF_InvokeContractAutoAddDisabled",
+				"AddInfusionSkills",
+				"RemoveInfusionSkills"
 			]
 		}
 	]
