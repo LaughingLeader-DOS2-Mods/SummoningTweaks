@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <save>
     <header version="2" />
     <version major="3" minor="6" revision="6" build="0" />
@@ -10,8 +10,8 @@
                     <attribute id="Author" value="LaughingLeader" type="30" />
                     <attribute id="CharacterCreationLevelName" value="" type="22" />
                     <attribute id="Description" value="Max summons are set to 3 by default, with the option to increase it further. Also contains helper skills for preparing your summons faster outside of combat. Activate Summoning Tweaks - Permanent Summons for permanent summon durations." type="30" />
-                    <attribute id="DescriptionName" value="" handle="ls::TranslatedStringRepository::s_HandleUnknown" type="28" />
-                    <attribute id="DisplayName" value="" handle="ls::TranslatedStringRepository::s_HandleUnknown" type="28" />
+                    <attribute id="DescriptionName" value="" handle="h55e618cfgf24ag4891ga57ag9e31568d798f" type="28" />
+                    <attribute id="DisplayName" value="Summoning Tweaks" handle="haba30717ga1e1g47cbgb591g544cabfa031c" type="28" />
                     <attribute id="Folder" value="SummoningTweaks_9fd43c0f-96de-4343-ba47-6f491aef2819" type="30" />
                     <attribute id="GMTemplate" value="" type="22" />
                     <attribute id="LobbyLevelName" value="" type="22" />
@@ -24,7 +24,7 @@
                     <attribute id="Tags" value="" type="30" />
                     <attribute id="Type" value="Add-on" type="22" />
                     <attribute id="UUID" value="9fd43c0f-96de-4343-ba47-6f491aef2819" type="22" />
-                    <attribute id="Version" value="319029251" type="4" />
+                    <attribute id="Version" value="319029252" type="4" />
                     <children>
                         <node id="PublishVersion">
                             <attribute id="Version" value="909321303" type="4" />
