@@ -41,6 +41,7 @@
 	<content contentuid="h7e9017a9g4c12g4155ga7f4ga8b592aabbf3">Decrease Limit by -5</content>
 	<content contentuid="h822d3c64g15fag4a8cg937bg70e99a39b27b">Add a copy and apply skill that allows you to copy a summon&apos;s infusions, for applying them to other summons.</content>
 	<content contentuid="h881c96ebg1d92g4036ga21fg99d517342ebc">Remove &quot;Control Summon&quot; Skill.</content>
+	<content contentuid="h88b6e048g12dcg46feg8369g3ec8134da2ef">Summoning Tweaks</content>
 	<content contentuid="h8ccdb4f8g8c7dg4ef6g8766g236912169c8f">[Host] Remove all Autonomous tags from all characters.</content>
 	<content contentuid="h9280fb14g0827g47f4gb1c3gdb042362a447">Remove the copy and apply infusion skills, if added to this character.</content>
 	<content contentuid="h9424aa76g9f77g4c3cgac96g6c8167daad7e">Copies and stores the current infusions on an &lt;font color=&apos;#c7a758&apos;&gt;Incarnate&lt;/font&gt;.&lt;br&gt;&lt;font color=&apos;#FF6347&apos;&gt;Only infusions with matching, memorized skills are stored.&lt;/font&gt;&lt;br&gt;Cast again on another Incarnate to override the previously copied infusions.</content>
@@ -49,6 +50,7 @@
 	<content contentuid="ha3db9492g994eg4761g8929ge5e39c9a2774">Summoner&apos;s Contract</content>
 	<content contentuid="ha4943c9ege663g44f5g85e4g91512611e6c1">Summoning Tweaks Settings Menu</content>
 	<content contentuid="ha59f04c9geeaeg4c42ga58fg71c1b43ae099">Invoke Contract</content>
+	<content contentuid="ha5b6fd5ag427eg436cg9300gb5ef05ad9e40">Max summons are set to 3 by default, with the option to increase it further. Also contains helper skills for preparing your summons faster outside of combat. Activate Summoning Tweaks - Permanent Summons for permanent summon durations.</content>
 	<content contentuid="ha8bfec7ag2b71g4787ga972g9d8188885053">[GLOBAL] Enable auto-adding the Dismiss Summon skill when summoning a creature. (Default)</content>
 	<content contentuid="hb1b7046ag4f6fg40a9gac83gf6f9260368a1">Only the host can change the summon limit cap. Get them to change it for you!</content>
 	<content contentuid="hb282ee97gd3b7g4b78gb1fegc53fc5df318e">Reset Limit to DOS2DE Default (1)</content>

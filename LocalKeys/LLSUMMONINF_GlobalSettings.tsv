@@ -9,3 +9,5 @@ LLSUMMONINF_Buttons_AddInfusionSkills	Add Copy/Apply Infusions Skills	hb6120bd2g
 LLSUMMONINF_Buttons_AddInfusionSkills_Description	Add a copy and apply skill that allows you to copy a summon's infusions, for applying them to other summons.	h822d3c64g15fag4a8cg937bg70e99a39b27b
 LLSUMMONINF_Buttons_RemoveInfusionSkills	Remove Copy/Apply Infusions Skills	h584bb6dbg88bfg412ega2fcg4965083041a9
 LLSUMMONINF_Buttons_RemoveInfusionSkills_Description	Remove the copy and apply infusion skills, if added to this character.	h9280fb14g0827g47f4gb1c3gdb042362a447
+LLSUMMONINF_DisplayName	Summoning Tweaks	haba30717ga1e1g47cbgb591g544cabfa031c
+LLSUMMONINF_Description	Max summons are set to 3 by default, with the option to increase it further. Also contains helper skills for preparing your summons faster outside of combat. Activate Summoning Tweaks - Permanent Summons for permanent summon durations.	h55e618cfgf24ag4891ga57ag9e31568d798f
