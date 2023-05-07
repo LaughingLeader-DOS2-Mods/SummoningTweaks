@@ -213,30 +213,18 @@ Ext.Osiris.RegisterListener("ObjectFlagSet", 3, "after", function (flag, obj, in
 	end
 end)
 
----@param char Guid
----@param skill string
-local function RefreshSkill(char, skill)
-	Osi.NRD_SkillSetCooldown(char, skill, 0.0)
-	if Mods.LeaderLib then
-		Mods.LeaderLib.Timer.StartOneshot("", 250, function()
-			Osi.NRD_SkillSetCooldown(char, skill, 0.0)
-		end)
-	end
-end
-
 Ext.Osiris.RegisterListener("SkillCast", 4, "after", function (char, skill, skillType, skillElement)
-	if Osi.CharacterIsInCombat(char) == 0
-	and Osi.CharacterIsPlayer(char) == 1
-	and Osi.GlobalGetFlag("LLSUMMONINF_InstantSummonCooldownDisabled") == 0
-	then
+	local character = Ext.Entity.GetCharacter(char)
+	if character and Osi.CharacterIsInCombat(char) == 0 and character.IsPlayer
+	and Osi.GlobalGetFlag("LLSUMMONINF_InstantSummonCooldownDisabled") ~= 1 then
 		if skillType == "summon" then
-			RefreshSkill(char, skill)
+			character.SkillManager.Skills[skill].ActiveCooldown = 0
 		else
 			local stat = Ext.Stats.Get(skill, nil, false)
 			if stat and stat.SkillProperties then
 				for _,v in pairs(stat.SkillProperties) do
 					if v.Type == "Summon" then
-						RefreshSkill(char, skill)
+						character.SkillManager.Skills[skill].ActiveCooldown = 0
 						break
 					end
 				end
